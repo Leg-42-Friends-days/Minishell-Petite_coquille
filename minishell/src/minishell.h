@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/02 16:39:26 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/02 18:12:42 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,13 @@ typedef struct s_mini
 	struct s_mini	*next;
 	struct s_mini	*previous;
 }					t_mini;
+
+typedef struct s_env
+{
+	char			*key;
+	char			*content;
+	struct s_env	*next;
+}					t_env;
 
 t_mini				*lexing(t_mini *mini_vars, char *line);
 t_mini				*lstfirst(t_mini *lst);
