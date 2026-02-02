@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/01/30 17:54:38 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/02 15:44:30 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,17 @@
 # include <unistd.h>
 // getcwd() chdir() isatty() ttyname() ttyslot()
 
+typedef struct s_mini
+{
+	int     command;
+	int     infile;
+	int     outfile;
+	int     pipe; 
+	char    *var;
+	struct s_mini  *next;
+	struct s_mini  *prev;
+}       t_mini;
+
+void	lexing(t_mini **mini_vars, char *line);
 
 #endif
