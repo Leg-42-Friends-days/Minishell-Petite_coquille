@@ -6,7 +6,8 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 15:09:27 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/03 14:05:57 by mickzhan         ###   ########.fr       */
+/*																			*/
+/*   Updated: 2026/02/03 16:44:07 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +75,19 @@ char	*add_char(char *buffer, char new)
 	int		len;
 	int		i;
 
+	if (!buffer)
+		len = 0;
+	else
+		len = ft_strlen(buffer);
 	i = 0;
-	len = ft_strlen(buffer);
 	temp = malloc(sizeof(char *) * len + 2);
-	while(buffer[i] != '\0')
+	if (buffer)
 	{
-		temp[i] = buffer[i];
-		i++;
+		while(buffer[i] != '\0')
+		{
+			temp[i] = buffer[i]; 
+			i++;
+		}
 	}
 	temp[i] = new;
 	i++;
@@ -88,49 +95,99 @@ char	*add_char(char *buffer, char new)
 	return (temp);
 }
 
+void	buffer_full(t_token **mini_vars, char **buffer)
+{
+	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>'))
+	{
+		*mini_vars = lstadd_back(*mini_vars, *buffer, WORD);
+		free(*buffer);
+		*buffer = NULL;
+	}
+	if (*buffer && *buffer[0] == '<')
+	{
+		*mini_vars = lstadd_back(*mini_vars, "<", INFILE);
+		free(*buffer);
+		*buffer = NULL;
+	}
+	if (*buffer && *buffer[0] == '>')
+	{
+		*mini_vars = lstadd_back(*mini_vars, ">", OUTFILE);
+		free(*buffer);
+		*buffer = NULL;
+	}
+}
+
 void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 {
-	if ((cara >= 'a' && cara <= 'z') || (cara >= 'A' && cara <= 'Z'))
-			*buffer = add_char(*buffer, cara);
 	if ((cara == ' ') || (cara >= 7 && cara <= 13))
+		buffer_full(mini_vars, buffer);
+	else if (cara == '|')
 	{
-		if (*buffer[0] != '\0')
-		{
-			*mini_vars = lstadd_back(*mini_vars, *buffer, WORD);
-			free(*buffer);
-			*buffer = malloc(1);
-			*buffer[0] = '\0';
-		}
-	}
-	if (cara == '|')
-	{
-		if (*buffer[0] != '\0')
-		{
-			*mini_vars = lstadd_back(*mini_vars, *buffer, WORD);
-			free(*buffer);
-			*buffer = malloc(1);
-			*buffer[0] = '\0';
-		}
+		buffer_full(mini_vars, buffer);
 		*mini_vars = lstadd_back(*mini_vars, "|", PIPE);
-		free(*buffer);
-		*buffer = malloc(1);
-		*buffer[0] = '\0';
 	}
-	if (cara == '"')
+	else if (cara == '<')
 	{
-		*state = IN_D_QUOTE;
+		if (*buffer && *buffer[0] != '<')
+		{
+			*mini_vars = lstadd_back(*mini_vars, *buffer, WORD);
+			free(*buffer);
+			*buffer = NULL;
+		}
+		if (*buffer && *buffer[0] == '<')
+		{
+			*mini_vars = lstadd_back(*mini_vars, "<<", HEREDOC);
+			free(*buffer);
+			*buffer = NULL;
+		}
+		else
+			*buffer = add_char(*buffer, cara);
 	}
+	else if (cara == '>')
+	{
+		if (*buffer && *buffer[0] != '>')
+		{
+			*mini_vars = lstadd_back(*mini_vars, *buffer, WORD);
+			free(*buffer);
+			*buffer = NULL;
+		}
+		if (*buffer && *buffer[0] == '>')
+		{
+			*mini_vars = lstadd_back(*mini_vars, ">>", APPEND);
+			free(*buffer);
+			*buffer = NULL;
+		}
+		else
+			*buffer = add_char(*buffer, cara);
+	}
+	else if (cara == 39)
+		*state = IN_S_QUOTE;
+	else if (cara == '"')
+		*state = IN_D_QUOTE;
+	else if (cara >= '!' && cara <= '~')
+		*buffer = add_char(*buffer, cara);
 }
 
 void	in_d_quote_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 {
 	(void)mini_vars;
-	if (cara >= ' ' && cara <= '~')
+	if (cara == '"')
+		*state = NORMAL;
+	else if (cara >= ' ' && cara <= '~')
 	{
 		*buffer = add_char(*buffer, cara);
 	}
-	if (cara == '"')
+}
+
+void	in_s_quote_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
+{
+	(void)mini_vars;
+	if (cara == 39)
 		*state = NORMAL;
+	else if (cara >= ' ' && cara <= '~')
+	{
+		*buffer = add_char(*buffer, cara);
+	}
 }
 
 t_token	*lexing(t_token *mini_vars, char *line)
@@ -141,20 +198,24 @@ t_token	*lexing(t_token *mini_vars, char *line)
 
 	i = 0;
 	state = NORMAL;
-	buffer = malloc(1);
-	buffer[0] = '\0';
+	buffer = NULL;
 	while (line[i] != '\0')
 	{
 		if (state == NORMAL)
 		{
 			normal_state(&buffer, line[i], &state, &mini_vars);
 		}
-		if (state == IN_D_QUOTE)
+		else if (state == IN_D_QUOTE)
 		{
 			in_d_quote_state(&buffer, line[i], &state, &mini_vars);
 		}
+		else if (state == IN_S_QUOTE)
+		{
+			in_s_quote_state(&buffer, line[i], &state, &mini_vars);
+		}
 		i++;
 	}
-	mini_vars = lstadd_back(mini_vars, buffer, WORD);
+	if (buffer)
+		mini_vars = lstadd_back(mini_vars, buffer, WORD);
 	return (mini_vars);
 }
