@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 15:09:27 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/02 19:35:27 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/03 11:54:42 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 {
 	if (cara >= 'a' && cara <= 'z')
 			*buffer = add_char(*buffer, cara);
-	if (cara == ' ')
+	if ((cara == ' ') || (cara >= 7 && cara <= 13))
 	{
 		if (*buffer[0] != '\0')
 		{
@@ -124,12 +124,13 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 
 void	in_d_quote_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 {
-	(void)state;
 	(void)mini_vars;
 	if (cara >= ' ' && cara <= '~')
 	{
 		*buffer = add_char(*buffer, cara);
 	}
+	if (cara == '"')
+		*state = NORMAL;
 }
 
 t_token	*lexing(t_token *mini_vars, char *line)

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/02 18:23:10 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/03 11:46:42 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ typedef enum e_token_type
 	PIPE, 
 	INFILE,
 	OUTFILE,
-	HEREDOC, 
+	HEREDOC,
 	APPEND
 }			t_token_type;
 
@@ -89,5 +89,6 @@ typedef struct s_token
 t_token				*lexing(t_token *mini_vars, char *line);
 t_token				*lstfirst(t_token *lst);
 void				printmini(t_token *mini);
+void	ft_miniclear(t_token **lst);
 
 #endif
