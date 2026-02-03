@@ -6,9 +6,10 @@
 #    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/02/02 18:29:09 by mickzhan         ###   ########.fr        #
+#    Updated: 2026/02/03 14:43:39 by mickzhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 .SILENT:
 
@@ -18,6 +19,7 @@ CFLAGS = -Wall -Wextra -Werror -I./includes -I./libft
 SRC_DIR = src/
 SRC =	main.c \
 		lexing.c \
+		node_utils.c \
 		env.c \
 		
 

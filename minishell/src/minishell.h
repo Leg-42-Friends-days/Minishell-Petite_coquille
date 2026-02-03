@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/02 19:01:28 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/03 14:42:46 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,30 @@
 # include <unistd.h>
 // getcwd() chdir() isatty() ttyname() ttyslot()
 
-typedef struct s_mini
+typedef enum e_state
 {
-	int				command;
-	int				infile;
-	int				outfile;
-	int				pipe;
+	NORMAL,
+	IN_D_QUOTE,
+	IN_S_QUOTE
+}					t_state;
+
+typedef enum e_token_type
+{
+	WORD,
+	PIPE,
+	INFILE,
+	OUTFILE,
+	HEREDOC,
+	APPEND
+}					t_token_type;
+
+typedef struct s_token
+{
 	char			*var;
-	struct s_mini	*next;
-	struct s_mini	*previous;
-}					t_mini;
+	t_token_type	type;
+	struct s_token	*next;
+	struct s_token	*previous;
+}					t_token;
 
 typedef struct s_env
 {
@@ -80,12 +94,14 @@ typedef struct s_env
 	struct s_env	*previous;
 }					t_env;
 
-t_mini				*lexing(t_mini *mini_vars, char *line);
-t_mini				*lstfirst(t_mini *lst);
+// TOKEN
+t_token				*lexing(t_token *mini_vars, char *line);
+t_token				*lstfirst(t_token *lst);
 
-void				printmini(t_mini *mini);
+void				printmini(t_token *mini);
+void				ft_miniclear(t_token **lst);
 
+// FONCTION DE L'ENVIRONNEMENT
 t_env				*env_content(t_env *env, char **envp);
-// t_env				*lstfirst_env(t_env *lst);
 
 #endif
