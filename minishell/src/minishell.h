@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/03 11:46:42 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/03 14:32:58 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,17 @@ typedef enum e_state
 	NORMAL,
 	IN_D_QUOTE,
 	IN_S_QUOTE
-}			t_state;
+}					t_state;
 
 typedef enum e_token_type
 {
 	WORD,
-	PIPE, 
+	PIPE,
 	INFILE,
 	OUTFILE,
 	HEREDOC,
 	APPEND
-}			t_token_type;
+}					t_token_type;
 
 typedef struct s_token
 {
@@ -84,11 +84,24 @@ typedef struct s_token
 	t_token_type	type;
 	struct s_token	*next;
 	struct s_token	*previous;
-}				t_token;
+}					t_token;
 
+typedef struct s_env
+{
+	char			*key;
+	char			*content;
+	struct s_env	*next;
+	struct s_env	*previous;
+}					t_env;
+
+// TOKEN
 t_token				*lexing(t_token *mini_vars, char *line);
 t_token				*lstfirst(t_token *lst);
+
 void				printmini(t_token *mini);
-void	ft_miniclear(t_token **lst);
+void				ft_miniclear(t_token **lst);
+
+// FONCTION DE L'ENVIRONNEMENT
+t_env				*env_content(t_env *env, char **envp);
 
 #endif
