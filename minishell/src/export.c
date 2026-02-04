@@ -6,13 +6,13 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/03 17:01:20 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/04 10:54:55 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env	*lstadd_back_env(t_env *lst, char *key, char *value)
+t_env	*lstadd_back_exp(t_env *lst, char *key, char *value)
 {
 	t_env	*last;
 	t_env	*curseur;
@@ -36,10 +36,11 @@ t_env	*lstadd_back_env(t_env *lst, char *key, char *value)
 	return (last);
 }
 
-int	function_export(t_env *env, t_token *info)
-{
-	char	*key;
-	char	*content;
+// int	function_export(t_env *env, t_token *info)
+// {
+// 	char	*key;
+// 	char	*content;
 
-	return (0);
-}
+	
+// 	return (0);
+// }
