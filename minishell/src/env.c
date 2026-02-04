@@ -125,10 +125,8 @@ t_env	*env_content(t_env *env, char **envp)
 	char	*key;
 	char	*value;
 	int		i;
-	int		j;
 
 	i = 0;
-	j = 0;
 	while (envp[i])
 	{
 		key = get_key(envp[i]);

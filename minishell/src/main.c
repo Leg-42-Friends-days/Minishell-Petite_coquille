@@ -58,31 +58,39 @@ void	handler(int signum)
 
 int	main(int ac, char **av, char **envp)
 {
-	t_token	*mini_vars;
+	// t_token	*mini_vars;
 	t_env	*env;
-
 	// char	*line;
 	(void)av;
 	(void)ac;
-	mini_vars = NULL;
+	// mini_vars = NULL;
 	env = NULL;
 	env = env_content(env, envp);
-	env = function_export(env, "Nimporte=quoi");
-	env = function_export(env, "test==hello");
-	env = function_export(env, "Hi");
+	// env = function_export(env, "Nimporte=quoi");
+	// env = function_export(env, "test==hello");
+	// env = function_export(env, "Hi");
 	// le cas ou il y'a un
 	// export key=content
 	// function_export(env);
+	// while (env->next != NULL)
+	// {
+	// 	printf("%s", env->key);
+	// 	printf("=");
+	// 	printf("%s\n", env->content);
+	// 	env = env->next;
+	// }
+	// printf("%s", env->key);
+	// printf("=");
+	// printf("%s", env->content);
+	env = lstfirst_env(env);
 	while (env->next != NULL)
 	{
-		printf("%s", env->key);
-		printf("=");
-		printf("%s\n", env->content);
+		free(env->key);
+		free(env->content);
 		env = env->next;
 	}
-	printf("%s", env->key);
-	printf("=");
-	printf("%s", env->content);
+	free(env->key);
+	free(env->content);
 	// while (true)
 	// {
 	// 	line = readline("Minishell > ");
