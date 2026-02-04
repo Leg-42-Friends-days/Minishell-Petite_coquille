@@ -81,6 +81,8 @@ char	*add_char(char *buffer, char new)
 		len = ft_strlen(buffer);
 	i = 0;
 	temp = malloc(sizeof(char *) * len + 2);
+	if (!temp)
+		return(NULL);
 	if (buffer)
 	{
 		while(buffer[i] != '\0')
@@ -202,17 +204,11 @@ t_token	*lexing(t_token *mini_vars, char *line)
 	while (line[i] != '\0')
 	{
 		if (state == NORMAL)
-		{
 			normal_state(&buffer, line[i], &state, &mini_vars);
-		}
 		else if (state == IN_D_QUOTE)
-		{
 			in_d_quote_state(&buffer, line[i], &state, &mini_vars);
-		}
 		else if (state == IN_S_QUOTE)
-		{
 			in_s_quote_state(&buffer, line[i], &state, &mini_vars);
-		}
 		i++;
 	}
 	if (buffer)
