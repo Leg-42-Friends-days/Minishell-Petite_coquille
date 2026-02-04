@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/04 11:29:22 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/04 11:55:33 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,11 @@ int	main(int ac, char **av, char **envp)
 	mini_vars = NULL;
 	env = NULL;
 	env = env_content(env, envp);
+	function_export(env, "hello=test");
 	// le cas ou il y'a un 
 	// export key=content
 	// function_export(env);
-	/* AFFICHAGE D'ENV
+	
 	while (env->next != NULL)
 	{
 		printf("%s", env->key);
@@ -78,7 +79,6 @@ int	main(int ac, char **av, char **envp)
 		printf("%s\n", env->content);
 		env = env->next;
 	}
-	*/
 	// while (true)
 	// {
 	// 	line = readline("Minishell > ");

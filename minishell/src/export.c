@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/04 10:54:55 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/04 11:54:30 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,39 @@ t_env	*lstadd_back_exp(t_env *lst, char *key, char *value)
 	return (last);
 }
 
-// int	function_export(t_env *env, t_token *info)
-// {
-// 	char	*key;
-// 	char	*content;
+char	*get_content(char *test)
+{
+	int		i;
+	int		j;
+	char	*str;
 
-	
-// 	return (0);
-// }
+	i = find_letter(test, '=');
+	j = 0;
+	while (test[i])
+	{
+		j++;
+		i++;
+	}
+	str = malloc(sizeof(char) * (j + 1));
+	i = find_letter(test, '=');
+	j = 0;
+	while (test[i])
+	{
+		str[j] = test[i];
+		j++;
+		i++;
+	}
+	str[j] = '\0';
+	return (str);
+}
+
+int	function_export(t_env *env, char *test)
+{
+	char	*key;
+	char	*content;
+
+	key = get_key(test);
+	content = get_content(test);
+	env = lstadd_back_exp(env, key, content);
+	return (0);
+}

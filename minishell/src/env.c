@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 18:19:17 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/03 16:48:38 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/04 11:40:22 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ char	*get_key(char *envp)
 		return (NULL);
 	j = 0;
 	str = malloc(sizeof(char) * (i + 1));
+	if (!str)
+		return (NULL);
 	while (j < i)
 	{
 		str[j] = envp[j];
