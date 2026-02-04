@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/04 14:13:56 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/04 14:26:13 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	main(int ac, char **av, char **envp)
 	env = NULL;
 	env = env_content(env, envp);
 	env = function_export(env, "Nimporte=quoi");
-	env = function_export(env, "test=hello");
+	env = function_export(env, "test==hello");
 	env = function_export(env, "Hi");
 	// le cas ou il y'a un
 	// export key=content
