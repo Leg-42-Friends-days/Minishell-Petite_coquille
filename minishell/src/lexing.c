@@ -87,13 +87,14 @@ char	*add_char(char *buffer, char new)
 	{
 		while(buffer[i] != '\0')
 		{
-			temp[i] = buffer[i]; 
+			temp[i] = buffer[i];
 			i++;
 		}
 	}
 	temp[i] = new;
 	i++;
 	temp[i] = '\0';
+	free(buffer);
 	return (temp);
 }
 
