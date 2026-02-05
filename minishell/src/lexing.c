@@ -20,35 +20,58 @@ t_token	*lstfirst(t_token *lst)
 	cursor = lst;
 	while (cursor != NULL)
 	{
-		if (cursor->previous == NULL)
+		if (cursor->prev == NULL)
 			return (cursor);
-		cursor = cursor->previous;
+		cursor = cursor->prev;
 	}
 	return (cursor);
 }
 
-t_token	*lstadd_back(t_token *lst, char *buffer, t_token_type type)
+t_token	*addnode(char *buffer, t_token_type type)
+{
+	t_token	*add_node;
+
+	add_node = malloc(sizeof(t_token));
+	if (!add_node)
+		return (NULL);
+	add_node->var = ft_strdup(buffer);
+	add_node->type = type;
+	add_node->next = NULL;
+	add_node->prev = NULL;
+	return (add_node);
+}
+
+t_sub_token *add_subnode(char *buffer, t_quote quote)
+{
+	t_sub_token	*add_sub_node;
+
+	add_sub_node = malloc(sizeof(t_sub_token));
+	if (!add_sub_node)
+		return (NULL);
+	add_sub_node->var = ft_strdup(buffer);
+	add_sub_node->quote = quote;
+	add_sub_node->next = NULL;
+	add_sub_node->prev = NULL;
+	return (add_sub_node);
+}
+
+void	lstadd_back(t_token *new, t_token **lst)
 {
 	t_token	*last;
-	t_token	*curseur;
 
-	last = malloc(sizeof(t_token));
-	if (!last)
-		return (NULL);
-	last->var = ft_strdup(buffer);
-	last->next = NULL;
-	last->type = type;
-	if (lst == NULL)
+	if (!lst || !new)
+		return ;
+	if (!*lst)
 	{
-		last->previous = NULL;
-		return (last);
+		*lst = new;
+		return ;
 	}
-	curseur = lst;
-	while (curseur->next != NULL)
-		curseur = curseur->next;
-	curseur->next = last;
-	last->previous = curseur;
-	return (last);
+	last = *lst;
+	while (last->next != NULL)
+		last = last->next;
+	last->next = new;
+	new->prev = last;
+	new->next = NULL;
 }
 
 void	printmini(t_token *mini)
@@ -61,6 +84,12 @@ void	printmini(t_token *mini)
 	}
 	while (mini->next != NULL)
 	{
+		while (mini->sub_token->next != NULL)
+		{
+			mini->sub_token = mini->sub_token->next;
+			printf("sub_token : [%s]\n", mini->sub_token->var);
+			printf("quote : [%d]\n", mini->sub_token->quote);
+		}
 		printf("value string : [%s]\n", mini->var);
 		printf("type : [%d]\n", mini->type);
 		mini = mini->next;
@@ -102,19 +131,20 @@ void	buffer_full(t_token **mini_vars, char **buffer)
 {
 	if (*buffer && (*buffer[0] != '<' && *buffer[0] != '>'))
 	{
-		*mini_vars = lstadd_back(*mini_vars, *buffer, WORD);
+		lstadd_back(addnode(*buffer, WORD), mini_vars);
+		lstadd_back(add_subnode(*buffer, NONE), &(*mini_vars)->sub_token);
 		free(*buffer);
 		*buffer = NULL;
 	}
-	if (*buffer && *buffer[0] == '<')
+	else if (*buffer && *buffer[0] == '<')
 	{
-		*mini_vars = lstadd_back(*mini_vars, "<", INFILE);
+		lstadd_back(addnode("<", INFILE), mini_vars);
 		free(*buffer);
 		*buffer = NULL;
 	}
-	if (*buffer && *buffer[0] == '>')
+	else if (*buffer && *buffer[0] == '>')
 	{
-		*mini_vars = lstadd_back(*mini_vars, ">", OUTFILE);
+		lstadd_back(addnode(">", OUTFILE), mini_vars);
 		free(*buffer);
 		*buffer = NULL;
 	}
@@ -127,19 +157,20 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 	else if (cara == '|')
 	{
 		buffer_full(mini_vars, buffer);
-		*mini_vars = lstadd_back(*mini_vars, "|", PIPE);
+		*buffer = add_char(*buffer, cara);
+		lstadd_back(addnode(*buffer, PIPE), mini_vars);
 	}
 	else if (cara == '<')
 	{
 		if (*buffer && *buffer[0] != '<')
 		{
-			*mini_vars = lstadd_back(*mini_vars, *buffer, WORD);
+			lstadd_back(addnode(*buffer, WORD), mini_vars);
 			free(*buffer);
 			*buffer = NULL;
 		}
 		if (*buffer && *buffer[0] == '<')
 		{
-			*mini_vars = lstadd_back(*mini_vars, "<<", HEREDOC);
+			lstadd_back(addnode("<<", HEREDOC), mini_vars);
 			free(*buffer);
 			*buffer = NULL;
 		}
@@ -150,13 +181,13 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 	{
 		if (*buffer && *buffer[0] != '>')
 		{
-			*mini_vars = lstadd_back(*mini_vars, *buffer, WORD);
+			lstadd_back(addnode(*buffer, WORD), mini_vars);
 			free(*buffer);
 			*buffer = NULL;
 		}
 		if (*buffer && *buffer[0] == '>')
 		{
-			*mini_vars = lstadd_back(*mini_vars, ">>", APPEND);
+			lstadd_back(addnode(">>", APPEND), mini_vars);
 			free(*buffer);
 			*buffer = NULL;
 		}
@@ -213,6 +244,14 @@ t_token	*lexing(t_token *mini_vars, char *line)
 		i++;
 	}
 	if (buffer)
-		mini_vars = lstadd_back(mini_vars, buffer, WORD);
+	{
+		if (buffer[0] == '<')
+			lstadd_back(addnode(buffer, INFILE), &mini_vars);
+		else if (buffer[0] == '>')
+			lstadd_back(addnode(buffer, OUTFILE), &mini_vars);
+		else if (buffer[0] != '|')
+			lstadd_back(addnode(buffer, WORD), &mini_vars);
+		free(buffer);
+	}
 	return (mini_vars);
 }

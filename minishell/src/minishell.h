@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/03 17:00:08 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/05 17:24:55 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef enum e_state
 	NORMAL,
 	IN_D_QUOTE,
 	IN_S_QUOTE
-}					t_state;
+}				t_state;
 
 typedef enum e_token_type
 {
@@ -77,14 +77,30 @@ typedef enum e_token_type
 	OUTFILE,
 	HEREDOC,
 	APPEND
-}					t_token_type;
+}				t_token_type;
+
+typedef enum e_quote
+{
+	NONE,
+	SINGLE,
+	DOUBLE
+}				t_quote;
+
+typedef struct s_sub_token
+{
+	char 				*var;
+	t_quote				quote;
+	struct s_sub_token	*next;
+	struct s_sub_token	*prev;
+}				t_sub_token;
 
 typedef struct s_token
 {
 	char			*var;
+	t_sub_token		*sub_token;
 	t_token_type	type;
 	struct s_token	*next;
-	struct s_token	*previous;
+	struct s_token	*prev;
 }					t_token;
 
 typedef struct s_env
