@@ -169,7 +169,6 @@ void	buffer_full(t_token **mini_vars, char **buffer)
 		free(*buffer);
 		*buffer = NULL;
 	}
-	if ()
 }
 
 void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
@@ -223,24 +222,16 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini_vars)
 	}
 	else if (cara == 39)
 	{
-		if (*buffer)
-		{
-			lstadd_back(addnode(*buffer, WORD), mini_vars);
-			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
-			free(*buffer);
-			*buffer = NULL;
-		}
+		buffer_full(mini_vars, buffer);
+		if (!*buffer)
+			lstadd_back(addnode(" ", WORD), mini_vars);
 		*state = IN_S_QUOTE;
 	}
 	else if (cara == '"')
 	{
-		if (*buffer)
-		{
-			lstadd_back(addnode(*buffer, WORD), mini_vars);
-			lstadd_sub_back(add_subnode(*buffer, NONE), mini_vars);
-			free(*buffer);
-			*buffer = NULL;
-		}
+		buffer_full(mini_vars, buffer);
+		if(!*buffer)
+			lstadd_back(addnode(" ", WORD), mini_vars);
 		*state = IN_D_QUOTE;
 	}
 	else if (cara >= '!' && cara <= '~')
@@ -267,7 +258,7 @@ void	in_d_quote_state(char **buffer, char cara, t_state *state, t_token **mini_v
 			free(*buffer);
 			*buffer = NULL;
 		}
-		*state = IN_S_QUOTE;
+		//*state = IN_S_QUOTE;
 	}
 	else if (cara == '"')
 	{
@@ -307,7 +298,7 @@ void	in_s_quote_state(char **buffer, char cara, t_state *state, t_token **mini_v
 			free(*buffer);
 			*buffer = NULL;
 		}
-		*state = IN_D_QUOTE;
+		//*state = IN_D_QUOTE;
 	}
 	else if (cara == 39)
 	{
