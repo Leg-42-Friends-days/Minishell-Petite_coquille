@@ -6,17 +6,17 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:44 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/09 13:31:06 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/09 13:31:21 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	cd_move_directory(t_pwd *pwd, t_parse *dir)
-{
-	if (chdir(parse->) != -1)
-	{
-		printf("success");
-	}
-	perror("chdir");
-}
+// void	cd_move_directory(t_pwd *pwd, t_parse *dir)
+// {
+// 	if (chdir(parse->) != -1)
+// 	{
+// 		printf("success");
+// 	}
+// 	perror("chdir");
+// }
