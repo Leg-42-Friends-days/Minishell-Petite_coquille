@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:16:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/09 16:25:28 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/09 17:09:00 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,8 @@ t_env				*function_export(t_env *env, char *test);
 t_env				*lstfirst_env(t_env *lst);
 t_pwd				*current_directory_path(t_pwd *pwd);
 t_env				*function_unset(t_env *env, char *unset);
+
+void				free_pwd(t_pwd *pwd);
+void				free_env(t_env *env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/09 15:19:03 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/09 17:08:41 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,31 +49,7 @@ void	handler(int signum)
 // si superieur a 255 il est unspecified
 // sinon exit sera le status de la derniere command ou 0 si il n'y a pas eu de commande
 
-void	free_env(t_env *env)
-{
-	t_env	*tmp;
 
-	while (env->next != NULL)
-	{
-		tmp = env->next;
-		free(env->key);
-		if (env->free_export == true)
-			free(env->content);
-		free(env);
-		env = tmp;
-	}
-	if (env->free_export == true)
-		free(env->content);
-	free(env->key);
-	free(env);
-}
-
-void	free_pwd(t_pwd *pwd)
-{
-	if (pwd->pwd)
-		free(pwd->pwd);
-	free(pwd);
-}
 
 int	main(int ac, char **av, char **envp)
 {
@@ -82,46 +58,37 @@ int	main(int ac, char **av, char **envp)
 
 	(void)av;
 	(void)ac;
+	(void)envp;
 	env = NULL;
 	pwd = malloc(sizeof(t_pwd));
 	pwd->pwd = NULL;
 	pwd->oldpwd = NULL;
-	env = env_content(env, envp);
-	env = function_unset(env, "SYSTEMD_EXEC_PID");
-	env = function_unset(env, "randomWORD");
-	env = function_export(env, "test==hello");
-	env = function_unset(env, "test");
+	// env = env_content(env, envp);
+	// env = function_unset(env, "SYSTEMD_EXEC_PID");
+	// env = function_unset(env, "randomWORD");
+	// env = function_export(env, "test==hello");
+	// env = function_unset(env, "test");
 
-	// pwd = current_directory_path(pwd);
-	// printf("current : [%s]\n", pwd->pwd);
-	// printf("current : [%s]", pwd->oldpwd);
+	pwd = current_directory_path(pwd);
+	printf("current : [%s]\n", pwd->pwd);
+	printf("current : [%s]", pwd->oldpwd);
 	// env = function_export(env, "Hi");
 	// le cas ou il y'a un
 	// export key=content
 	// function_export(env);
-	while (env->next != NULL)
-	{
-		printf("%s", env->key);
-		printf("=");
-		printf("%s\n", env->content);
-		env = env->next;
-	}
-	printf("%s", env->key);
-	printf("=");
-	printf("%s", env->content);
-	env = lstfirst_env(env);
-	free_env(env);
-	free_pwd(pwd);
-	// while (true)
+	// while (env->next != NULL)
 	// {
-	// 	line = readline("Minishell > ");
-	// 	if (line)
-	// 		mini_vars = lexing(mini_vars, line);
-	// 	mini_vars = lstfirst(mini_vars);
-	// 	printmini(mini_vars);
-	// 	ft_miniclear(&mini_vars);
-	// 	free(line);
+	// 	printf("%s", env->key);
+	// 	printf("=");
+	// 	printf("%s\n", env->content);
+	// 	env = env->next;
 	// }
+	// printf("%s", env->key);
+	// printf("=");
+	// printf("%s", env->content);
+	// env = lstfirst_env(env);
+	// free_env(env);
+	free_pwd(pwd);
 }
 
 // Test KILL
