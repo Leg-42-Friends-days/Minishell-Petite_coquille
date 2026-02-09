@@ -6,7 +6,7 @@
 #    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/02/03 14:43:39 by mickzhan         ###   ########.fr        #
+#    Updated: 2026/02/09 12:45:28 by mickzhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,11 +18,10 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -I./includes -I./libft 
 SRC_DIR = src/
 SRC =	main.c \
-		lexing.c \
+		lexing/lexing.c \
 		node_utils.c \
 		env.c \
 		
-
 OBJ_DIR = obj/
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
@@ -35,7 +34,7 @@ LIBFT_FLAGS = -L./$(LIBFT_DIR) -lft
 all: libft $(NAME)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
-	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@
 	
 $(NAME): $(OBJ) $(LIBFT)
