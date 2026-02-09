@@ -1,33 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/09 16:13:57 by ibrouin-         ###   ########.fr       */
+/*   Created: 2026/02/09 16:14:19 by ibrouin-          #+#    #+#             */
+/*   Updated: 2026/02/09 16:43:39 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-#ifndef MINISHELL_H
-# define MINISHELL_H
-
-// Unicode Color
-// Usage > printf("%s Hello World %s", COLOR, RESET);
-# define BLACK "\033[30m"
-# define RED "\033[31m"
-# define GREEN "\033[32m"
-# define YELLOW "\033[33m"
-# define BLUE "\033[34m"
-# define MAGENTA "\033[35m"
-# define CYAN "\033[36m"
-# define WHITE "\033[37m"
-# define RESET "\033[0m"
+#ifndef LEXER_H
+# define LEXER_H
 
 # include "../libft/libft.h"
-# include "lexing/lexer.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 // readline rl_clear_history, rl_on_new_line,
@@ -104,22 +90,23 @@ typedef struct s_token
 	struct s_token	*prev;
 }					t_token;
 
-typedef struct s_env
-{
-	char			*key;
-	char			*content;
-	struct s_env	*next;
-	struct s_env	*previous;
-}					t_env;
+// ADD_NODES
+t_token	    *addnode(t_token_type type);
+t_sub_token *add_subnode(char *buffer, t_quote quote);
+t_token	    *find_last(t_token **lst);
+void	    lstadd_back(t_token *new, t_token **lst);
+void	    lstadd_sub_back(t_sub_token *new, t_token **lst);
 
-// TOKEN
+// LEXING
 t_token				*lexing(t_token **mini_vars, char *line);
-//t_token				*lstfirst(t_token *lst);
 
+// LEXING_2
+char	*add_char(char *buffer, char new);
+void	in_d_quote_state(char **buf, char c, t_state *st, t_token **mini);
+void	in_s_quote_state(char **buf, char c, t_state *st, t_token **mini);
+
+// NODE_UTILS
 void				printmini(t_token **mini);
 void				ft_miniclear(t_token **lst);
-
-// FONCTION DE L'ENVIRONNEMENT
-t_env				*env_content(t_env *env, char **envp);
 
 #endif

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
+#    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/02/09 12:45:28 by mickzhan         ###   ########.fr        #
+#    Updated: 2026/02/09 16:43:07 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,10 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -I./includes -I./libft 
 SRC_DIR = src/
 SRC =	main.c \
+		lexing/add_nodes.c \
+		lexing/lexing_2.c \
 		lexing/lexing.c \
-		node_utils.c \
+		lexing/node_utils.c \
 		env.c \
 		
 OBJ_DIR = obj/
