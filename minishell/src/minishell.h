@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/06 14:19:24 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/09 13:56:54 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,5 +115,6 @@ int					find_letter(char *envp, char letter);
 t_env				*function_export(t_env *env, char *test);
 t_env				*lstfirst_env(t_env *lst);
 t_pwd				*current_directory_path(t_pwd *pwd);
+t_env				*function_unset(t_env *env, char *unset);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/02/09 12:27:35 by mickzhan         ###   ########.fr        #
+#    Updated: 2026/02/09 13:58:36 by mickzhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,8 +25,10 @@ SRC =	main.c \
 		builtin/export.c \
 		builtin/pwd.c \
 		builtin/cd.c \
-		builtin/echo.c
-
+		builtin/echo.c \
+		builtin/unset.c 
+		
+		
 OBJ_DIR = obj/
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
