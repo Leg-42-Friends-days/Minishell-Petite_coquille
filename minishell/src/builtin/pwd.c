@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 14:31:27 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/09 12:26:53 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/09 17:36:39 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,13 @@ t_pwd	*current_directory_path(t_pwd *pwd)
 	char	cdw[1024];
 	int		i;
 
-	i = ft_strlen(getcwd(cdw, sizeof((cdw))));
+	i = ft_strlen(getcwd(cdw, sizeof(cdw)));
 	if (i == 0)
 		perror("getwcd");
 	if (pwd->oldpwd && pwd->pwd)
 	{
 		free(pwd->oldpwd);
+		pwd->pwd = getcwd(cdw, sizeof(cdw));
 		pwd->oldpwd = pwd->pwd;
 	}
 	else

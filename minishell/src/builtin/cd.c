@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:44 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/09 13:31:21 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/09 17:37:22 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 // void	cd_move_directory(t_pwd *pwd, t_parse *dir)
 // {
-// 	if (chdir(parse->) != -1)
+// 	if (chdir(parse->content) != -1)
 // 	{
-// 		printf("success");
+// 		current_directory_path(pwd);
 // 	}
 // 	perror("chdir");
 // }
