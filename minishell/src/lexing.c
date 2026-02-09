@@ -131,7 +131,7 @@ void	printmini(t_token **mini)
 		(*mini)->sub_token = (*mini)->sub_token->next;
 	}
 	if ((*mini)->sub_token->var)
-	{
+	{ls
 		printf("	sub_token : [%s]\n", (*mini)->sub_token->var);
 		printf("	quote : [%d]\n", (*mini)->sub_token->quote);
 	}
