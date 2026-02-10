@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 11:11:16 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/10 18:02:39 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/10 18:22:52 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	quotes(char **buffer, char cara, t_token **mini_vars, t_state *state)
 
 void	meta_cara(char **buffer, char cara, t_token **mini_vars)
 {
-	if (*buffer && (*buffer[0] != '|'))
+	if (*buffer && (*buffer[0] != '|' || *buffer[0] !=))
 	{
 		if (!(*mini_vars))
 			lstadd_back(addnode(WORD), mini_vars);
@@ -82,6 +82,7 @@ void	meta_cara(char **buffer, char cara, t_token **mini_vars)
 		*buffer = NULL;
 		*buffer = add_char(*buffer, cara);
 	}
+	if 
 	else if (*buffer && *buffer[0] == cara)
 	{
 		if (cara == '|')
