@@ -6,10 +6,9 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/10 14:08:59 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/10 14:37:26 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -63,5 +62,31 @@
 # include <unistd.h>
 // getcwd() chdir() isatty() ttyname() ttyslot()
 
+typedef enum e_event
+{
+	UNPAIR_OP,
+	OPERATOR,
+	OPTION,
+	BUILTIN,
+	EXECUTABLE
+}		t_event;
+
+typedef enum e_exit
+{
+	NORMAL_STATUS,
+	ERROR_STATUS,
+	ERROR_SYNTAX_STATUS,
+	EXECUTABLE_NOT_POSSIBLE = 126,
+	COMMAND_NOT_FOUND = 127,
+	INTERRUPT_CTRL = 130,
+	QUIT_CTRL = 131,
+}		t_exit;
+
+typedef struct s_parser
+{
+	int	exit_status;
+	int	event_status;
+
+}		t_parser;
 
 #endif

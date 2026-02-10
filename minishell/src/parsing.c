@@ -6,9 +6,13 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/06 15:05:51 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/10 14:35:34 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// int parser(t_token *token)
+// {
+    
+// }
