@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/10 14:56:34 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/10 17:30:19 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,25 +26,14 @@ void	handler(int signum)
 
 int	main(int ac, char **av, char **envp)
 {
-	char	*line;
-	t_token	*mini_vars;
-	//t_env	*env;
+	char		*line;
+	t_token		*mini_vars;
+	// t_parser	*parse;
 
 	(void)av;
 	(void)ac;
 	(void)envp;
 	mini_vars = NULL;
-	//env = NULL;
-	//env = env_content(env, envp);
-	/*AFFICHAGE D'ENV
-	while (env->next != NULL)
-	{
-		printf("%s", env->key);
-		printf("=");
-		printf("%s\n", env->content);
-		env = env->next;
-	}
-	*/
 	while (true)
 	{
 		line = readline("Minishell > ");

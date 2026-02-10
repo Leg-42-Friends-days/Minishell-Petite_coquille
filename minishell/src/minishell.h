@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/10 14:54:38 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/10 16:53:58 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,16 @@
 # define CYAN "\033[36m"
 # define WHITE "\033[37m"
 # define RESET "\033[0m"
+
+// MACRO SORTIE D'ERREUR
+
+# define NORMAL_STATUS 0
+# define ERROR_STATUS 1
+# define ERROR_SYNTAX_STATUS 2
+# define EXECUTABLE_NOT_POSSIBLE 126
+# define COMMAND_NOT_FOUND 127
+# define INTERRUPT_CTRL 130
+# define QUIT_CTRL 131
 
 # include "../libft/libft.h"
 # include "./builtin/builtin.h"
@@ -64,31 +74,20 @@
 
 typedef enum e_event
 {
-	UNPAIR_OP,
 	OPERATOR,
 	OPTION,
 	BUILTIN,
 	EXECUTABLE
-}		t_event;
-
-typedef enum e_exit
-{
-	NORMAL_STATUS,
-	ERROR_STATUS,
-	ERROR_SYNTAX_STATUS,
-	EXECUTABLE_NOT_POSSIBLE = 126,
-	COMMAND_NOT_FOUND = 127,
-	INTERRUPT_CTRL = 130,
-	QUIT_CTRL = 131,
-}		t_exit;
+}			t_event;
 
 typedef struct s_parser
 {
-	int	exit_status;
-	int	event_status;
+	int		exit_status;
+	int		event_status;
+	int		last_command;
+	t_event	event;
+}			t_parser;
 
-}		t_parser;
-
-int		parser(t_token *token);
+int			parser(t_token *token);
 
 #endif
