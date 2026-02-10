@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/10 14:00:34 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/10 14:08:59 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,52 +63,5 @@
 # include <unistd.h>
 // getcwd() chdir() isatty() ttyname() ttyslot()
 
-typedef enum e_state
-{
-	NORMAL,
-	IN_D_QUOTE,
-	IN_S_QUOTE
-}						t_state;
-
-typedef enum e_token_type
-{
-	WORD,
-	PIPE,
-	INFILE,
-	OUTFILE,
-	HEREDOC,
-	APPEND
-}						t_token_type;
-
-typedef enum e_quote
-{
-	NONE,
-	SINGLE,
-	DOUBLE
-}						t_quote;
-
-typedef struct s_sub_token
-{
-	char				*var;
-	t_quote				quote;
-	struct s_sub_token	*next;
-	struct s_sub_token	*prev;
-}						t_sub_token;
-
-typedef struct s_token
-{
-	int					token_state;
-	t_sub_token			*sub_token;
-	t_token_type		type;
-	struct s_token		*next;
-	struct s_token		*prev;
-}						t_token;
-
-// TOKEN
-t_token					*lexing(t_token **mini_vars, char *line);
-// t_token				*lstfirst(t_token *lst);
-
-void					printmini(t_token **mini);
-void					ft_miniclear(t_token **lst);
 
 #endif
