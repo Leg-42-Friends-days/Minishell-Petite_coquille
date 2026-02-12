@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/11 17:25:29 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/12 14:46:04 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,15 @@ t_token	*lstfirst_token(t_token *lst)
 {
 	t_token	*cursor;
 
+	if (!lst || !lst->sub_token)
+		return (lst);
 	cursor = lst;
-	while (cursor != NULL)
-	{
-		if (cursor->sub_token->prev == NULL)
-			return (cursor);
+	while (cursor->sub_token->prev != NULL)
 		cursor->sub_token = cursor->sub_token->prev;
-	}
 	return (cursor);
 }
 
-int	cmd_compteur(t_token *token)
+int	len_cmd(t_token *token)
 {
 	int		i;
 	t_token	*tmp;
@@ -83,30 +81,54 @@ bool	check_token(t_token *token)
 
 int	len_cmd_sub(t_token *token)
 {
-	int		i;
-	t_token	*tmp;
+	int			i;
+	t_sub_token	*tmp;
 
-	i = 1;
-	tmp = token;
-	if (!tmp)
+	if (!token || !token->sub_token)
 		return (0);
-	while (tmp->sub_token->next != NULL)
+	i = 1;
+	tmp = token->sub_token;
+	while (tmp->next != NULL)
 	{
 		i++;
-		tmp->sub_token = tmp->sub_token->next;
+		tmp = tmp->next;
 	}
-    tmp = lstfirst_token(tmp);
 	return (i);
 }
 
-t_cmd	*lstadd_back_cmd(t_cmd *lst)
+char	**tableau_av(t_token *token)
+{
+	int		i;
+	int		len;
+	char	**tableau;
+	t_sub_token *tmp;
+
+	i = 0;
+	len = len_cmd_sub(token);
+	tableau = malloc(sizeof(char *) * (len + 1));
+	if (!tableau)
+		return (NULL);
+	tmp = token->sub_token;
+	while (tmp != NULL)
+	{
+		tableau[i] = ft_strdup(tmp->var);
+		i++;
+		tmp = tmp->next;
+	}
+	tableau[i] = NULL;
+	return (tableau);
+}
+
+t_cmd	*lstadd_back_cmd(t_cmd *lst, t_token *token)
 {
 	t_cmd	*last;
 	t_cmd	*curseur;
 
+	(void)token;
 	last = malloc(sizeof(t_cmd));
 	if (!last)
 		return (NULL);
+	last->argv = tableau_av(token);
 	last->next = NULL;
 	if (lst == NULL)
 	{
@@ -118,34 +140,34 @@ t_cmd	*lstadd_back_cmd(t_cmd *lst)
 		curseur = curseur->next;
 	curseur->next = last;
 	last->previous = curseur;
-	return (last);
+	return (lst);
 }
 
-// t_cmd	*cmd_list(t_cmd *cmd, t_token *token)
-// {
-// 	int	i;
+t_cmd	*cmd_list(t_cmd *cmd, t_token *token)
+{
+	while (token != NULL)
+	{
+		cmd = lstadd_back_cmd(cmd, token);
+		token = token->next;
+	}
+	return (cmd);
+}
 
-// 	i = 0;
-// 	while (token->next != NULL)
-// 	{
-// 		cmd = lstadd_back_cmd(cmd);
-// 		cmd->argv = malloc(sizeof(char *) * len_cmd_sub(token));
-// 		while (token->sub_token->next != NULL)
-// 		{
-// 			strcpy(cmd->argv[i], token->sub_token->var);
-// 			printf("THIS IS CMD ARGV : [%s]\n", cmd->argv[i]);
-// 			i++;
-// 			token->sub_token = token->sub_token->next;
-// 		}
-// 		if (token->sub_token->var)
-// 		{
-// 			strcpy(cmd->argv[i], token->sub_token->var);
-// 			printf("THIS IS CMD ARGV : [%s]\n", cmd->argv[i]);
-// 		}
-// 		token = token->next;
-// 	}
-// 	return (cmd);
-// }
+void	test_cmd(t_cmd *cmd)
+{
+	int i;
+	
+	while (cmd != NULL)
+	{
+		i = 0;
+		while (cmd->argv[i])
+		{
+			printf("CMD TEST [%s]\nVALUE : [%d]\n", cmd->argv[i], i);
+			i++;
+		}
+		cmd = cmd->next;
+	}	
+}
 
 int	parser(t_token *token, t_env *env)
 {
@@ -155,7 +177,8 @@ int	parser(t_token *token, t_env *env)
 	(void)env;
 	cmd = NULL;
 	cmd_sub = len_cmd_sub(token);
-    token = lstfirst_token(token);
+	printf("CMD SUB LEN -> %d\n", cmd_sub);
+	token = lstfirst_token(token);
 	// printf("%s TEST :[%s]\n%s", RED, token->sub_token->var, RESET);
 	// printf("%s TEST :[%s]\n%s", RED, token->sub_token->prev->var, RESET);
 	if (check_token(token) == 1)
@@ -163,7 +186,7 @@ int	parser(t_token *token, t_env *env)
 		ft_printf(2, "PRINTF TESTER : syntax error near unexpected token\n");
 		return (ERROR_SYNTAX_STATUS);
 	}
-	// cmd = cmd_list(cmd, token);
-	// printf("CMD TABLEAU [%s]\n", cmd->argv[1]);
+	cmd = cmd_list(cmd, token);
+	test_cmd(cmd);
 	return (0);
 }
