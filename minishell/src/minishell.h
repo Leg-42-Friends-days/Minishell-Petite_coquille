@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/13 16:10:02 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/13 16:55:53 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,13 @@
 
 typedef enum e_ast_type
 {
-	WORD,
-	PIPE,
-	AND,
-	OR,
-	SUBSHELL,
-	LEFT_PAR,
-	RIGHT_PAR
+	AST_WORD,
+	AST_PIPE,
+	AST_AND,
+	AST_OR,
+	AST_SUBSHELL,
+	AST_LEFT_PAR,
+	AST_RIGHT_PAR
 }					t_ast_type;
 
 typedef struct s_redir

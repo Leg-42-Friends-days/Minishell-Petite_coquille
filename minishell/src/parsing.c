@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/13 16:28:47 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/14 16:19:41 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,27 +272,143 @@ bool	check_token(t_token *token)
 // 	return (ast);
 // }
 
+// int	parser(t_token *token)
+// {
+// 	t_ast	*ast;
+// 	t_token	*last;
+
+// 	if (check_token(token) == 1)
+// 	{
+// 		ft_printf(2, "PRINTF TESTER : syntax error near unexpected token\n");
+// 		return (ERROR_SYNTAX_STATUS);
+// 	}
+// 	last = token;
+// 	while (last->next != NULL)
+// 		last = last->next;
+// 	ast = starting_point(token, last);
+// 	// ast = priority_operator(ast, token);
+// 	if (ast)
+// 	{
+// 		printf("ast existe\n");
+// 		printf("NUMBER AST : [%d]\n", ast->type);
+// 	}
+// 	else
+// 		printf("ast n'existe pas");
+// 	return (0);
+// }
+
+// Creation de node
+t_ast	*ast_node(int type)
+{
+	t_ast	*node;
+
+	node = malloc(sizeof(t_ast));
+	if (!node)
+		return (NULL);
+	node->type = type;
+	node->left = NULL;
+	node->right = NULL;
+	node->cmd_token = NULL;
+	node->redirs = NULL;
+	return (node);
+}
+
+t_ast	*parse_cmd(t_token **token)
+{
+	t_ast	*node;
+
+	node = ast_node(AST_WORD);
+	node->cmd_token = *token;
+	*token = (*token)->next;
+	while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+	{
+		// redirection
+		*token = (*token)->next;
+	}
+	return (node);
+}
+
+t_ast	*parse_pipe(t_token **token)
+{
+	t_ast	*left;
+	t_ast	*node;
+
+	left = parse_cmd(token);
+	while (*token && (*token)->type == PIPE)
+	{
+		node = ast_node(AST_PIPE);
+		*token = (*token)->next;
+		node->left = left;
+		node->right = parse_cmd(token);
+		left = node;
+	}
+	return (left);
+}
+
+t_ast	*parse_and(t_token **token)
+{
+	t_ast	*left;
+	t_ast	*node;
+
+	left = parse_pipe(token);
+	while (*token && (*token)->type == AND)
+	{
+		node = ast_node(AST_AND);
+		*token = (*token)->next;
+		node->left = left;
+		node->right = parse_pipe(token);
+		left = node;
+	}
+	return (left);
+}
+
+t_ast	*parse_or(t_token **token)
+{
+	t_ast	*left;
+	t_ast	*node;
+
+	left = parse_and(token);
+	while (*token && (*token)->type == OR)
+	{
+		node = ast_node(AST_OR);
+		*token = (*token)->next;
+		node->left = left;
+		node->right = parse_and(token);
+		left = node;
+	}
+	return (left);
+}
+
+void	printleft(t_ast *ast)
+{
+	while (ast != NULL)
+	{
+		printf("AST LEFT VALUE : %u\n", ast->type);
+		ast = ast->left;
+	}
+}
+
+void	printright(t_ast *ast)
+{
+	while (ast != NULL)
+	{
+		printf("AST RIGHT VALUE : %u\n", ast->type);
+		ast = ast->right;
+	}
+}
+
 int	parser(t_token *token)
 {
 	t_ast	*ast;
-	t_token	*last;
 
+	ast = NULL;
 	if (check_token(token) == 1)
 	{
 		ft_printf(2, "PRINTF TESTER : syntax error near unexpected token\n");
 		return (ERROR_SYNTAX_STATUS);
 	}
-	last = token;
-	while (last->next != NULL)
-		last = last->next;
-	ast = starting_point(token, last);
-	// ast = priority_operator(ast, token);
-	if (ast)
-	{
-		printf("ast existe\n");
-		printf("NUMBER AST : [%d]\n", ast->type);
-	}
-	else
-		printf("ast n'existe pas");
+	ast = parse_or(&token);
+	printleft(ast);
+	printright(ast);
 	return (0);
 }
