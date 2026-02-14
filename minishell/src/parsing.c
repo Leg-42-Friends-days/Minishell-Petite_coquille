@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/14 16:19:41 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/14 16:41:35 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,8 +318,11 @@ t_ast	*parse_cmd(t_token **token)
 	t_ast	*node;
 
 	node = ast_node(AST_WORD);
-	node->cmd_token = *token;
-	*token = (*token)->next;
+	while (*token && (*token)->type == WORD)
+	{
+		node->cmd_token = *token;
+		*token = (*token)->next;
+	}
 	while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
 	{
 		// redirection
@@ -379,13 +382,23 @@ t_ast	*parse_or(t_token **token)
 	return (left);
 }
 
+void	printright(t_ast *ast);
+
 void	printleft(t_ast *ast)
 {
 	while (ast != NULL)
 	{
 		printf("AST LEFT VALUE : %u\n", ast->type);
+		// while (ast->cmd_token->sub_token->next != NULL)
+		// {
+		// 	printf("AST LEFT TOKEN VALUE : %s \n", ast->cmd_token->sub_token->var);
+		// 	ast->cmd_token->sub_token = ast->cmd_token->sub_token->next;
+		// }
+		if (ast->right)
+			printright(ast);
 		ast = ast->left;
 	}
+	printf("\n");
 }
 
 void	printright(t_ast *ast)
@@ -393,6 +406,11 @@ void	printright(t_ast *ast)
 	while (ast != NULL)
 	{
 		printf("AST RIGHT VALUE : %u\n", ast->type);
+		// while (ast->cmd_token->sub_token->next != NULL)
+		// {
+		// 	printf("AST RIGHT TOKEN VALUE : %s \n", ast->cmd_token->sub_token->var);
+		// 	ast->cmd_token->sub_token = ast->cmd_token->sub_token->next;
+		// }
 		ast = ast->right;
 	}
 }
