@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/10 14:08:59 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/16 15:37:37 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,37 @@
 # include <unistd.h>
 // getcwd() chdir() isatty() ttyname() ttyslot()
 
+// ARBRE SYNTAXIQUE
+
+typedef enum e_ast_type
+{
+	AST_WORD,
+	AST_PIPE,
+	AST_AND,
+	AST_OR,
+	AST_SUBSHELL,
+	AST_LEFT_PAR,
+	AST_RIGHT_PAR
+}					t_ast_type;
+
+typedef struct s_redir
+{
+	t_token_type	type;
+	t_token			*target;
+	struct s_red	*next;
+}					t_redir;
+
+typedef struct s_ast
+{
+	t_ast_type		type;
+
+	struct s_ast	*left;
+	struct s_ast	*right;
+
+	t_token			*cmd_token;
+	t_redir			*redirs;
+}					t_ast;
+
+int					parser(t_token *token);
 
 #endif
