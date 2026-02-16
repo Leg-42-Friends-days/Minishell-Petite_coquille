@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/16 13:28:21 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/16 15:11:44 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,10 +326,10 @@ t_ast	*parse_cmd(t_token **token)
 		*token = (*token)->next;
 	while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
 	{
+		node->redirs = malloc(sizeof(t_redir));
 		node->redirs->type = (*token)->type;
 		*token = (*token)->next;
 		node->redirs->target = (*token);
-		*token = (*token)->next;
 	}
 	return (node);
 }
@@ -397,14 +397,14 @@ void	printleft(t_ast *ast)
 			while (ast->cmd_token->next != NULL && ast->cmd_token->type == WORD)
 			{
 				printf("AST LEFT CONTENT : %s\n", ast->cmd_token->sub_token->var);
+				if (ast->redirs)
+				{
+					printf("REDIR VALUE : %u\n", ast->redirs->type);
+					printf("REDIR CONTENT : %s\n", ast->redirs->target->sub_token->var);
+				}
 				ast->cmd_token = ast->cmd_token->next;
 			}
 		}
-		// while (ast->cmd_token->sub_token->next != NULL)
-		// {
-		// 	printf("AST LEFT TOKEN VALUE : %s \n", ast->cmd_token->sub_token->var);
-		// 	ast->cmd_token->sub_token = ast->cmd_token->sub_token->next;
-		// }
 		if (ast->right)
 			printright(ast);
 		ast = ast->left;
