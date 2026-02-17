@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/17 15:24:12 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/17 17:17:15 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,21 @@ bool	check_if_expendable(char *ast)
 
 bool	check_path2(char *ast, t_env *env)
 {
+	int	i;
 
+	i = 0;
+	while (env != NULL)
+	{
+		i = 0;
+		while (env->key[i] == ast[i])
+		{
+			if (ast[i] == '\0')
+				return (false);
+			i++;
+		}
+		env == env->next;
+	}
+	return (true);
 }
 
 bool	check_path(char *ast, t_env *env)
@@ -78,8 +92,7 @@ bool	check_path(char *ast, t_env *env)
 		i++;
 	}
 	i = check_path2(str, env);
-	free(str);
-	return (i);
+	return (free(str), i);
 }
 
 char	*app_expend(char *ast, t_env *env)
