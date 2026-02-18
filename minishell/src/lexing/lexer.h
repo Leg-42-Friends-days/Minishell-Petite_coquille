@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:14:19 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/16 14:28:42 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/17 18:28:16 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,15 @@ typedef enum e_state
 typedef enum e_token_type
 {
 	WORD,
-	PIPE,
 	INFILE,
 	OUTFILE,
 	HEREDOC,
 	APPEND,
-	OR,
-	AND,
 	L_PAR,
-	R_PAR
+	R_PAR,
+	PIPE,
+	OR,
+	AND
 }				t_token_type;
 
 typedef enum e_quote

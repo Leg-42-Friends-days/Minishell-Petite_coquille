@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/17 11:25:35 by ibrouin-         ###   ########.fr       */
+/*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
+/*   Updated: 2026/02/18 11:38:37 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef PARSER_H
+# define PARSER_H
 
 // Unicode Color
 // Usage > printf("%s Hello World %s", COLOR, RESET);
@@ -27,9 +26,7 @@
 # define RESET "\033[0m"
 
 # include "../libft/libft.h"
-# include "./builtin/builtin.h"
-# include "lexing/lexer.h"
-# include "parsing/parser.h"
+# include "../lexing/lexer.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 // readline rl_clear_history, rl_on_new_line,
@@ -65,5 +62,41 @@
 // getcwd() chdir() isatty() ttyname() ttyslot()
 
 // ARBRE SYNTAXIQUE
+
+typedef enum e_ast_type
+{
+	AST_CMD,
+	AST_PIPE,
+	AST_AND,
+	AST_OR,
+	AST_SUBSHELL,
+}					t_ast_type;
+
+typedef struct s_redir
+{
+	t_token_type	type;
+	t_token			*target;
+	struct s_redir	*next;
+}					t_redir;
+
+typedef struct s_ast
+{
+	t_ast_type		type;
+
+	struct s_ast	*left;
+	struct s_ast	*right;
+
+	t_token			*cmd_token;
+	t_redir			*redirs;
+	char 			**cmd;
+}					t_ast;
+
+
+//PARSING.C
+int				parser(t_token *token);
+t_ast			*parse_or(t_token **token);
+
+//CHECK_TOKEN.C
+bool	            check_token(t_token *token);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/02/12 22:56:47 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/02/17 11:37:54 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,6 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -I./includes -I./libft 
 SRC_DIR = src/
 SRC =	main.c \
-		parsing.c \
 		lexing/add_nodes.c \
 		lexing/lexing_2.c \
 		lexing/lexing.c \
@@ -31,7 +30,9 @@ SRC =	main.c \
 		builtin/cd.c \
 		builtin/echo.c \
 		builtin/unset.c \
-		builtin/free_builtin.c 
+		builtin/free_builtin.c \
+		parsing/check_token.c \
+		parsing/parsing.c
 		
 OBJ_DIR = obj/
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
