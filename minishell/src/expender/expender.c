@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/18 14:00:59 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/18 14:09:22 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ char	*app_expend(char *ast, t_env *env)
 
 t_ast	*call_expand(t_ast *ast, t_env *env)
 {
-	while (ast->cmd_token != NULL)
+	while (ast->cmd_token != NULL && ast->cmd_token->type == WORD)
 	{
 		ast->cmd_token = ast->cmd_token->next;
 	}

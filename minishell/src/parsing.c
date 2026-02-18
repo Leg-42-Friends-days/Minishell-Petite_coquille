@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/17 11:43:32 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/18 14:05:35 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -445,6 +445,6 @@ int	parser(t_token *token, t_env *env)
 	ast = parse_or(&token);
 	// printleft(ast);
 	// printright(ast);
-	expand_function(ast, env);
+	ast = expand_function(ast, env);
 	return (0);
 }
