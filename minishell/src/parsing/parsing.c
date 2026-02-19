@@ -6,10 +6,9 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/18 17:15:51 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/19 16:21:17 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "parser.h"
 
@@ -197,17 +196,19 @@ void	print_ast(t_ast *ast)
 	printf("\n");
 }
 
-int	parser(t_token **token)
+int	parser(t_token *token, t_env *env)
 {
 	t_ast	*ast;
 
 	ast = NULL;
-	if (check_token((*token)) == 1)
+	(void) env;
+	if (check_token(token) == 1)
 	{
 		ft_printf(2, "PRINTF TESTER : syntax error near unexpected token\n");
 		return (2);
 	}
 	ast = parse_or(token);
 	print_ast(ast);
+	// ast = expand_function(ast, env);
 	return (0);
 }

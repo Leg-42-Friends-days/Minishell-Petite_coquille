@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/18 16:56:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/19 16:18:15 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,6 @@
 
 // Unicode Color
 // Usage > printf("%s Hello World %s", COLOR, RESET);
-# define BLACK "\033[30m"
-# define RED "\033[31m"
-# define GREEN "\033[32m"
-# define YELLOW "\033[33m"
-# define BLUE "\033[34m"
-# define MAGENTA "\033[35m"
-# define CYAN "\033[36m"
-# define WHITE "\033[37m"
-# define RESET "\033[0m"
 
 # include "../libft/libft.h"
 # include "../lexing/lexer.h"
@@ -93,7 +84,7 @@ typedef struct s_ast
 
 
 //PARSING.C
-int				parser(t_token **token);
+int				parser(t_token *token, t_env *env);
 t_ast			*parse_or(t_token **token);
 
 //CHECK_TOKEN.C

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
+#    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/02/17 11:37:54 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/02/18 14:27:44 by mickzhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I./includes -I./libft 
+CFLAGS = -Wall -Wextra -Werror -I./includes -I./libft -g3
 SRC_DIR = src/
 SRC =	main.c \
 		lexing/add_nodes.c \
@@ -32,7 +32,8 @@ SRC =	main.c \
 		builtin/unset.c \
 		builtin/free_builtin.c \
 		parsing/check_token.c \
-		parsing/parsing.c
+		parsing/parsing.c \
+		expender/expender.c 
 		
 OBJ_DIR = obj/
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
