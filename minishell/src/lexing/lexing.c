@@ -32,7 +32,7 @@ void	normal_state(char **buffer, char cara, t_state *state, t_token **mini)
 		other_cara(buffer, cara, mini, state);
 }
 
-void	cara_iteration(char *line, char **buffer, t_token **mini_vars, t_state *state)
+int	cara_iteration(char *line, char **buffer, t_token **mini_vars, t_state *state)
 {
 	int		i;
 
@@ -40,7 +40,7 @@ void	cara_iteration(char *line, char **buffer, t_token **mini_vars, t_state *sta
 	while (line[i] != '\0' && line[i] == ' ')
 		i++;
 	if (line[i] == '\0')
-		return ;
+		return (1);
 	while (line[i] != '\0')
 	{
 		if (*state == NORMAL)
@@ -50,9 +50,10 @@ void	cara_iteration(char *line, char **buffer, t_token **mini_vars, t_state *sta
 		else if (*state == IN_S_QUOTE)
 			in_s_quote_state(buffer, line[i], state, mini_vars);
 		if (*state == ERROR)
-			return ;
+			return (0);
 		i++;
 	}
+	return (0);
 }
 
 void	last_token(char **buffer, t_token **mini_vars, t_state *state)
@@ -91,7 +92,8 @@ t_token	*lexing(t_token **mini_vars, char *line)
 
 	state = NORMAL;
 	buffer = NULL;
-	cara_iteration(line, &buffer, mini_vars, &state);
+	if ((cara_iteration(line, &buffer, mini_vars, &state)) == 1)
+		return (NULL);
 	if (state == 1 || state == 2)
 	{
 		ft_miniclear(mini_vars);

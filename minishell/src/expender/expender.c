@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   expender.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/18 14:20:24 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/19 16:44:52 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
+/* 
 // copy permet de copie la valeur de $
 // paste permet de la mettre en leurs valeur et le renvoye
 
@@ -142,4 +142,4 @@ t_ast	*expand_function(t_ast *ast, t_env *env)
 	// if (curseurr->type != AST_WORD)
 	// 	if (curseurr->left && check_if_word(curseurr) == true)
 	return (ast);
-}
+} */

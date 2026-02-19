@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/19 16:24:09 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/19 17:55:37 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,6 +230,8 @@ int	parser(t_token **token)
 {
 	t_ast	*ast;
 
+	if (!token || !*token)
+		return (0);
 	ast = NULL;
 	if (check_token((*token)) == 1)
 	{
