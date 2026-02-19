@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/19 14:27:56 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/19 15:09:54 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,20 +132,37 @@ bool	check_path2(char *str, t_env *env)
 	return (false);
 }
 
+int	len_dollars(char *ast)
+{
+	int	i;
+
+	i = 0;
+	while (ast[i])
+	{
+		if (ast[i] == ' ')
+			return (i);
+		i++;
+	}
+	return (i);
+}
+
 bool	check_path(char *ast, t_env *env)
 {
 	char	*str;
 	int		i;
+	int		j;
 
 	if (env == NULL || ast == NULL)
 		return (NULL);
 	i = 0;
 	while (ast[i])
 	{
+		j = 0;
 		if (ast[i] == '$')
 		{
 			i++;
-			str = ft_substr(ast, i, -1);
+			j = len_dollars(ast + i);
+			str = ft_substr(ast, i, j);
 			if (!str)
 				return (NULL);
 			printf("str malloc: %s\n", str);
@@ -158,7 +175,7 @@ bool	check_path(char *ast, t_env *env)
 	return (free(str), i);
 }
 
-char	*app_expend(char *ast, t_env *env)
+char	*app_expend(char *ast, t_env *env, bool state)
 {
 	if (check_if_expendable(ast) == 0)
 		return (ast);
@@ -170,9 +187,10 @@ char	*app_expend(char *ast, t_env *env)
 	}
 	else
 	{
-		ast = ft_strdup("TROUVE");
-		// faire un if double ou normal
-		return (ast);
+		if (state == true)
+			ast = ft_strdup("TROUVER DOUBLE");
+		else if (state == false)
+			ast = ft_strdup("TROUVER NORMAL");
 	}
 	return (ast);
 }
@@ -190,8 +208,10 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		current_sub = current_token->sub_token;
 		while (current_sub != NULL)
 		{
-			if (current_sub->quote != SINGLE)
-				current_sub->var = app_expend(current_sub->var, env);
+			if (current_sub->quote == DOUBLE)
+				current_sub->var = app_expend(current_sub->var, env, true);
+			else if (current_sub->quote == NORMAL)
+				current_sub->var = app_expend(current_sub->var, env, false);
 			current_sub = current_sub->next;
 		}
 		current_token = current_token->next;
