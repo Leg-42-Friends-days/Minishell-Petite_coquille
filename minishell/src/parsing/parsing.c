@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/19 17:55:37 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/20 14:08:42 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,19 @@ t_ast	*ast_node(int type)
 	return (node);
 }
 
-void	redir_node(t_redir **redir, t_token **token)
+int	redir_node(t_redir **redir, t_token **token)
 {
 	t_redir	*node;
 	t_token	*file;
 
+	if (!(*token)->next)
+	{
+		printf("minishell: syntax error near unexpected token `newline'\n");
+		return (1);
+	}
 	node = malloc(sizeof(t_redir));
 	if (!node)
-		return ;
+		return (1);
 	node->type = (*token)->type;
 	file = (*token)->next;
 	node->target = file;
@@ -56,16 +61,17 @@ void	redir_node(t_redir **redir, t_token **token)
 	if (!redir || !(*redir))
 	{
 		(*redir) = node;
-		return;
+		return (0);
 	}
 	while ((*redir)->next != NULL)
 	{
 		(*redir) = (*redir)->next;
 	}
 	(*redir)->next = node;
+	return (0);
 }
 
-void	token_list_redir(t_token **token, t_ast *node)
+int	token_list_redir(t_token **token, t_ast *node)
 {
 	t_token	*prev;
 	t_token	*next;
@@ -76,7 +82,8 @@ void	token_list_redir(t_token **token, t_ast *node)
 		prev = (*token)->prev;
 	else
 		prev = NULL;
-	redir_node(&node->redirs, token);;
+	if ((redir_node(&node->redirs, token)) == 1)
+		return (1);
 	//node->redirs->type = (*token)->type;
 	file = (*token)->next;
 	redir = (*token);
@@ -98,6 +105,9 @@ void	token_list_redir(t_token **token, t_ast *node)
 		next->prev = prev;
 	if (next)
 		(*token) = next;
+	else
+		(*token) = NULL;
+	return (0);
 }
 
 t_ast	*parse_cmd(t_token **token)
@@ -121,8 +131,10 @@ t_ast	*parse_cmd(t_token **token)
 	if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
 	{
 		node = ast_node(AST_CMD);
-		token_list_redir(token, node);
-		node->cmd_token = *token;
+		if ((token_list_redir(token, node)) == 1)
+			return (NULL);
+		if (*token)
+			node->cmd_token = *token;
 	}
 	else if (*token && (*token)->type == WORD)
 	{
@@ -133,7 +145,8 @@ t_ast	*parse_cmd(t_token **token)
 	{
 		if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
 		{
-			token_list_redir(token, node);
+			if ((token_list_redir(token, node)) == 1)
+				return (NULL);
 		}
 		else
 			*token = (*token)->next;
@@ -197,32 +210,39 @@ void	print_ast(t_ast *ast)
 {
 	if (ast != NULL)
 	{
-		printf("%u\n", ast->type);
+		if (ast->type)
+			printf("%u\n", ast->type);
 		if (ast->cmd_token)
 		{
 			while (ast->cmd_token && ast->cmd_token->type < 5)
 			{
-				printf("AST CONTENT : %s\n", ast->cmd_token->sub_token->var);
+				if (ast->cmd_token->sub_token->var)
+					printf("AST CONTENT : %s\n", ast->cmd_token->sub_token->var);
 				if (ast->cmd_token->next)
 					ast->cmd_token = ast->cmd_token->next;
 				else
 					break ;
 			}
+		}
+		if (ast->redirs)
+		{
 			while (ast->redirs)
 			{
-				printf("REDIR VALUE : %u\n", ast->redirs->type);
-				printf("REDIR CONTENT : %s\n", ast->redirs->target->sub_token->var);
+				if (ast->redirs->type)
+					printf("REDIR VALUE : %u\n", ast->redirs->type);
+				if (ast->redirs->target->sub_token->var)
+					printf("REDIR CONTENT : %s\n", ast->redirs->target->sub_token->var);
 				if (ast->redirs->next)
 					ast->redirs = ast->redirs->next;
 				else
 					break ;
 			}
 		}
+		if (ast->left)
+			print_ast(ast->left);
+		if (ast->right)
+			print_ast(ast->right);
 	}
-	if (ast->left)
-		print_ast(ast->left);
-	if (ast->right)
-		print_ast(ast->right);
 	printf("\n");
 }
 
