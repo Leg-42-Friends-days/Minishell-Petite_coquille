@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/20 15:01:20 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/20 17:03:49 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,90 +48,6 @@ bool	check_if_expendable(char *ast)
 	return (false);
 }
 
-// bool	check_path2(char *ast, t_env *env)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (env != NULL)
-// 	{
-// 		i = 0;
-// 		while (env->key[i] == ast[i])
-// 		{
-// 			i++;
-// 			printf("key : %c\nast : %c\n", env->key[i], ast[i]);
-// 			if (ast[i] == '\0')
-// 				return (true);
-// 		}
-// 		env = env->next;
-// 	}
-// 	return (false);
-// }
-
-// bool	check_path(char *ast, t_env *env)
-// {
-// 	char	*str;
-// 	int		i;
-// 	int		j;
-
-// 	i = 0;
-// 	j = 0;
-// 	// str = ft_calloc(1, (ft_strlen(ast) + 1));
-// 	str = malloc(sizeof(char) * (ft_strlen(ast) + 1));
-// 	if (!str)
-// 		return (NULL);
-// 	while (ast[i])
-// 	{
-// 		if (ast[i] == '$')
-// 		{
-// 			i++;
-// 			while (ast[i])
-// 			{
-// 				str[j] = str[i];
-// 				i++;
-// 				j++;
-// 			}
-// 		}
-// 		i++;
-// 	}
-// 		printf("ast value : %s\n", ast);
-// 	printf("str value : %s\n", str);
-// 	i = check_path2(ast, env);
-// 	return (free(str), i);
-// // }
-
-// char	*app_expend(char *ast, t_env *env)
-// {
-// 	if (check_if_expendable(ast) == 0)
-// 		return (ast);
-// 	else if (check_path(ast, env) == 0)
-// 	{
-// 		ast = ft_strdup("TEST1");
-// 		return (ast);
-// 	}
-// 	else
-// 	{
-// 		ast = ft_strdup("TEST2");
-// 		return (ast);
-// 	}
-// 	return (ast);
-// }
-
-bool	check_path2(char *str, t_env *env)
-{
-	int	i;
-
-	i = 0;
-	while (env != NULL)
-	{
-		i = 0;
-		if (ft_strncmp(env->key, str, -1) == 0)
-			return (true);
-		env = env->next;
-	}
-	return (false);
-}
-
 int	len_dollars(char *ast)
 {
 	int	i;
@@ -146,45 +62,20 @@ int	len_dollars(char *ast)
 	return (i);
 }
 
-bool	check_path(char *ast, t_env *env)
-{
-	char	*str;
-	int		i;
-	int		j;
-	int		count;
-
-	if (env == NULL || ast == NULL)
-		return (NULL);
-	i = 0;
-	count = 0;
-	while (ast[i])
-	{
-		j = 0;
-		if (ast[i] == '$')
-		{
-			i++;
-			j = len_dollars(ast + i);
-			count++;
-			str = ft_substr(ast, i, j);
-			if (!str)
-				return (NULL);
-		}
-		i++;
-	}
-	i = check_path2(str, env);
-	return (free(str), i);
-}
 
 char	*check_string(char *str, t_env *env)
 {
 	char	*str_env;
 
+	if (!str)
+		return (NULL);
 	str_env = NULL;
 	while (env != NULL)
 	{
 		if (ft_strncmp(env->key, str, -1) == 0)
 		{
 			str_env = ft_strdup(env->content);
+			printf("ENV->CONTENT : %s\n", str_env);
 			break ;
 		}
 		env = env->next;
@@ -198,18 +89,19 @@ char	*check_key(char *str)
 	char	*key;
 
 	i = 0;
-	while (str[i] != ' ')
+	while (str[i] != ' ' && str[i])
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
 		return (NULL);
 	i = 0;
-	while (str[i] != ' ')
+	while (str[i] != ' ' && str[i])
 	{
 		key[i] = str[i];
 		i++;
 	}
 	key[i] = '\0';
+	printf("KEY->CONTENT : %s\n", key);
 	return (key);
 }
 
@@ -249,6 +141,8 @@ char	*check_new_string(char *str, char *key, char *env)
 		}
 	}
 	new_string[k] = '\0';
+	free(str);
+	printf("NEW_STRING VALUE : %s\n", new_string);
 	return (new_string);
 }
 
@@ -257,35 +151,45 @@ char	*new_string(char *str, t_env *env)
 	int		i;
 	char	*str_key;
 	char	*str_env;
-	char	*new_string;
+	char	*new_str;
+	char	*temp;
 
 	i = 0;
-	while (str[i])
+	if (!str)
+		return (NULL);
+	new_str = ft_strdup(str);
+	if (!new_str)
+		return (NULL);
+	while (new_str[i])
 	{
-		if (str[i] == '$')
+		if (new_str[i] == '$')
 		{
 			i++;
-			str_key = check_key(str + i);
+			str_key = check_key(new_str + i);
 			str_env = check_string(str_key, env);
-			new_string = check_new_string(str, str_key, str_env);
+			if (str_env)
+			{
+				temp = check_new_string(new_str, str_key, str_env);
+				new_str = temp;
+			}
+			else
+				i += ft_strlen(str_key);
 			free(str_key);
 			free(str_env);
 		}
 		else
 			i++;
 	}
-	return (new_string);
+	free(str);
+	return (new_str);
 }
 
 char	*app_expend(char *ast, t_env *env, bool state)
 {
+	if (!ast)
+		return (NULL);
 	if (check_if_expendable(ast) == 0)
 		return (ast);
-	else if (check_path(ast, env) == 0)
-	{
-		ast = ft_strdup("PAS TROUVE");
-		return (ast);
-	}
 	else
 	{
 		if (state == true)
@@ -337,7 +241,6 @@ t_ast	*expand_function(t_ast *ast, t_env *env)
 {
 	t_ast	*curseur;
 
-	(void)env;
 	curseur = ast;
 	ast = expand_ast_checker(curseur, env);
 	return (ast);
