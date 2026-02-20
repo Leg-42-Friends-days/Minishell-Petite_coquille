@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/20 14:12:03 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/20 15:01:20 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,27 +168,20 @@ bool	check_path(char *ast, t_env *env)
 			str = ft_substr(ast, i, j);
 			if (!str)
 				return (NULL);
-			printf("str malloc: %s\n", str);
 		}
 		i++;
 	}
-	printf("ast value : %s\n", ast);
-	printf("str value : %s\n", str);
-	printf("Number of count : %d\n", count);
 	i = check_path2(str, env);
 	return (free(str), i);
 }
 
 char	*check_string(char *str, t_env *env)
 {
-	int		i;
 	char	*str_env;
 
-	i = 0;
 	str_env = NULL;
 	while (env != NULL)
 	{
-		i = 0;
 		if (ft_strncmp(env->key, str, -1) == 0)
 		{
 			str_env = ft_strdup(env->content);
@@ -216,37 +209,47 @@ char	*check_key(char *str)
 		key[i] = str[i];
 		i++;
 	}
-	key = '\0';
+	key[i] = '\0';
 	return (key);
 }
 
 char	*check_new_string(char *str, char *key, char *env)
 {
-	int	i;
-	int	j;
-	int	len;
-	char *new_string;
+	int		i;
+	int		j;
+	int		k;
+	int		len;
+	char	*new_string;
 
 	i = 0;
-	len = ft_strlen(str) + ft_strlen(env);
+	k = 0;
+	len = ft_strlen(str) + ft_strlen(env) - ft_strlen(key) - 1;
 	new_string = malloc(sizeof(char) * (len + 1));
+	if (!new_string)
+		return (NULL);
 	while (str[i])
 	{
-		j = 0;
 		if (str[i] == '$')
 		{
 			i++;
-			while (str[j] == key[j])
+			i += ft_strlen(key);
+			j = 0;
+			while (env[j])
 			{
+				new_string[k] = env[j];
 				j++;
-				if (key == '\0')
-				{
-					
-				}
+				k++;
 			}
 		}
-		i++;
+		else
+		{
+			new_string[k] = str[i];
+			i++;
+			k++;
+		}
 	}
+	new_string[k] = '\0';
+	return (new_string);
 }
 
 char	*new_string(char *str, t_env *env)
@@ -265,18 +268,13 @@ char	*new_string(char *str, t_env *env)
 			str_key = check_key(str + i);
 			str_env = check_string(str_key, env);
 			new_string = check_new_string(str, str_key, str_env);
+			free(str_key);
+			free(str_env);
 		}
-		i++;
+		else
+			i++;
 	}
-	return (NULL);
-}
-
-char	*ft_dup_exp(char *str, t_env *env)
-{
-	char	*new_str;
-
-	new_str = new_string(str, env);
-	return (new_str);
+	return (new_string);
 }
 
 char	*app_expend(char *ast, t_env *env, bool state)
@@ -286,15 +284,14 @@ char	*app_expend(char *ast, t_env *env, bool state)
 	else if (check_path(ast, env) == 0)
 	{
 		ast = ft_strdup("PAS TROUVE");
-		ast = ft_dup_exp(ast, env);
 		return (ast);
 	}
 	else
 	{
 		if (state == true)
-			ast = ft_strdup("TROUVER DOUBLE");
+			ast = new_string(ast, env);
 		else if (state == false)
-			ast = ft_strdup("TROUVER NORMAL");
+			ast = new_string(ast, env);
 	}
 	return (ast);
 }
