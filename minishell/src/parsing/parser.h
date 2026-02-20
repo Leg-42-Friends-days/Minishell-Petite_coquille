@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/19 16:31:09 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/20 11:20:06 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ typedef struct s_ast
 
 
 //PARSING.C
-int				parser(t_token *token, t_env *env);
+int				parser(t_token **token);
 t_ast			*parse_or(t_token **token);
 
 //CHECK_TOKEN.C

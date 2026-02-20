@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/18 14:20:24 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/20 11:20:24 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,119 +27,119 @@
 // 	struct s_exp	*next;
 // }					t_exp;
 
-bool	check_if_word(t_ast *ast)
-{
-	if (ast->type == AST_CMD)
-		return (true);
-	return (false);
-}
+// bool	check_if_word(t_ast *ast)
+// {
+// 	if (ast->type == AST_CMD)
+// 		return (true);
+// 	return (false);
+// }
 
-bool	check_if_expendable(char *ast)
-{
-	int	i;
+// bool	check_if_expendable(char *ast)
+// {
+// 	int	i;
 
-	i = 0;
-	while (ast[i])
-	{
-		if (ast[i] == '$' && ast[i + 1] >= 33 && ast[i + 1] <= 126)
-			return (true);
-		i++;
-	}
-	return (false);
-}
+// 	i = 0;
+// 	while (ast[i])
+// 	{
+// 		if (ast[i] == '$' && ast[i + 1] >= 33 && ast[i + 1] <= 126)
+// 			return (true);
+// 		i++;
+// 	}
+// 	return (false);
+// }
 
-bool	check_path2(char *ast, t_env *env)
-{
-	int	i;
+// bool	check_path2(char *ast, t_env *env)
+// {
+// 	int	i;
 
-	i = 0;
-	while (env != NULL)
-	{
-		i = 0;
-		while (env->key[i] == ast[i])
-		{
-			if (ast[i] == '\0')
-				return (false);
-			i++;
-		}
-		env == env->next;
-	}
-	return (true);
-}
+// 	i = 0;
+// 	while (env != NULL)
+// 	{
+// 		i = 0;
+// 		while (env->key[i] == ast[i])
+// 		{
+// 			if (ast[i] == '\0')
+// 				return (false);
+// 			i++;
+// 		}
+// 		env == env->next;
+// 	}
+// 	return (true);
+// }
 
-bool	check_path(char *ast, t_env *env)
-{
-	char	*str;
-	int		i;
-	int		j;
+// bool	check_path(char *ast, t_env *env)
+// {
+// 	char	*str;
+// 	int		i;
+// 	int		j;
 
-	i = 0;
-	j = 0;
-	str = ft_calloc(1, (ft_strlen(ast) + 1));
-	if (!str)
-		return (NULL);
-	while (ast[i])
-	{
-		if (ast[i] == '$')
-		{
-			i++;
-			while (ast[i])
-			{
-				str[j] = str[i];
-				i++;
-			}
-		}
-		i++;
-	}
-	i = check_path2(str, env);
-	return (free(str), i);
-}
+// 	i = 0;
+// 	j = 0;
+// 	str = ft_calloc(1, (ft_strlen(ast) + 1));
+// 	if (!str)
+// 		return (NULL);
+// 	while (ast[i])
+// 	{
+// 		if (ast[i] == '$')
+// 		{
+// 			i++;
+// 			while (ast[i])
+// 			{
+// 				str[j] = str[i];
+// 				i++;
+// 			}
+// 		}
+// 		i++;
+// 	}
+// 	i = check_path2(str, env);
+// 	return (free(str), i);
+// }
 
-char	*app_expend(char *ast, t_env *env)
-{
-	if (check_if_expendable(ast) == 0)
-		return (ast);
-	else if (check_path(ast, env) == 0)
-		return (NULL);
-	else
-	{
-	}
-}
+// char	*app_expend(char *ast, t_env *env)
+// {
+// 	if (check_if_expendable(ast) == 0)
+// 		return (ast);
+// 	else if (check_path(ast, env) == 0)
+// 		return (NULL);
+// 	else
+// 	{
+// 	}
+// }
 
-// changer a partir de a ne pas changer var mais mettre dans un tableau
+// // changer a partir de a ne pas changer var mais mettre dans un tableau
 
-t_ast	*call_expand(t_ast *ast, t_env *env)
-{
-	while (ast->cmd_token != NULL && ast->cmd_token->type == WORD)
-	{
-		ast->cmd_token = ast->cmd_token->next;
-	}
-	return (ast);
-}
+// t_ast	*call_expand(t_ast *ast, t_env *env)
+// {
+// 	while (ast->cmd_token != NULL && ast->cmd_token->type == WORD)
+// 	{
+// 		ast->cmd_token = ast->cmd_token->next;
+// 	}
+// 	return (ast);
+// }
 
-t_ast	*expand_left(t_ast *curseurl, t_env *env)
-{
-	while (curseurl->type != AST_CMD)
-	{
-		curseurl = curseurl->left;
-		if (check_if_word(curseurl) == 1)
-			call_expand(curseurl, env);
-		else
-			expand_left(curseurl->right, env);
-		if (check_if_word(curseurl) == 1)
-			call_expand(curseurl, env);
-	}
-}
+// t_ast	*expand_left(t_ast *curseurl, t_env *env)
+// {
+// 	while (curseurl->type != AST_CMD)
+// 	{
+// 		curseurl = curseurl->left;
+// 		if (check_if_word(curseurl) == 1)
+// 			call_expand(curseurl, env);
+// 		else
+// 			expand_left(curseurl->right, env);
+// 		if (check_if_word(curseurl) == 1)
+// 			call_expand(curseurl, env);
+// 	}
+// }
 
-t_ast	*expand_function(t_ast *ast, t_env *env)
-{
-	t_ast	*curseurl;
-	t_ast	*curseurr;
+// t_ast	*expand_function(t_ast *ast, t_env *env)
+// {
+// 	t_ast	*curseurl;
+// 	t_ast	*curseurr;
 
-	curseurl = ast;
-	curseurr = ast;
-	expand_left(curseurl, env);
-	// if (curseurr->type != AST_WORD)
-	// 	if (curseurr->left && check_if_word(curseurr) == true)
-	return (ast);
-}
+// 	curseurl = ast;
+// 	curseurr = ast;
+// 	expand_left(curseurl, env);
+// 	// if (curseurr->type != AST_WORD)
+// 	// 	if (curseurr->left && check_if_word(curseurr) == true)
+// 	return (ast);
+// }
