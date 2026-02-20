@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/20 14:08:42 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/02/20 14:22:19 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,8 +242,8 @@ void	print_ast(t_ast *ast)
 			print_ast(ast->left);
 		if (ast->right)
 			print_ast(ast->right);
+		printf("\n");
 	}
-	printf("\n");
 }
 
 int	parser(t_token **token)
