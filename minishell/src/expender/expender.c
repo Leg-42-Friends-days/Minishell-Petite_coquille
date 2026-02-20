@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/19 15:09:54 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/02/20 14:12:03 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,10 +151,12 @@ bool	check_path(char *ast, t_env *env)
 	char	*str;
 	int		i;
 	int		j;
+	int		count;
 
 	if (env == NULL || ast == NULL)
 		return (NULL);
 	i = 0;
+	count = 0;
 	while (ast[i])
 	{
 		j = 0;
@@ -162,6 +164,7 @@ bool	check_path(char *ast, t_env *env)
 		{
 			i++;
 			j = len_dollars(ast + i);
+			count++;
 			str = ft_substr(ast, i, j);
 			if (!str)
 				return (NULL);
@@ -171,8 +174,109 @@ bool	check_path(char *ast, t_env *env)
 	}
 	printf("ast value : %s\n", ast);
 	printf("str value : %s\n", str);
+	printf("Number of count : %d\n", count);
 	i = check_path2(str, env);
 	return (free(str), i);
+}
+
+char	*check_string(char *str, t_env *env)
+{
+	int		i;
+	char	*str_env;
+
+	i = 0;
+	str_env = NULL;
+	while (env != NULL)
+	{
+		i = 0;
+		if (ft_strncmp(env->key, str, -1) == 0)
+		{
+			str_env = ft_strdup(env->content);
+			break ;
+		}
+		env = env->next;
+	}
+	return (str_env);
+}
+
+char	*check_key(char *str)
+{
+	int		i;
+	char	*key;
+
+	i = 0;
+	while (str[i] != ' ')
+		i++;
+	key = malloc(sizeof(char) * (i + 1));
+	if (!key)
+		return (NULL);
+	i = 0;
+	while (str[i] != ' ')
+	{
+		key[i] = str[i];
+		i++;
+	}
+	key = '\0';
+	return (key);
+}
+
+char	*check_new_string(char *str, char *key, char *env)
+{
+	int	i;
+	int	j;
+	int	len;
+	char *new_string;
+
+	i = 0;
+	len = ft_strlen(str) + ft_strlen(env);
+	new_string = malloc(sizeof(char) * (len + 1));
+	while (str[i])
+	{
+		j = 0;
+		if (str[i] == '$')
+		{
+			i++;
+			while (str[j] == key[j])
+			{
+				j++;
+				if (key == '\0')
+				{
+					
+				}
+			}
+		}
+		i++;
+	}
+}
+
+char	*new_string(char *str, t_env *env)
+{
+	int		i;
+	char	*str_key;
+	char	*str_env;
+	char	*new_string;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+		{
+			i++;
+			str_key = check_key(str + i);
+			str_env = check_string(str_key, env);
+			new_string = check_new_string(str, str_key, str_env);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
+char	*ft_dup_exp(char *str, t_env *env)
+{
+	char	*new_str;
+
+	new_str = new_string(str, env);
+	return (new_str);
 }
 
 char	*app_expend(char *ast, t_env *env, bool state)
@@ -182,7 +286,7 @@ char	*app_expend(char *ast, t_env *env, bool state)
 	else if (check_path(ast, env) == 0)
 	{
 		ast = ft_strdup("PAS TROUVE");
-		// donc envoye vide
+		ast = ft_dup_exp(ast, env);
 		return (ast);
 	}
 	else
