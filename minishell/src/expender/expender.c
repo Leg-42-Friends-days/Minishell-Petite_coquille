@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/02 19:51:10 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/02 20:15:25 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,10 @@ bool	check_if_expendable(char *str)
 		return (false);
 	while (str[i])
 	{
-		if (str[i] == '$' && !(str[i + 1] >= 32 && 47 <= str[i + 1]))
-			i++;
-		else if (str[i] == '$')
+		if (str[i] == '$' && str[i + 1] == '$')
+			i += 2;
+		if (str[i] == '$' && ((str[i + 1] >= 65 && 90 <= str[i + 1]) || (str[i
+						+ 1] >= 97 && 122 <= str[i + 1])))
 			return (true);
 		i++;
 	}
