@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/02 13:05:30 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 13:09:32 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,13 +258,6 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		}
 		current_token = current_token->next;
 	}
-
-	int i = 0;
-	while (ast->cmd[i])
-	{
-		printf("PRINT CMD : %s\n", ast->cmd[i]);
-		i++;
-	} */
 	return (ast);
 }
 

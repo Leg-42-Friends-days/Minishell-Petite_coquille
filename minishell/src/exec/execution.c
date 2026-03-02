@@ -6,11 +6,23 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/27 11:14:13 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 13:18:01 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+void	print_tab(char **tabl)
+{
+	int	i;
+
+	i = 0;
+	while(tabl[i] != NULL)
+	{
+		printf("%s\n", tabl[i]);
+		i++;
+	}
+}
 
 int	execution(t_ast *ast, t_env *env)
 {
@@ -22,6 +34,7 @@ int	execution(t_ast *ast, t_env *env)
 		if (ast->type == AST_CMD)
 		{
 			expand_function(ast, env);
+			print_tab(ast->cmd);
 			exit_status = exec_cmd(ast, env);
 		}
 		if (ast->type == AST_PIPE)
