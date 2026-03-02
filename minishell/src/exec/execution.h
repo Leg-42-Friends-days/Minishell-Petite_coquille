@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/27 11:02:44 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 15:15:39 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ char    *find_cmd(t_env *env, char *cmd);
 
 //REDIRECTION
 void    redirection(t_ast *node);
+void	run_through_here_doc(t_ast *ast);
 
 #endif

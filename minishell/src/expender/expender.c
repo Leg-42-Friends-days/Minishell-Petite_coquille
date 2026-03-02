@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/02 13:42:50 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 13:49:36 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*check_string(char *str, t_env *env)
 		if (ft_strncmp(env->key, str, -1) == 0)
 		{
 			str_env = ft_strdup(env->content);
-			printf("ENV->CONTENT : %s\n", str_env);
+			// printf("ENV->CONTENT : %s\n", str_env);
 			break ;
 		}
 		env = env->next;
@@ -119,7 +119,7 @@ char	*check_new_string(char *str, char *key, char *env)
 		k++;
 	}
 	new_string[k] = '\0';
-	printf("NEW_STRING VALUE : %s\n", new_string);
+	// printf("NEW_STRING VALUE : %s\n", new_string);
 	return (free(str), new_string);
 }
 
@@ -132,9 +132,9 @@ char	*new_string(char *str, t_env *env)
 	char	*tmp;
 
 	i = 0;
-	printf("VALEUR ACTUELLE DE STR : %s\n", str);
+	// printf("VALEUR ACTUELLE DE STR : %s\n", str);
 	new_str = ft_strdup(str);
-	printf("VALEUR ACTUELLE DE NEW_STR : %s\n", new_str);
+	// printf("VALEUR ACTUELLE DE NEW_STR : %s\n", new_str);
 	while (new_str[i])
 	{
 		if (new_str[i] == '$')
@@ -142,8 +142,8 @@ char	*new_string(char *str, t_env *env)
 			i++;
 			key = check_key(new_str + i);
 			content = check_string(key, env);
-			printf("KEY->CONTENT : %s\n", key);
-			printf("ENV->CONTENT : %s\n", content);
+			// printf("KEY->CONTENT : %s\n", key);
+			// printf("ENV->CONTENT : %s\n", content);
 			tmp = check_new_string(new_str, key, content);
 			new_str = tmp;
 			i = 0;
@@ -307,11 +307,11 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	}
 	ast->cmd[i] = NULL;
 	i = 0;
-	while (ast->cmd[i])
-	{
-		printf("%s\n", ast->cmd[i]);
-		i++;
-	}
+	// while (ast->cmd[i])
+	// {
+	// 	printf("%s\n", ast->cmd[i]);
+	// 	i++;
+	// }
 	return (ast);
 }
 
