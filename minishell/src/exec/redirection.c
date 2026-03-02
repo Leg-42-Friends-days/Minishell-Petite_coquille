@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/02 20:20:27 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 20:39:49 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	prepare_here_doc(t_redir *node)
 			line = readline("lol > ");
 			if (!line)
 				break ;
-			if ((ft_strncmp(line, node->target->sub_token->var, (ft_strlen(line) - 1)) == 0))
+			if ((ft_strncmp(line, node->target->sub_token->var, (ft_strlen(node->target->sub_token->var) + 1)) == 0))
 			{
 				free(line);
 				close(fd[1]);

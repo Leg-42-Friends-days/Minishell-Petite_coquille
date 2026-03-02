@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/02 20:05:22 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 20:38:42 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	execution(t_ast *ast, t_env *env)
 	int	exit_status;
 
 	exit_status = 0;
-	run_through_here_doc(ast);
 	if (ast != NULL)
 	{
 		if (ast->type == AST_CMD)
