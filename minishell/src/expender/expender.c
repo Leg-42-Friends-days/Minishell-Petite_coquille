@@ -55,12 +55,33 @@ char	*check_string(char *str, t_env *env)
 	return (str_env);
 }
 
+char	*number_str(char *str)
+{
+	int i;
+	char *key;
+
+	i = 0;
+	while (str[i] >= 48 && str[i] <= 57)
+		i++;
+	key = malloc(sizeof(char) * (i + 1));
+	i = 0;
+	while (str[i] >= 48 && str[i] <= 57)
+	{
+		key[i] = str[i];
+		i++;
+	}
+	key[i] = '\0';
+	return (key);
+}
+
 char	*check_key(char *str)
 {
 	int		i;
 	char	*key;
 
 	i = 0;
+	if (str[i] >= '0' && str[i] <= '9')
+		return (key = number_str(str));
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
 		&& (str[i] != 39 && str[i]))
 		i++;
@@ -157,6 +178,8 @@ char	*app_expend(char *str, t_env *env, bool state)
 		return (NULL);
 	if (check_if_expendable(str) == 0)
 		return (str);
+	else if (check_if_number(str) == 0)
+		printf("STRING VALUE :%s", str);
 	else
 	{
 		if (state == true)
@@ -317,7 +340,7 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	int			j;
 
 	k = 0;
-	ast->cmd2 = malloc(sizeof(char) * 10);
+	ast->cmd2 = malloc(sizeof(char *) * 10);
 	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
@@ -404,10 +427,6 @@ t_ast	*expand_ast(t_ast *ast, t_env *env)
 		call_expand(ast, env);
 	}
 	check_redirection(ast, env);
-	if (ast->left)
-		expand_ast(ast->left, env);
-	if (ast->right)
-		expand_ast(ast->right, env);
 	return (tmp);
 }
 
