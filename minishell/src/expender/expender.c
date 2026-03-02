@@ -154,7 +154,7 @@ char	*new_string(char *str, t_env *env)
 	new_str = ft_strdup(str);
 	while (new_str[i])
 	{
-		if (new_str[i] == '$')
+		if (new_str[i] == '$' && !(new_str[i + 1] == ' ' || new_str[i + 1] == '\0'))
 		{
 			i++;
 			key = check_key(new_str + i);
@@ -178,8 +178,6 @@ char	*app_expend(char *str, t_env *env, bool state)
 		return (NULL);
 	if (check_if_expendable(str) == 0)
 		return (str);
-	else if (check_if_number(str) == 0)
-		printf("STRING VALUE :%s", str);
 	else
 	{
 		if (state == true)
