@@ -6,10 +6,9 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/02 13:49:36 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 18:36:50 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 
 #include "../minishell.h"
@@ -218,6 +217,7 @@ int	expand_len(t_ast *ast, t_env *env)
 // 	char	**tmp;
 // 	int		i;
 // 	int		j;
+
 // 	i = 0;
 // 	j = 0;
 // 	if (current_sub->quote == DOUBLE)
@@ -266,6 +266,50 @@ int	expand_len(t_ast *ast, t_env *env)
 // 	return (ast);
 // }
 
+char	*strjoin_exp(char *s1, char *s2)
+{
+	int		i;
+	int		j;
+	int		len;
+	char	*str;
+
+	i = 0;
+	j = 0;
+	len = ft_strlen(s1) + ft_strlen(s2);
+	str = malloc(sizeof(char) * (len + 1));
+	if (!s1 && !s2)
+		return (NULL);
+	while (s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		str[i + j] = s2[j];
+		j++;
+	}
+	str[i + j] = '\0';
+	if (s1)
+		free(s1);
+	return (str);
+}
+
+char	*call_join(char **str)
+{
+	int		i;
+	char	*full_string;
+
+	i = 0;
+	full_string = calloc(1, 1);
+	while (str[i])
+	{
+		full_string = strjoin_exp(full_string, str[i]);
+		i++;
+	}
+	return (full_string);
+}
+
 t_ast	*call_expand(t_ast *ast, t_env *env)
 {
 	t_token		*current_token;
@@ -274,7 +318,6 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	int			i;
 	int			j;
 
-	ast->cmd = malloc(sizeof(char *) * 100);
 	i = 0;
 	j = 0;
 	current_token = ast->cmd_token;
@@ -300,18 +343,18 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 					i++;
 				}
 			}
+			else if (current_sub->quote == SINGLE)
+			{
+				ast->cmd[i] = ft_strdup(current_sub->var);
+				i++;
+			}
 			j = 0;
 			current_sub = current_sub->next;
 		}
 		current_token = current_token->next;
 	}
 	ast->cmd[i] = NULL;
-	i = 0;
-	// while (ast->cmd[i])
-	// {
-	// 	printf("%s\n", ast->cmd[i]);
-	// 	i++;
-	// }
+	ast->final = call_join(ast->cmd);
 	return (ast);
 }
 

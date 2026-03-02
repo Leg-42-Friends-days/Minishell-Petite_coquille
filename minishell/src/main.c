@@ -6,9 +6,11 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/02 15:05:27 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 18:37:21 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 
 #include "minishell.h"
@@ -54,8 +56,8 @@ int	main(int ac, char **av, char **envp)
 		{
 			mini_vars = lexing(&mini_vars, line);
 		}
-		//if (*line)
-		//	add_history(line);
+		if (*line)
+			add_history(line);
 		if (!line)
 		{
 			free(line);

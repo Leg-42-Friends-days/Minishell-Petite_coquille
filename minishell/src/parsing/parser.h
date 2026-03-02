@@ -6,9 +6,11 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/02 18:34:21 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 18:37:34 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 #ifndef PARSER_H
 # define PARSER_H
@@ -82,11 +84,13 @@ typedef struct s_ast
 	t_token			*cmd_token;
 	t_redir			*redirs;
 	char 			**cmd;
+	char			*final;
 }					t_ast;
 
 
 //PARSING.C
 t_ast			*parser(t_token **token);
+
 t_ast			*parse_or(t_token **token);
 void			print_ast(t_ast *ast);
 
