@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/02 18:37:34 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 19:11:33 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 
 
@@ -84,7 +85,7 @@ typedef struct s_ast
 	t_token			*cmd_token;
 	t_redir			*redirs;
 	char 			**cmd;
-	char			*final;
+	char			**cmd2;
 }					t_ast;
 
 
