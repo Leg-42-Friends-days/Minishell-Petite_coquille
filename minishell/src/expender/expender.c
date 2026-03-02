@@ -6,9 +6,10 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/02 13:09:32 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 13:42:50 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 
 #include "../minishell.h"
@@ -62,13 +63,15 @@ char	*check_key(char *str)
 	char	*key;
 
 	i = 0;
-	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i]))
+	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
+		&& (str[i] != 39 && str[i]))
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
 		return (NULL);
 	i = 0;
-	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i]))
+	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
+		&& (str[i] != 39 && str[i]))
 	{
 		key[i] = str[i];
 		i++;
@@ -76,7 +79,6 @@ char	*check_key(char *str)
 	key[i] = '\0';
 	return (key);
 }
-
 
 char	*check_new_string(char *str, char *key, char *env)
 {
@@ -169,8 +171,6 @@ char	*app_expend(char *str, t_env *env, bool state)
 	return (str);
 }
 
-// changer a partir de a ne pas changer var mais mettre dans un tableau
-
 int	count_tmp(char **str)
 {
 	int	i;
@@ -213,107 +213,134 @@ int	expand_len(t_ast *ast, t_env *env)
 }
 // dans le return (free_split(tmp));
 
-
-t_ast	*expension(t_ast *ast, t_sub_token *current_sub, t_env *env)
-{
-	char	**tmp;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	if (current_sub->quote == DOUBLE)
-	{
-		current_sub->var = app_expend(current_sub->var, env, true);
-		ast->cmd[i] = ft_strdup(current_sub->var);
-		i++;
-	}
-	else if (current_sub->quote == NORMAL)
-	{
-		current_sub->var = app_expend(current_sub->var, env, false);
-		tmp = ft_split(current_sub->var, ' ');
-		while (tmp[j])
-		{
-			ast->cmd[i] = ft_strdup(tmp[j]);
-			j++;
-			i++;
-		}
-	}
-	return (ast->cmd[i] = NULL, ast);
-}
-
-t_ast	*call_expand(t_ast *ast, t_env *env)
-{
-	t_token		*current_token;
-	t_sub_token	*current_sub;
-
-	current_token = ast->cmd_token;
-	while (current_token != NULL && current_token->type == WORD)
-	{
-		current_sub = current_token->sub_token;
-		while (current_sub != NULL)
-		{
-			ast = expension(ast, current_sub, env);
-			current_sub = current_sub->next;
-		}
-		current_token = current_token->next;
-	}
-	return (ast);
-}
+// t_ast	*expension(t_ast *ast, t_sub_token *current_sub, t_env *env)
+// {
+// 	char	**tmp;
+// 	int		i;
+// 	int		j;
+// 	i = 0;
+// 	j = 0;
+// 	if (current_sub->quote == DOUBLE)
+// 	{
+// 		current_sub->var = app_expend(current_sub->var, env, true);
+// 		ast->cmd[i] = ft_strdup(current_sub->var);
+// 		i++;
+// 	}
+// 	else if (current_sub->quote == NORMAL)
+// 	{
+// 		current_sub->var = app_expend(current_sub->var, env, false);
+// 		tmp = ft_split(current_sub->var, ' ');
+// 		while (tmp[j])
+// 		{
+// 			ast->cmd[i] = ft_strdup(tmp[j]);
+// 			j++;
+// 			i++;
+// 		}
+// 	}
+// 	return (ast->cmd[i] = NULL, ast);
+// }
 
 // t_ast	*call_expand(t_ast *ast, t_env *env)
 // {
 // 	t_token		*current_token;
 // 	t_sub_token	*current_sub;
-// 	char		**tmp;
 // 	int			i;
-// 	int			j;
 
-// 	i = 0;
-// 	j = 0;
 // 	current_token = ast->cmd_token;
 // 	while (current_token != NULL && current_token->type == WORD)
 // 	{
 // 		current_sub = current_token->sub_token;
 // 		while (current_sub != NULL)
 // 		{
-// 			if (current_sub->quote == DOUBLE)
-// 			{
-// 				current_sub->var = app_expend(current_sub->var, env, true);
-// 				ast->cmd[i] = ft_strdup(current_sub->var);
-// 				i++;
-// 			}
-// 			else if (current_sub->quote == NORMAL)
-// 			{
-// 				current_sub->var = app_expend(current_sub->var, env, false);
-// 				tmp = ft_split(current_sub->var, ' ');
-// 				while (tmp[j])
-// 				{
-// 					ast->cmd[i] = ft_strdup(tmp[j]);
-// 					j++;
-// 					i++;
-// 				}
-// 			}
-// 			j = 0;
+// 			ast = expension(ast, current_sub, env);
 // 			current_sub = current_sub->next;
 // 		}
 // 		current_token = current_token->next;
 // 	}
-// 	ast->cmd[i] = NULL;
 // 	i = 0;
 // 	while (ast->cmd[i])
 // 	{
-// 		printf("%s\n", ast->cmd[i]);
+// 		printf("PRINT CMD : %s\n", ast->cmd[i]);
 // 		i++;
 // 	}
 // 	return (ast);
 // }
 
-// NVM c'est celle la qu'on a pas besoin
+t_ast	*call_expand(t_ast *ast, t_env *env)
+{
+	t_token		*current_token;
+	t_sub_token	*current_sub;
+	char		**tmp;
+	int			i;
+	int			j;
+
+	ast->cmd = malloc(sizeof(char *) * 100);
+	i = 0;
+	j = 0;
+	current_token = ast->cmd_token;
+	while (current_token != NULL && current_token->type == WORD)
+	{
+		current_sub = current_token->sub_token;
+		while (current_sub != NULL)
+		{
+			if (current_sub->quote == DOUBLE)
+			{
+				current_sub->var = app_expend(current_sub->var, env, true);
+				ast->cmd[i] = ft_strdup(current_sub->var);
+				i++;
+			}
+			else if (current_sub->quote == NORMAL)
+			{
+				current_sub->var = app_expend(current_sub->var, env, false);
+				tmp = ft_split(current_sub->var, ' ');
+				while (tmp[j])
+				{
+					ast->cmd[i] = ft_strdup(tmp[j]);
+					j++;
+					i++;
+				}
+			}
+			j = 0;
+			current_sub = current_sub->next;
+		}
+		current_token = current_token->next;
+	}
+	ast->cmd[i] = NULL;
+	i = 0;
+	while (ast->cmd[i])
+	{
+		printf("%s\n", ast->cmd[i]);
+		i++;
+	}
+	return (ast);
+}
+
+void	check_redirection(t_ast *ast, t_env *env)
+{
+	t_ast	*tmp;
+	t_redir	*re;
+
+	tmp = ast;
+	if (!tmp || !tmp->redirs)
+		return ;
+	re = tmp->redirs;
+	while (re != NULL)
+	{
+		if (check_if_expendable(re->target->sub_token->var) == 1
+			&& tmp->cmd_token->sub_token->quote == DOUBLE)
+			re->target->sub_token->var = app_expend(re->target->sub_token->var,
+					env, true);
+		else if (check_if_expendable(re->target->sub_token->var) == 1
+			&& tmp->cmd_token->sub_token->quote == NORMAL)
+			re->target->sub_token->var = app_expend(re->target->sub_token->var,
+					env, false);
+		re = re->next;
+	}
+}
 
 t_ast	*expand_ast(t_ast *ast, t_env *env)
 {
-	t_ast *tmp;
+	t_ast	*tmp;
 
 	tmp = ast;
 	if (!ast)
@@ -326,18 +353,7 @@ t_ast	*expand_ast(t_ast *ast, t_env *env)
 			return (ast);
 		call_expand(ast, env);
 	}
-	while (ast->redirs != NULL)
-	{
-		if (check_if_expendable(ast->redirs->target->sub_token->var) == 1
-			&& ast->cmd_token->sub_token->quote == DOUBLE)
-			ast->redirs->target->sub_token->var = app_expend(ast->redirs->target->sub_token->var,
-					env, true);
-		else if (check_if_expendable(ast->redirs->target->sub_token->var) == 1
-			&& ast->cmd_token->sub_token->quote == NORMAL)
-			ast->redirs->target->sub_token->var = app_expend(ast->redirs->target->sub_token->var,
-					env, false);
-		ast->redirs = ast->redirs->next;
-	}
+	check_redirection(ast, env);
 	if (ast->left)
 		expand_ast(ast->left, env);
 	if (ast->right)
@@ -353,26 +369,3 @@ t_ast	*expand_function(t_ast *ast, t_env *env)
 	ast = expand_ast(curseur, env);
 	return (ast);
 }
-
-
-
-
-// t_ast	*expand_redir(t_ast *ast, t_env *env)
-// {
-// 	t_ast	*tmp;
-
-// 	tmp = ast;
-// 	while (ast->redirs->next != NULL)
-// 	{
-// 		if (check_if_expendable(ast->redirs->target->sub_token->var) == 1
-// 			&& ast->cmd_token->sub_token->quote == DOUBLE)
-// 			ast->redirs->target->sub_token->var = app_expend(ast->redirs->target->sub_token->var,
-// 					env, true);
-// 		else if (check_if_expendable(ast->redirs->target->sub_token->var) == 1
-// 			&& ast->cmd_token->sub_token->quote == NORMAL)
-// 			ast->redirs->target->sub_token->var = app_expend(ast->redirs->target->sub_token->var,
-// 					env, false);
-// 		ast->redirs = ast->redirs->next;
-// 	}
-// 	return (tmp);
-// }
