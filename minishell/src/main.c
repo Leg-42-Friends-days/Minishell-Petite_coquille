@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/02 13:08:59 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 18:28:01 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 
 #include "minishell.h"
@@ -54,8 +55,8 @@ int	main(int ac, char **av, char **envp)
 		{
 			mini_vars = lexing(&mini_vars, line);
 		}
-		//if (*line)
-		//	add_history(line);
+		if (*line)
+			add_history(line);
 		if (!line)
 		{
 			free(line);
