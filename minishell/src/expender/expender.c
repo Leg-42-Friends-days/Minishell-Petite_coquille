@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/27 19:20:31 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/02 11:17:52 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,15 @@ char	*check_key(char *str)
 	char	*key;
 
 	i = 0;
-	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i]))
+	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
+		&& (str[i] != 39 && str[i]))
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
 		return (NULL);
 	i = 0;
-	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i]))
+	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
+		&& (str[i] != 39 && str[i]))
 	{
 		key[i] = str[i];
 		i++;
