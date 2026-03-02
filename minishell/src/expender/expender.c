@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/02 19:07:32 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/02 19:51:10 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ bool	check_if_expendable(char *str)
 		return (false);
 	while (str[i])
 	{
-		if (str[i] == '$')
+		if (str[i] == '$' && !(str[i + 1] >= 32 && 47 <= str[i + 1]))
+			i++;
+		else if (str[i] == '$')
 			return (true);
 		i++;
 	}
@@ -130,9 +132,7 @@ char	*new_string(char *str, t_env *env)
 	char	*tmp;
 
 	i = 0;
-	printf("VALEUR ACTUELLE DE STR : %s\n", str);
 	new_str = ft_strdup(str);
-	printf("VALEUR ACTUELLE DE NEW_STR : %s\n", new_str);
 	while (new_str[i])
 	{
 		if (new_str[i] == '$')
@@ -358,9 +358,11 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		current_token = current_token->next;
 	}
 	// i = 0;
-	// while (ast->cmd[i])
+	printf("CMD2 VALUE : %s\n", ast->cmd[0]);
+	printf("CMD2 VALUE : %s\n", ast->cmd[1]);
+	// while (ast->cmd2[i])
 	// {
-	// 	printf("%s\n", ast->cmd[i]);
+	// 	printf("CMD2 VALUE : %s\n", ast->cmd[i]);
 	// 	i++;
 	// }
 	return (ast);
