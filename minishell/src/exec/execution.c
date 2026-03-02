@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/02 18:38:52 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 19:17:38 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	execution(t_ast *ast, t_env *env)
 		if (ast->type == AST_CMD)
 		{
 			expand_function(ast, env);
-			//print_tab(ast->cmd);
+			//print_tab(ast->cmd2);
 			exit_status = exec_cmd(ast, env);
 		}
 		if (ast->type == AST_PIPE)
@@ -57,11 +57,11 @@ int	exec_cmd(t_ast *ast, t_env *env)
 	int		status;
 
 	status = 0;
-	path = find_cmd(env, ast->cmd[0]);
+	path = find_cmd(env, ast->cmd2[0]);
 	if (!path)
 	{
 		write(2, "minishell: ", 11);
-		write(2, ast->cmd[0], ft_strlen(ast->cmd[0]));
+		write(2, ast->cmd2[0], ft_strlen(ast->cmd2[0]));
 		write(2, ": command not found\n", 21);
 		return (127);
 	}
@@ -71,7 +71,7 @@ int	exec_cmd(t_ast *ast, t_env *env)
 	if (pid == 0)
 	{
 		redirection(ast);
-		execve(path, ast->cmd, NULL);
+		execve(path, ast->cmd2, NULL);
 		perror("minishell");
 		exit (127);
 	}
