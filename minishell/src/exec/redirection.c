@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/02 19:13:29 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 20:20:27 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,20 @@ int	prepare_here_doc(t_redir *node)
 			if ((ft_strncmp(line, node->target->sub_token->var, (ft_strlen(line) - 1)) == 0))
 			{
 				free(line);
-				break ;
+				close(fd[1]);
+				exit (0);
 			}
 			write(fd[1], line, ft_strlen(line));
+			write(fd[1], "\n", 1);
 			free(line);
 		}
-		close(fd[1]);
 	}
-	close(fd[0]);
 	close(fd[1]);
 	waitpid(pid, &status, 0);
+	node->fd = fd[0];
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return(0);
-	node->fd = fd[0];
-	printf("heredoc lol \n");
 }
 
 void	run_through_here_doc(t_ast *ast)
@@ -69,7 +68,10 @@ void	run_through_here_doc(t_ast *ast)
 				while (ast->redirs)
 				{
 					if (ast->redirs->type == HEREDOC)
+					{
 						prepare_here_doc(ast->redirs);
+						break ;
+					}
 					if (ast->redirs->next)
 						ast->redirs = ast->redirs->next;
 					else
@@ -78,9 +80,9 @@ void	run_through_here_doc(t_ast *ast)
 			}
 		}
 		if (ast->left)
-			print_ast(ast->left);
+			run_through_here_doc(ast->left);
 		if (ast->right)
-			print_ast(ast->right);
+			run_through_here_doc(ast->right);
 	}
 /* 	if (ast->left)
 			print_ast(ast->left);
