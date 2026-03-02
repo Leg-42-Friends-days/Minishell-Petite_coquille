@@ -6,26 +6,12 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/26 19:48:46 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 13:05:30 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "../minishell.h"
-
-// copy permet de copie la valeur de $
-// paste permet de la mettre en leurs valeur et le renvoye
-
-// typedef struct s_exp
-// {
-// 	int				last_command;
-
-// 	char			*copy;
-// 	char			*paste;
-// 	t_state			state;
-// 	t_env			*env;
-// 	bool			in_doc;
-// 	struct s_exp	*next;
-// }					t_exp;
 
 bool	check_if_word(t_ast *ast)
 {
@@ -39,6 +25,8 @@ bool	check_if_expendable(char *str)
 	int	i;
 
 	i = 0;
+	if (!str)
+		return (false);
 	while (str[i])
 	{
 		if (str[i] == '$')
@@ -47,20 +35,6 @@ bool	check_if_expendable(char *str)
 	}
 	return (false);
 }
-
-// int	len_dollars(char *ast)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (ast[i])
-// 	{
-// 		if (ast[i] == ' ' || ast[i] == '$')
-// 			return (i);
-// 		i++;
-// 	}
-// 	return (i);
-// }
 
 char	*check_string(char *str, t_env *env)
 {
@@ -74,6 +48,7 @@ char	*check_string(char *str, t_env *env)
 		if (ft_strncmp(env->key, str, -1) == 0)
 		{
 			str_env = ft_strdup(env->content);
+			printf("ENV->CONTENT : %s\n", str_env);
 			break ;
 		}
 		env = env->next;
@@ -102,6 +77,7 @@ char	*check_key(char *str)
 	return (key);
 }
 
+
 char	*check_new_string(char *str, char *key, char *env)
 {
 	int		i;
@@ -126,6 +102,7 @@ char	*check_new_string(char *str, char *key, char *env)
 			j = 0;
 			i += ft_strlen(key);
 			count++;
+			// new_string = new_string_cpy(new_string, env, i);
 			while (env[j])
 			{
 				new_string[k] = env[j];
@@ -140,51 +117,9 @@ char	*check_new_string(char *str, char *key, char *env)
 		k++;
 	}
 	new_string[k] = '\0';
-	free(str);
-	return (new_string);
+	printf("NEW_STRING VALUE : %s\n", new_string);
+	return (free(str), new_string);
 }
-
-// char	*new_string(char *str, t_env *env)
-// {
-// 	int		i;
-// 	char	*str_key;
-// 	char	*str_env;
-// 	char	*new_str;
-// 	char	*temp;
-
-// 	i = 0;
-// 	if (!str)
-// 		return (NULL);
-// 	new_str = ft_strdup(str);
-// 	if (!new_str)
-// 		return (NULL);
-// 	while (new_str[i])
-// 	{
-//         printf("CONTENT CHAR: %c\n", new_str[i]);
-// 		if (new_str[i] == '$')
-// 		{
-// 			i++;
-//             printf("NEW_STRING AVANT : %s\n", new_str);
-// 			str_key = check_key(new_str + i);
-// 			str_env = check_string(str_key, env);
-// 			if (str_env)
-// 			{
-// 				temp = check_new_string(new_str, str_key, str_env);
-// 				new_str = temp;
-//                 i = 0;
-// 			}
-// 			else
-// 				i += ft_strlen(str_key) + 1;
-// 			free(str_key);
-// 			free(str_env);
-// 		}
-// 		else
-// 			i++;
-// 	}
-//     printf("NEW_STRING APRES : %s\n", new_str);
-// 	free(str);
-// 	return (new_str);
-// }
 
 char	*new_string(char *str, t_env *env)
 {
@@ -195,7 +130,9 @@ char	*new_string(char *str, t_env *env)
 	char	*tmp;
 
 	i = 0;
+	printf("VALEUR ACTUELLE DE STR : %s\n", str);
 	new_str = ft_strdup(str);
+	printf("VALEUR ACTUELLE DE NEW_STR : %s\n", new_str);
 	while (new_str[i])
 	{
 		if (new_str[i] == '$')
@@ -203,103 +140,216 @@ char	*new_string(char *str, t_env *env)
 			i++;
 			key = check_key(new_str + i);
 			content = check_string(key, env);
+			printf("KEY->CONTENT : %s\n", key);
+			printf("ENV->CONTENT : %s\n", content);
 			tmp = check_new_string(new_str, key, content);
 			new_str = tmp;
 			i = 0;
 		}
+		// printf("VALEUR ACTUELLE DE NEW_CHAR : %c\n", new_str[i]);
 		i++;
 	}
 	free(str);
 	return (new_str);
 }
 
-char	*app_expend(char *ast, t_env *env, bool state)
+char	*app_expend(char *str, t_env *env, bool state)
 {
-	if (!ast)
+	if (!str)
 		return (NULL);
-	if (check_if_expendable(ast) == 0)
-		return (ast);
+	if (check_if_expendable(str) == 0)
+		return (str);
 	else
 	{
 		if (state == true)
-			ast = new_string(ast, env);
+			str = new_string(str, env);
 		else if (state == false)
-			ast = new_string(ast, env);
+			str = new_string(str, env);
 	}
-	return (ast);
+	return (str);
 }
 
 // changer a partir de a ne pas changer var mais mettre dans un tableau
+
+int	count_tmp(char **str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+		i++;
+	return (i);
+}
+
+int	expand_len(t_ast *ast, t_env *env)
+{
+	int			i;
+	char		**tmp;
+	t_token		*token;
+	t_sub_token	*sub_token;
+
+	i = 0;
+	token = ast->cmd_token;
+	while (token != NULL && token->type == WORD)
+	{
+		sub_token = token->sub_token;
+		while (sub_token != NULL)
+		{
+			if (sub_token->quote == DOUBLE)
+				i++;
+			else if (sub_token->quote == NORMAL)
+			{
+				sub_token->var = app_expend(sub_token->var, env, false);
+				tmp = ft_split(sub_token->var, ' ');
+				i += count_tmp(tmp);
+			}
+			sub_token = sub_token->next;
+		}
+		token = token->next;
+	}
+	return (i);
+}
+// dans le return (free_split(tmp));
+
+
+t_ast	*expension(t_ast *ast, t_sub_token *current_sub, t_env *env)
+{
+	char	**tmp;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	if (current_sub->quote == DOUBLE)
+	{
+		current_sub->var = app_expend(current_sub->var, env, true);
+		ast->cmd[i] = ft_strdup(current_sub->var);
+		i++;
+	}
+	else if (current_sub->quote == NORMAL)
+	{
+		current_sub->var = app_expend(current_sub->var, env, false);
+		tmp = ft_split(current_sub->var, ' ');
+		while (tmp[j])
+		{
+			ast->cmd[i] = ft_strdup(tmp[j]);
+			j++;
+			i++;
+		}
+	}
+	return (ast->cmd[i] = NULL, ast);
+}
 
 t_ast	*call_expand(t_ast *ast, t_env *env)
 {
 	t_token		*current_token;
 	t_sub_token	*current_sub;
-	char		**tmp;
-	int			i;
-	int			j;
 
-	ast->cmd = malloc(sizeof(char *) * 100);
-	i = 0;
-	j = 0;
 	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
 		current_sub = current_token->sub_token;
 		while (current_sub != NULL)
 		{
-			if (current_sub->quote == DOUBLE)
-			{
-				current_sub->var = app_expend(current_sub->var, env, true);
-				ast->cmd[i] = ft_strdup(current_sub->var);
-				i++;
-			}
-			else if (current_sub->quote == NORMAL)
-			{
-				current_sub->var = app_expend(current_sub->var, env, false);
-				tmp = ft_split(current_sub->var, ' ');
-				while (tmp[j])
-				{
-					ast->cmd[i] = ft_strdup(tmp[j]);
-					j++;
-					i++;
-				}
-			}
-			j = 0;
+			ast = expension(ast, current_sub, env);
 			current_sub = current_sub->next;
 		}
 		current_token = current_token->next;
 	}
-	ast->cmd[i] = NULL;
-	i = 0;
-	/* while (ast->cmd[i])
+
+	int i = 0;
+	while (ast->cmd[i])
 	{
-		printf("%s\n", ast->cmd[i]);
+		printf("PRINT CMD : %s\n", ast->cmd[i]);
 		i++;
 	} */
 	return (ast);
 }
 
-// call expend de la version cmd
 // t_ast	*call_expand(t_ast *ast, t_env *env)
 // {
+// 	t_token		*current_token;
 // 	t_sub_token	*current_sub;
+// 	char		**tmp;
+// 	int			i;
+// 	int			j;
 
-// 	current_sub = ast->cmd_token->sub_token;
-// 	if (current_sub->quote == DOUBLE)
-// 		current_sub->var = app_expend(current_sub->var, env, true);
-// 	else if (current_sub->quote == NORMAL)
-// 		current_sub->var = app_expend(current_sub->var, env, false);
+// 	i = 0;
+// 	j = 0;
+// 	current_token = ast->cmd_token;
+// 	while (current_token != NULL && current_token->type == WORD)
+// 	{
+// 		current_sub = current_token->sub_token;
+// 		while (current_sub != NULL)
+// 		{
+// 			if (current_sub->quote == DOUBLE)
+// 			{
+// 				current_sub->var = app_expend(current_sub->var, env, true);
+// 				ast->cmd[i] = ft_strdup(current_sub->var);
+// 				i++;
+// 			}
+// 			else if (current_sub->quote == NORMAL)
+// 			{
+// 				current_sub->var = app_expend(current_sub->var, env, false);
+// 				tmp = ft_split(current_sub->var, ' ');
+// 				while (tmp[j])
+// 				{
+// 					ast->cmd[i] = ft_strdup(tmp[j]);
+// 					j++;
+// 					i++;
+// 				}
+// 			}
+// 			j = 0;
+// 			current_sub = current_sub->next;
+// 		}
+// 		current_token = current_token->next;
+// 	}
+// 	ast->cmd[i] = NULL;
+// 	i = 0;
+// 	while (ast->cmd[i])
+// 	{
+// 		printf("%s\n", ast->cmd[i]);
+// 		i++;
+// 	}
 // 	return (ast);
 // }
 
-t_ast	*expand_ast_checker(t_ast *curseur, t_env *env)
+// NVM c'est celle la qu'on a pas besoin
+
+t_ast	*expand_ast(t_ast *ast, t_env *env)
 {
-	if (!curseur)
+	t_ast *tmp;
+
+	tmp = ast;
+	if (!ast)
 		return (NULL);
-	if (check_if_word(curseur) == 1)
-		call_expand(curseur, env);
-	return (curseur);
+
+	if (check_if_word(ast) == 1)
+	{
+		ast->cmd = malloc(sizeof(char *) * (expand_len(ast, env) + 1));
+		if (!ast->cmd)
+			return (ast);
+		call_expand(ast, env);
+	}
+	while (ast->redirs != NULL)
+	{
+		if (check_if_expendable(ast->redirs->target->sub_token->var) == 1
+			&& ast->cmd_token->sub_token->quote == DOUBLE)
+			ast->redirs->target->sub_token->var = app_expend(ast->redirs->target->sub_token->var,
+					env, true);
+		else if (check_if_expendable(ast->redirs->target->sub_token->var) == 1
+			&& ast->cmd_token->sub_token->quote == NORMAL)
+			ast->redirs->target->sub_token->var = app_expend(ast->redirs->target->sub_token->var,
+					env, false);
+		ast->redirs = ast->redirs->next;
+	}
+	if (ast->left)
+		expand_ast(ast->left, env);
+	if (ast->right)
+		expand_ast(ast->right, env);
+	return (tmp);
 }
 
 t_ast	*expand_function(t_ast *ast, t_env *env)
@@ -307,6 +357,29 @@ t_ast	*expand_function(t_ast *ast, t_env *env)
 	t_ast	*curseur;
 
 	curseur = ast;
-	ast = expand_ast_checker(curseur, env);
+	ast = expand_ast(curseur, env);
 	return (ast);
 }
+
+
+
+
+// t_ast	*expand_redir(t_ast *ast, t_env *env)
+// {
+// 	t_ast	*tmp;
+
+// 	tmp = ast;
+// 	while (ast->redirs->next != NULL)
+// 	{
+// 		if (check_if_expendable(ast->redirs->target->sub_token->var) == 1
+// 			&& ast->cmd_token->sub_token->quote == DOUBLE)
+// 			ast->redirs->target->sub_token->var = app_expend(ast->redirs->target->sub_token->var,
+// 					env, true);
+// 		else if (check_if_expendable(ast->redirs->target->sub_token->var) == 1
+// 			&& ast->cmd_token->sub_token->quote == NORMAL)
+// 			ast->redirs->target->sub_token->var = app_expend(ast->redirs->target->sub_token->var,
+// 					env, false);
+// 		ast->redirs = ast->redirs->next;
+// 	}
+// 	return (tmp);
+// }
