@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/24 14:18:50 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/02 15:09:39 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_ast
 	t_token			*cmd_token;
 	t_redir			*redirs;
 	char 			**cmd;
+	char			*final;
 }					t_ast;
 
 
