@@ -6,13 +6,13 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/02 18:34:57 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 18:39:11 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-void	prepare_here_doc(t_redir *node)
+/* void	prepare_here_doc(t_redir *node)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -53,7 +53,7 @@ void	prepare_here_doc(t_redir *node)
 	return(0);
 	node->fd = fd;
 	printf("heredoc lol \n");
-}
+} */
 
 void	run_through_here_doc(t_ast *ast)
 {
@@ -69,11 +69,11 @@ void	run_through_here_doc(t_ast *ast)
 				while (ast->redirs)
 				{
 					if (ast->redirs->type == HEREDOC)
-						prepare_here_doc(ast->redirs);
+						//prepare_here_doc(ast->redirs);
 					if (ast->redirs->next)
 						ast->redirs = ast->redirs->next;
-					else
-						break ;
+					//else
+					//	break ;
 				}
 			}
 		}
