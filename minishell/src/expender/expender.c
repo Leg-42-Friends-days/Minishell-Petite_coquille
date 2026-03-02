@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expender.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/02 18:36:50 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/02 20:18:29 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 
 #include "../minishell.h"
@@ -29,7 +31,11 @@ bool	check_if_expendable(char *str)
 		return (false);
 	while (str[i])
 	{
-		if (str[i] == '$')
+
+		if (str[i] == '$' && str[i + 1] == '$')
+			i += 2;
+		if (str[i] == '$' && ((str[i + 1] >= 65 && 90 <= str[i + 1]) || (str[i
+						+ 1] >= 97 && 122 <= str[i + 1])))
 			return (true);
 		i++;
 	}
@@ -316,16 +322,19 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	t_sub_token	*current_sub;
 	char		**tmp;
 	int			i;
+	int			k;
 	int			j;
 
-	i = 0;
-	j = 0;
+	k = 0;
+	ast->cmd2 = malloc(sizeof(char) * 10);
 	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
+		i = 0;
 		current_sub = current_token->sub_token;
 		while (current_sub != NULL)
 		{
+			j = 0;
 			if (current_sub->quote == DOUBLE)
 			{
 				current_sub->var = app_expend(current_sub->var, env, true);
@@ -348,13 +357,20 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 				ast->cmd[i] = ft_strdup(current_sub->var);
 				i++;
 			}
-			j = 0;
 			current_sub = current_sub->next;
 		}
+		ast->cmd[i] = NULL;
+		ast->cmd2[k] = call_join(ast->cmd);
+		k++;
 		current_token = current_token->next;
 	}
-	ast->cmd[i] = NULL;
-	ast->final = call_join(ast->cmd);
+
+	// i = 0;
+	// while (ast->cmd[i])
+	// {
+	// 	printf("%s\n", ast->cmd[i]);
+	// 	i++;
+	// }
 	return (ast);
 }
 
