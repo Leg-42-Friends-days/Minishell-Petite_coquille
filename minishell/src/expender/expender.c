@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/02 18:18:56 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/02 19:07:32 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,11 +303,9 @@ char	*call_join(char **str)
 	full_string = calloc(1, 1);
 	while (str[i])
 	{
-		printf("RESULTAT SPLIT %s\n", str[i]);
 		full_string = strjoin_exp(full_string, str[i]);
 		i++;
 	}
-		printf("FULL_STRING %s\n", full_string);
 	return (full_string);
 }
 
@@ -317,16 +315,19 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	t_sub_token	*current_sub;
 	char		**tmp;
 	int			i;
+	int			k;
 	int			j;
 
-	i = 0;
-	j = 0;
+	k = 0;
+	ast->cmd2 = malloc(sizeof(char) * 10);
 	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
+		i = 0;
 		current_sub = current_token->sub_token;
 		while (current_sub != NULL)
 		{
+			j = 0;
 			if (current_sub->quote == DOUBLE)
 			{
 				current_sub->var = app_expend(current_sub->var, env, true);
@@ -349,19 +350,19 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 				ast->cmd[i] = ft_strdup(current_sub->var);
 				i++;
 			}
-			j = 0;
 			current_sub = current_sub->next;
 		}
+		ast->cmd[i] = NULL;
+		ast->cmd2[k] = call_join(ast->cmd);
+		k++;
 		current_token = current_token->next;
 	}
-	ast->cmd[i] = NULL;
 	// i = 0;
 	// while (ast->cmd[i])
 	// {
 	// 	printf("%s\n", ast->cmd[i]);
 	// 	i++;
 	// }
-	ast->final = call_join(ast->cmd);
 	return (ast);
 }
 
