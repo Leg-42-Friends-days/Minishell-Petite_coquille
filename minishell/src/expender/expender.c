@@ -6,9 +6,10 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/02 20:18:29 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/03 13:43:48 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 
 
@@ -32,10 +33,7 @@ bool	check_if_expendable(char *str)
 	while (str[i])
 	{
 
-		if (str[i] == '$' && str[i + 1] == '$')
-			i += 2;
-		if (str[i] == '$' && ((str[i + 1] >= 65 && 90 <= str[i + 1]) || (str[i
-						+ 1] >= 97 && 122 <= str[i + 1])))
+		if (str[i] == '$')
 			return (true);
 		i++;
 	}
@@ -62,12 +60,33 @@ char	*check_string(char *str, t_env *env)
 	return (str_env);
 }
 
+char	*number_str(char *str)
+{
+	int i;
+	char *key;
+
+	i = 0;
+	while (str[i] >= 48 && str[i] <= 57)
+		i++;
+	key = malloc(sizeof(char) * (i + 1));
+	i = 0;
+	while (str[i] >= 48 && str[i] <= 57)
+	{
+		key[i] = str[i];
+		i++;
+	}
+	key[i] = '\0';
+	return (key);
+}
+
 char	*check_key(char *str)
 {
 	int		i;
 	char	*key;
 
 	i = 0;
+	if (str[i] >= '0' && str[i] <= '9')
+		return (key = number_str(str));
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
 		&& (str[i] != 39 && str[i]))
 		i++;
@@ -142,7 +161,7 @@ char	*new_string(char *str, t_env *env)
 	// printf("VALEUR ACTUELLE DE NEW_STR : %s\n", new_str);
 	while (new_str[i])
 	{
-		if (new_str[i] == '$')
+		if (new_str[i] == '$' && !(new_str[i + 1] == ' ' || new_str[i + 1] == '\0'))
 		{
 			i++;
 			key = check_key(new_str + i);
@@ -326,7 +345,7 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	int			j;
 
 	k = 0;
-	ast->cmd2 = malloc(sizeof(char) * 10);
+	ast->cmd2 = malloc(sizeof(char *) * 10);
 	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
@@ -413,10 +432,6 @@ t_ast	*expand_ast(t_ast *ast, t_env *env)
 		call_expand(ast, env);
 	}
 	check_redirection(ast, env);
-	if (ast->left)
-		expand_ast(ast->left, env);
-	if (ast->right)
-		expand_ast(ast->right, env);
 	return (tmp);
 }
 

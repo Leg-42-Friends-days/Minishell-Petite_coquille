@@ -7,6 +7,7 @@ https://gforgeron.gitlab.io/progsys/td/projet/Sujet/sujet.pdf
 
 pour le lexer
 https://en.wikipedia.org/wiki/Lexical_analysis
+https://developer.mozilla.org/fr/docs/Glossary/State_machine
 
 pour les redirections
 https://putaindecode.io/articles/maitriser-les-redirections-shell/
