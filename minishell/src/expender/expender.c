@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/03 14:08:09 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/03 15:25:29 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	check_if_expendable(char *str)
 		return (false);
 	while (str[i])
 	{
-		if (str[i] == '$')
+		if (str[i] == '$' && str[i + 1] != ':' && str[i + 1] != '=')
 			return (true);
 		i++;
 	}
@@ -74,6 +74,18 @@ char	*number_str(char *str)
 	return (key);
 }
 
+// char	*unique_key(char *str)
+// {
+// 	int i;
+// 	char	*key;
+
+// 	i = 0;
+// 	while (str[i] && (str[i + 1] != ' ' || str[i + 1] != '$'))
+// 		i++;
+// 	key = malloc(sizeof(char) * (i + 1));
+
+// }
+
 char	*check_key(char *str)
 {
 	int		i;
@@ -82,8 +94,6 @@ char	*check_key(char *str)
 	i = 0;
 	if (str[i] >= '0' && str[i] <= '9')
 		return (key = number_str(str));
-	if (str[i] == ':')
-		return (str);
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i]))
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
