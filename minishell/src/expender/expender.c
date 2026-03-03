@@ -28,7 +28,8 @@ bool	check_if_expendable(char *str)
 		return (false);
 	while (str[i])
 	{
-		if (str[i] == '$' && str[i + 1] != ':' && str[i + 1] != '=')
+		if (str[i] == '$' && str[i + 1] != ':' && str[i + 1] != '=' 
+			&& str[i + 1] != '"' && str[i + 1] != '\'')
 			return (true);
 		i++;
 	}
@@ -94,14 +95,15 @@ char	*check_key(char *str)
 	i = 0;
 	if (str[i] >= '0' && str[i] <= '9')
 		return (key = number_str(str));
-	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i]))
+	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
+		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i]))
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
 		return (NULL);
 	i = 0;
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
-		&& (str[i] != 39 && str[i]))
+		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i]))
 	{
 		key[i] = str[i];
 		i++;
@@ -168,7 +170,7 @@ char	*new_string(char *str, t_env *env)
 	while (new_str[i])
 	{
 		if (new_str[i] == '$' && !(new_str[i + 1] == ' ' || new_str[i
-				+ 1] == '\0'))
+				+ 1] == '\0') && new_str[i + 1] != '"' && new_str[i + 1] != '\'')
 		{
 			i++;
 			key = check_key(new_str + i);
@@ -342,6 +344,32 @@ char	*call_join(char **str)
 	return (full_string);
 }
 
+char	*remove_dollar(char *str)
+{
+	int		len;
+	int		i;
+	char	*new_str;
+
+	if (!str)
+		return (NULL);
+	len = ft_strlen(str);
+	if (len > 0 && str[len - 1] == '$')
+	{
+		new_str = malloc(sizeof(char) * len);
+		if (!new_str)
+			return (str);
+		i = 0;
+		while (i < len - 1)
+		{
+			new_str[i] = str[i];
+			i++;
+		}
+		new_str[i] = '\0';
+		return (free(str), new_str);
+	}
+	return (str);
+}
+
 t_ast	*call_expand(t_ast *ast, t_env *env)
 {
 	t_token		*current_token;
@@ -361,29 +389,39 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		while (current_sub != NULL)
 		{
 			j = 0;
-			if (current_sub->quote == DOUBLE)
+			if (!(current_sub->quote == NORMAL && ft_strncmp(current_sub->var, "$", -1) == 0
+				&& current_sub->next && (current_sub->next->quote == DOUBLE 
+				|| current_sub->next->quote == SINGLE)))
 			{
-				current_sub->var = app_expend(current_sub->var, env, true);
-				ast->cmd[i] = ft_strdup(current_sub->var);
-				i++;
-			}
-			else if (current_sub->quote == NORMAL)
-			{
-				current_sub->var = app_expend(current_sub->var, env, false);
-				tmp = ft_split(current_sub->var, ' ');
-				while (tmp[j])
+				if (current_sub->quote == DOUBLE)
 				{
-					ast->cmd[i] = ft_strdup(tmp[j]);
-					j++;
+					current_sub->var = app_expend(current_sub->var, env, true);
+					ast->cmd[i] = ft_strdup(current_sub->var);
 					i++;
 				}
+				else if (current_sub->quote == NORMAL)
+				{
+					if (current_sub->next && (current_sub->next->quote == DOUBLE
+						|| current_sub->next->quote == SINGLE))
+						current_sub->var = remove_dollar(current_sub->var);
+					current_sub->var = app_expend(current_sub->var, env, false);
+					tmp = ft_split(current_sub->var, ' ');
+					while (tmp[j])
+					{
+						ast->cmd[i] = ft_strdup(tmp[j]);
+						j++;
+						i++;
+					}
+				}
+				else if (current_sub->quote == SINGLE)
+				{
+					ast->cmd[i] = ft_strdup(current_sub->var);
+					i++;
+				}
+				current_sub = current_sub->next;
 			}
-			else if (current_sub->quote == SINGLE)
-			{
-				ast->cmd[i] = ft_strdup(current_sub->var);
-				i++;
-			}
-			current_sub = current_sub->next;
+			else
+				current_sub = current_sub->next;
 		}
 		ast->cmd[i] = NULL;
 		ast->cmd2[k] = call_join(ast->cmd);
