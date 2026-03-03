@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/02 19:50:30 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/03 11:34:28 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,7 +282,7 @@ t_ast	*parser(t_token **token)
 	ast = NULL;
 	if (check_token((*token)) == 1)
 	{
-		ft_printf(2, "PRINTF TESTER : syntax error near unexpected token\n");
+		ft_printf(2, "Minishell : syntax error near unexpected '%s'\n", (*token)->sub_token->var);
 		return (NULL);
 	}
 	ast = parse_or(token);
