@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/02 20:39:49 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/03 15:55:31 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ void    redirection(t_ast *node)
 				perror("minishell");
 				exit (127);
 			}
+			node->redirs->stdin = dup(0);
+			node->redirs->stdout = dup(1);
 			dup2(fd, 0);
 			close(fd);
 		}
@@ -118,6 +120,8 @@ void    redirection(t_ast *node)
 				perror("minishell");
 				exit (127);
 			}
+			node->redirs->stdin = dup(0);
+			node->redirs->stdout = dup(1);
 			dup2(fd, 1);
 			close(fd);
 		}
@@ -131,6 +135,8 @@ void    redirection(t_ast *node)
 			} */
 			fd = node->redirs->fd;
 			//close(fd[1]);
+			node->redirs->stdin = dup(0);
+			node->redirs->stdout = dup(1);
 			dup2(fd, 0);
 			close(fd);
 		}
@@ -142,8 +148,40 @@ void    redirection(t_ast *node)
 				perror("minishell");
 				exit (127);
 			}
+			node->redirs->stdin = dup(0);
+			node->redirs->stdout = dup(1);
 			dup2(fd, 1);
 			close(fd);
+		}
+		node->redirs = node->redirs->next;
+	}
+}
+
+void	restore_redirection(t_ast *node)
+{
+	if (!node->redirs)
+		return;
+	while (node->redirs)
+	{
+		if (node->redirs->type == 1)
+		{
+			dup2(0, node->redirs->stdin);
+			close(node->redirs->stdin);
+		}
+		if (node->redirs->type == 2)
+		{
+			dup2(1, node->redirs->stdout);
+			close(node->redirs->stdout);
+		}
+		if (node->redirs->type == 3)
+		{
+			dup2(0, node->redirs->stdin);
+			close(node->redirs->stdin);
+		}
+		if (node->redirs->type == 4)
+		{
+			dup2(1, node->redirs->stdout);
+			close(node->redirs->stdout);
 		}
 		node->redirs = node->redirs->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/03 11:05:38 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/03 15:42:44 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,14 @@ int	execution(t_ast *ast, t_env *env)
 		{
 			expand_function(ast, env);
 			//print_tab(ast->cmd2);
-			exit_status = exec_cmd(ast, env);
+			if (ft_strncmp(ast->cmd2[0], "echo", 5) == 0)
+			{
+				redirection(ast);
+				exit_status = ft_echo(ast->cmd2);
+				restore_redirection(ast);
+			}
+			else
+				exit_status = exec_cmd(ast, env);
 		}
 		if (ast->type == AST_PIPE)
 			exit_status = exec_pipe(ast, env);

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:16:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/27 11:00:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/03 14:15:59 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,8 @@ t_env				*function_unset(t_env *env, char *unset);
 
 void				free_pwd(t_pwd *pwd);
 void				free_env(t_env *env);
+
+// ECHO
+int					ft_echo(char **cmd);
 
 #endif
