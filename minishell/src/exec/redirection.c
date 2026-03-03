@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/03 15:55:31 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/03 17:13:23 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,28 +61,28 @@ void	run_through_here_doc(t_ast *ast)
 	current = ast;
 	if (ast != NULL)
 	{
-		if (ast->type == AST_CMD || ast->type == AST_SUBSHELL)
+		if (current->type == AST_CMD || current->type == AST_SUBSHELL)
 		{
-			if (ast->redirs)
+			if (current->redirs)
 			{
-				while (ast->redirs)
+				while (current->redirs)
 				{
-					if (ast->redirs->type == HEREDOC)
+					if (current->redirs->type == HEREDOC)
 					{
-						prepare_here_doc(ast->redirs);
+						prepare_here_doc(current->redirs);
 						break ;
 					}
-					if (ast->redirs->next)
-						ast->redirs = ast->redirs->next;
+					if (current->redirs->next)
+						current->redirs = current->redirs->next;
 					else
 						break ;
 				}
 			}
 		}
-		if (ast->left)
-			run_through_here_doc(ast->left);
-		if (ast->right)
-			run_through_here_doc(ast->right);
+		if (current->left)
+			run_through_here_doc(current->left);
+		if (current->right)
+			run_through_here_doc(current->right);
 	}
 /* 	if (ast->left)
 			print_ast(ast->left);
@@ -93,96 +93,101 @@ void	run_through_here_doc(t_ast *ast)
 
 void    redirection(t_ast *node)
 {
-	int	fd;
+	int		fd;
+	t_redir	*current;	
 
-	if (!node->redirs)
+	current = node->redirs;
+	if (!current)
 		return;
-	while (node->redirs)
+	while (current)
 	{
-		if (node->redirs->type == 1)
+		if (current->type == 1)
 		{
-			fd = open(node->redirs->target->sub_token->var, O_RDONLY);
+			fd = open(current->target->sub_token->var, O_RDONLY);
 			if (fd < 0)
 			{
 				perror("minishell");
 				exit (127);
 			}
-			node->redirs->stdin = dup(0);
-			node->redirs->stdout = dup(1);
+			current->stdin = dup(0);
+			current->stdout = dup(1);
 			dup2(fd, 0);
 			close(fd);
 		}
-		if (node->redirs->type == 2)
+		if (current->type == 2)
 		{
-			fd = open(node->redirs->target->sub_token->var, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			fd = open(current->target->sub_token->var, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (fd < 0)
 			{
 				perror("minishell");
 				exit (127);
 			}
-			node->redirs->stdin = dup(0);
-			node->redirs->stdout = dup(1);
+			current->stdin = dup(0);
+			current->stdout = dup(1);
 			dup2(fd, 1);
 			close(fd);
 		}
-		if (node->redirs->type == 3)
+		if (current->type == 3)
 		{
-			//fd = open(node->redirs->fd[0], O_RDONLY);
+			//fd = open(current->fd[0], O_RDONLY);
 			/* if (fd < 0)
 			{
 				perror("minishell");
 				exit (127);
 			} */
-			fd = node->redirs->fd;
+			fd = current->fd;
 			//close(fd[1]);
-			node->redirs->stdin = dup(0);
-			node->redirs->stdout = dup(1);
+			current->stdin = dup(0);
+			current->stdout = dup(1);
 			dup2(fd, 0);
 			close(fd);
 		}
-		if (node->redirs->type == 4)
+		if (current->type == 4)
 		{
-			fd = open(node->redirs->target->sub_token->var, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			fd = open(current->target->sub_token->var, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (fd < 0)
 			{
 				perror("minishell");
 				exit (127);
 			}
-			node->redirs->stdin = dup(0);
-			node->redirs->stdout = dup(1);
+			current->stdin = dup(0);
+			current->stdout = dup(1);
 			dup2(fd, 1);
 			close(fd);
 		}
-		node->redirs = node->redirs->next;
+		current = current->next;
 	}
 }
 
 void	restore_redirection(t_ast *node)
 {
-	if (!node->redirs)
+	t_redir	*current;	
+
+	current = node->redirs;
+	if (!current)
 		return;
-	while (node->redirs)
+	while (current)
 	{
-		if (node->redirs->type == 1)
+		if (current->type == 1)
 		{
-			dup2(0, node->redirs->stdin);
-			close(node->redirs->stdin);
+			dup2(current->stdin, 0);
+			close(current->stdin);
 		}
-		if (node->redirs->type == 2)
+		if (current->type == 2)
 		{
-			dup2(1, node->redirs->stdout);
-			close(node->redirs->stdout);
+			dup2(current->stdout, 1);
+			close(current->stdout);
 		}
-		if (node->redirs->type == 3)
+		if (current->type == 3)
 		{
-			dup2(0, node->redirs->stdin);
-			close(node->redirs->stdin);
+			dup2(current->stdin, 0);
+			close(current->stdin);
 		}
-		if (node->redirs->type == 4)
+		if (current->type == 4)
 		{
-			dup2(1, node->redirs->stdout);
-			close(node->redirs->stdout);
+			dup2(current->stdout, 1);
+			close(current->stdout);
 		}
-		node->redirs = node->redirs->next;
+		current = current->next;
 	}
 }
