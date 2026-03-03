@@ -6,13 +6,9 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/03 13:43:48 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/03 14:08:09 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
-
-
 
 #include "../minishell.h"
 
@@ -32,7 +28,6 @@ bool	check_if_expendable(char *str)
 		return (false);
 	while (str[i])
 	{
-
 		if (str[i] == '$')
 			return (true);
 		i++;
@@ -62,8 +57,8 @@ char	*check_string(char *str, t_env *env)
 
 char	*number_str(char *str)
 {
-	int i;
-	char *key;
+	int		i;
+	char	*key;
 
 	i = 0;
 	while (str[i] >= 48 && str[i] <= 57)
@@ -87,8 +82,9 @@ char	*check_key(char *str)
 	i = 0;
 	if (str[i] >= '0' && str[i] <= '9')
 		return (key = number_str(str));
-	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
-		&& (str[i] != 39 && str[i]))
+	if (str[i] == ':')
+		return (str);
+	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i]))
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
@@ -161,7 +157,8 @@ char	*new_string(char *str, t_env *env)
 	// printf("VALEUR ACTUELLE DE NEW_STR : %s\n", new_str);
 	while (new_str[i])
 	{
-		if (new_str[i] == '$' && !(new_str[i + 1] == ' ' || new_str[i + 1] == '\0'))
+		if (new_str[i] == '$' && !(new_str[i + 1] == ' ' || new_str[i
+				+ 1] == '\0'))
 		{
 			i++;
 			key = check_key(new_str + i);
@@ -383,7 +380,6 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		k++;
 		current_token = current_token->next;
 	}
-
 	// i = 0;
 	// while (ast->cmd[i])
 	// {
@@ -423,7 +419,6 @@ t_ast	*expand_ast(t_ast *ast, t_env *env)
 	tmp = ast;
 	if (!ast)
 		return (NULL);
-
 	if (check_if_word(ast) == 1)
 	{
 		ast->cmd = malloc(sizeof(char *) * (expand_len(ast, env) + 1));
