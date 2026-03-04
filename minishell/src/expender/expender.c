@@ -6,13 +6,9 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/03 13:43:48 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/04 14:22:15 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
-
-
 
 #include "../minishell.h"
 
@@ -32,8 +28,8 @@ bool	check_if_expendable(char *str)
 		return (false);
 	while (str[i])
 	{
-
-		if (str[i] == '$')
+		if (str[i] == '$' && str[i + 1] != ':' && str[i + 1] != '=' && str[i
+			+ 1] != '"' && str[i + 1] != '\'')
 			return (true);
 		i++;
 	}
@@ -62,8 +58,8 @@ char	*check_string(char *str, t_env *env)
 
 char	*number_str(char *str)
 {
-	int i;
-	char *key;
+	int		i;
+	char	*key;
 
 	i = 0;
 	while (str[i] >= 48 && str[i] <= 57)
@@ -79,6 +75,18 @@ char	*number_str(char *str)
 	return (key);
 }
 
+// char	*unique_key(char *str)
+// {
+// 	int i;
+// 	char	*key;
+
+// 	i = 0;
+// 	while (str[i] && (str[i + 1] != ' ' || str[i + 1] != '$'))
+// 		i++;
+// 	key = malloc(sizeof(char) * (i + 1));
+
+// }
+
 char	*check_key(char *str)
 {
 	int		i;
@@ -88,14 +96,16 @@ char	*check_key(char *str)
 	if (str[i] >= '0' && str[i] <= '9')
 		return (key = number_str(str));
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
-		&& (str[i] != 39 && str[i]))
+		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
+		&& (str[i] != '\'' && str[i]))
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
 		return (NULL);
 	i = 0;
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
-		&& (str[i] != 39 && str[i]))
+		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
+		&& (str[i] != '\'' && str[i]))
 	{
 		key[i] = str[i];
 		i++;
@@ -161,9 +171,11 @@ char	*new_string(char *str, t_env *env)
 	// printf("VALEUR ACTUELLE DE NEW_STR : %s\n", new_str);
 	while (new_str[i])
 	{
-		if (new_str[i] == '$' && !(new_str[i + 1] == ' ' || new_str[i + 1] == '\0'))
+		if (new_str[i] == '$' && !(new_str[i + 1] == ' ' || new_str[i
+				+ 1] == '\0') && new_str[i + 1] != '"' && new_str[i + 1] != '/')
 		{
 			i++;
+			// printf("AFFICHAGE STR %s\n", str);
 			key = check_key(new_str + i);
 			content = check_string(key, env);
 			// printf("KEY->CONTENT : %s\n", key);
@@ -295,14 +307,14 @@ char	*strjoin_exp(char *s1, char *s2)
 {
 	int		i;
 	int		j;
-	int		len;
 	char	*str;
 
+	if (!s1 && !s2)
+		return (NULL);
 	i = 0;
 	j = 0;
-	len = ft_strlen(s1) + ft_strlen(s2);
-	str = malloc(sizeof(char) * (len + 1));
-	if (!s1 && !s2)
+	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!str)
 		return (NULL);
 	while (s1[i])
 	{
@@ -326,13 +338,41 @@ char	*call_join(char **str)
 	char	*full_string;
 
 	i = 0;
-	full_string = calloc(1, 1);
+	if (!str || !*str)
+		return (NULL);
+	full_string = ft_calloc(1, 1);
 	while (str[i])
 	{
 		full_string = strjoin_exp(full_string, str[i]);
 		i++;
 	}
 	return (full_string);
+}
+
+char	*remove_dollar(char *str)
+{
+	int		len;
+	int		i;
+	char	*new_str;
+
+	if (!str)
+		return (NULL);
+	len = ft_strlen(str);
+	if (len > 0 && str[len - 1] == '$')
+	{
+		new_str = malloc(sizeof(char) * len);
+		if (!new_str)
+			return (str);
+		i = 0;
+		while (i < len - 1)
+		{
+			new_str[i] = str[i];
+			i++;
+		}
+		new_str[i] = '\0';
+		return (free(str), new_str);
+	}
+	return (str);
 }
 
 t_ast	*call_expand(t_ast *ast, t_env *env)
@@ -345,7 +385,7 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	int			j;
 
 	k = 0;
-	ast->cmd2 = malloc(sizeof(char *) * 10);
+	ast->cmd2 = malloc(sizeof(char *) * 1000);
 	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
@@ -354,42 +394,47 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		while (current_sub != NULL)
 		{
 			j = 0;
-			if (current_sub->quote == DOUBLE)
+			if (!(current_sub->quote == NORMAL && ft_strncmp(current_sub->var,
+						"$", -1) == 0 && current_sub->next
+					&& (current_sub->next->quote == DOUBLE
+						|| current_sub->next->quote == SINGLE)))
 			{
-				current_sub->var = app_expend(current_sub->var, env, true);
-				ast->cmd[i] = ft_strdup(current_sub->var);
-				i++;
-			}
-			else if (current_sub->quote == NORMAL)
-			{
-				current_sub->var = app_expend(current_sub->var, env, false);
-				tmp = ft_split(current_sub->var, ' ');
-				while (tmp[j])
+				if (current_sub->quote == DOUBLE)
 				{
-					ast->cmd[i] = ft_strdup(tmp[j]);
-					j++;
+					current_sub->var = app_expend(current_sub->var, env, true);
+					ast->cmd[i] = ft_strdup(current_sub->var);
 					i++;
 				}
+				else if (current_sub->quote == NORMAL)
+				{
+					if (current_sub->next && (current_sub->next->quote == DOUBLE
+							|| current_sub->next->quote == SINGLE))
+						current_sub->var = remove_dollar(current_sub->var);
+					current_sub->var = app_expend(current_sub->var, env, false);
+					tmp = ft_split(current_sub->var, ' ');
+					while (tmp[j])
+					{
+						ast->cmd[i] = ft_strdup(tmp[j]);
+						j++;
+						i++;
+					}
+				}
+				else if (current_sub->quote == SINGLE)
+				{
+					ast->cmd[i] = ft_strdup(current_sub->var);
+					i++;
+				}
+				current_sub = current_sub->next;
 			}
-			else if (current_sub->quote == SINGLE)
-			{
-				ast->cmd[i] = ft_strdup(current_sub->var);
-				i++;
-			}
-			current_sub = current_sub->next;
+			else
+				current_sub = current_sub->next;
 		}
 		ast->cmd[i] = NULL;
 		ast->cmd2[k] = call_join(ast->cmd);
 		k++;
 		current_token = current_token->next;
 	}
-
-	// i = 0;
-	// while (ast->cmd[i])
-	// {
-	// 	printf("%s\n", ast->cmd[i]);
-	// 	i++;
-	// }
+	ast->cmd2[k] = NULL;
 	return (ast);
 }
 
@@ -423,7 +468,6 @@ t_ast	*expand_ast(t_ast *ast, t_env *env)
 	tmp = ast;
 	if (!ast)
 		return (NULL);
-
 	if (check_if_word(ast) == 1)
 	{
 		ast->cmd = malloc(sizeof(char *) * (expand_len(ast, env) + 1));
