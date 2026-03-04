@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/03 15:25:29 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/04 09:09:21 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ bool	check_if_expendable(char *str)
 		return (false);
 	while (str[i])
 	{
-		if (str[i] == '$' && str[i + 1] != ':' && str[i + 1] != '=' 
-			&& str[i + 1] != '"' && str[i + 1] != '\'')
+		if (str[i] == '$' && str[i + 1] != ':' && str[i + 1] != '=' && str[i
+			+ 1] != '"' && str[i + 1] != '\'')
 			return (true);
 		i++;
 	}
@@ -170,7 +170,8 @@ char	*new_string(char *str, t_env *env)
 	while (new_str[i])
 	{
 		if (new_str[i] == '$' && !(new_str[i + 1] == ' ' || new_str[i
-				+ 1] == '\0') && new_str[i + 1] != '"' && new_str[i + 1] != '\'')
+					+ 1] == '\0') && new_str[i + 1] != '"' && new_str[i
+			+ 1] != '\'')
 		{
 			i++;
 			key = check_key(new_str + i);
@@ -193,7 +194,7 @@ char	*app_expend(char *str, t_env *env, bool state)
 	if (!str)
 		return (NULL);
 	if (check_if_expendable(str) == 0)
-		return (str);
+		return (str);x
 	else
 	{
 		if (state == true)
@@ -389,9 +390,10 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		while (current_sub != NULL)
 		{
 			j = 0;
-			if (!(current_sub->quote == NORMAL && ft_strncmp(current_sub->var, "$", -1) == 0
-				&& current_sub->next && (current_sub->next->quote == DOUBLE 
-				|| current_sub->next->quote == SINGLE)))
+			if (!(current_sub->quote == NORMAL && ft_strncmp(current_sub->var,
+						"$", -1) == 0 && current_sub->next
+					&& (current_sub->next->quote == DOUBLE
+						|| current_sub->next->quote == SINGLE)))
 			{
 				if (current_sub->quote == DOUBLE)
 				{
@@ -402,7 +404,7 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 				else if (current_sub->quote == NORMAL)
 				{
 					if (current_sub->next && (current_sub->next->quote == DOUBLE
-						|| current_sub->next->quote == SINGLE))
+							|| current_sub->next->quote == SINGLE))
 						current_sub->var = remove_dollar(current_sub->var);
 					current_sub->var = app_expend(current_sub->var, env, false);
 					tmp = ft_split(current_sub->var, ' ');
