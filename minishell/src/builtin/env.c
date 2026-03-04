@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 18:19:17 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/09 12:26:39 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/04 15:39:08 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ t_env	*env_content(t_env *env, char **envp)
 	while (envp[i])
 	{
 		key = get_key(envp[i]);
-		value = getenv(key);
+		value = ft_strdup(getenv(key));
 		env = lstadd_back_env(env, key, value);
 		i++;
 	}

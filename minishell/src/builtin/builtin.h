@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:16:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/04 10:38:49 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:05:32 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,9 @@ int					ft_echo(char **cmd);
 
 //CD
 int					ft_cd(char **cmd, t_env *env);
+char				*ft_getenv(t_env *env, char *key);
+
+//PWD
+int					ft_pwd(char **cmd, t_env *env);
 
 #endif

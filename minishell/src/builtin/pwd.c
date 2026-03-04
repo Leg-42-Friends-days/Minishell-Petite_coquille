@@ -3,47 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 14:31:27 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/09 12:26:53 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:08:01 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*ft_strcpy(char *s1, char *s2)
+int	ft_pwd(char **cmd, t_env *env)
 {
-	int	i;
+	char	*pwd;
 
-	i = 0;
-	while (s2[i])
-	{
-		s1[i] = s2[i];
-		i++;
-	}
-	s1[i] = '\0';
-	return (s1);
-}
+	(void)cmd;
+	pwd = ft_getenv(env, "PWD");
+	write(1, pwd, ft_strlen(pwd));
+	write(1, "\n", 1);
 
-t_pwd	*current_directory_path(t_pwd *pwd)
-{
-	char	cdw[1024];
-	int		i;
-
-	i = ft_strlen(getcwd(cdw, sizeof((cdw))));
-	if (i == 0)
-		perror("getwcd");
-	if (pwd->oldpwd && pwd->pwd)
-	{
-		free(pwd->oldpwd);
-		pwd->oldpwd = pwd->pwd;
-	}
-	else
-	{
-		pwd->pwd = malloc(sizeof(char) * (i + 1));
-		pwd->pwd = ft_strcpy(pwd->pwd, cdw);
-		pwd->oldpwd = pwd->pwd;
-	}
-	return (pwd);
+	return (0);
 }
