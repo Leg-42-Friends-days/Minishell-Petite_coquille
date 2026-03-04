@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/04 09:09:21 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/04 13:53:35 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,16 @@ char	*check_key(char *str)
 	if (str[i] >= '0' && str[i] <= '9')
 		return (key = number_str(str));
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
-		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i]))
+		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
+		&& (str[i] != '\'' && str[i]))
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
 		return (NULL);
 	i = 0;
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
-		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i]))
+		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
+		&& (str[i] != '\'' && str[i]))
 	{
 		key[i] = str[i];
 		i++;
@@ -170,10 +172,10 @@ char	*new_string(char *str, t_env *env)
 	while (new_str[i])
 	{
 		if (new_str[i] == '$' && !(new_str[i + 1] == ' ' || new_str[i
-					+ 1] == '\0') && new_str[i + 1] != '"' && new_str[i
-			+ 1] != '\'')
+				+ 1] == '\0') && new_str[i + 1] != '"' && new_str[i + 1] != '/')
 		{
 			i++;
+			// printf("AFFICHAGE STR %s\n", str);
 			key = check_key(new_str + i);
 			content = check_string(key, env);
 			// printf("KEY->CONTENT : %s\n", key);
@@ -194,7 +196,7 @@ char	*app_expend(char *str, t_env *env, bool state)
 	if (!str)
 		return (NULL);
 	if (check_if_expendable(str) == 0)
-		return (str);x
+		return (str);
 	else
 	{
 		if (state == true)
@@ -305,14 +307,14 @@ char	*strjoin_exp(char *s1, char *s2)
 {
 	int		i;
 	int		j;
-	int		len;
 	char	*str;
 
+	if (!s1 && !s2)
+		return (NULL);
 	i = 0;
 	j = 0;
-	len = ft_strlen(s1) + ft_strlen(s2);
-	str = malloc(sizeof(char) * (len + 1));
-	if (!s1 && !s2)
+	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!str)
 		return (NULL);
 	while (s1[i])
 	{
@@ -381,7 +383,7 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	int			j;
 
 	k = 0;
-	ast->cmd2 = malloc(sizeof(char *) * 10);
+	ast->cmd2 = malloc(sizeof(char *) * 1000);
 	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
