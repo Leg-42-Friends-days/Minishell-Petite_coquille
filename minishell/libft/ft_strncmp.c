@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:08:19 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/05 19:33:59 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:31:46 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t size)
 	i = 0;
 	if (size == 0)
 		return (0);
-	while (i < (size - 1) && (s1[i] == s2[i]) && s1[i] && s2[i])
+	while (s1[i] && s2[i] && i < (size - 1) && (s1[i] == s2[i]))
 	{
 		i++;
 	}

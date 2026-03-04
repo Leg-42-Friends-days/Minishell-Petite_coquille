@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/04 16:04:13 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:37:51 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int	execution(t_ast *ast, t_env *env)
 		{
 			expand_function(ast, env);
 			//print_tab(ast->cmd2);
+			if (!ast->cmd2[0])
+				return (0);
 			if (is_bult_in(ast->cmd2) == 1)
 			{
 				redirection(ast);

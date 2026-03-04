@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/03 17:13:23 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:58:48 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int	prepare_here_doc(t_redir *node)
+int	prepare_here_doc(t_redir *node, t_env *env)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -35,6 +35,7 @@ int	prepare_here_doc(t_redir *node)
 			line = readline("lol > ");
 			if (!line)
 				break ;
+			line = app_expend(line, env, 0);
 			if ((ft_strncmp(line, node->target->sub_token->var, (ft_strlen(node->target->sub_token->var) + 1)) == 0))
 			{
 				free(line);
@@ -54,7 +55,7 @@ int	prepare_here_doc(t_redir *node)
 	return(0);
 }
 
-void	run_through_here_doc(t_ast *ast)
+void	run_through_here_doc(t_ast *ast, t_env *env)
 {
 	t_ast	*current;
 
@@ -69,7 +70,7 @@ void	run_through_here_doc(t_ast *ast)
 				{
 					if (current->redirs->type == HEREDOC)
 					{
-						prepare_here_doc(current->redirs);
+						prepare_here_doc(current->redirs, env);
 						break ;
 					}
 					if (current->redirs->next)
@@ -80,9 +81,9 @@ void	run_through_here_doc(t_ast *ast)
 			}
 		}
 		if (current->left)
-			run_through_here_doc(current->left);
+			run_through_here_doc(current->left, env);
 		if (current->right)
-			run_through_here_doc(current->right);
+			run_through_here_doc(current->right, env);
 	}
 /* 	if (ast->left)
 			print_ast(ast->left);

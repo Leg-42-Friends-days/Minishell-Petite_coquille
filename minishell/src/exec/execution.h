@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/03 15:42:34 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:59:49 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char    *find_cmd(t_env *env, char *cmd);
 
 //REDIRECTION
 void    redirection(t_ast *node);
-void	run_through_here_doc(t_ast *ast);
+void	run_through_here_doc(t_ast *ast, t_env *env);
 void	restore_redirection(t_ast *node);
 
 #endif
