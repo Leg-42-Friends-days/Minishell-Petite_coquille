@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:44 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/04 11:33:39 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/04 14:21:47 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int	ft_cd(char **cmd, t_env *env)
 	target = NULL;
 	target = define_target(cmd, env);
 	printf("%s\n", target);
+	
 	if (chdir(target) != 0)
 	{
 		perror("cd");
