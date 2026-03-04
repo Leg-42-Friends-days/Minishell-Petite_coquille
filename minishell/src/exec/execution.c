@@ -6,11 +6,31 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/03 15:42:44 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/04 11:20:05 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+int	is_bult_in(char **cmd)
+{
+	if (ft_strncmp(cmd[0], "echo", 5) == 0)
+		return (1);
+	if (ft_strncmp(cmd[0], "cd", 3) == 0)
+		return (1);
+	return (0);
+}
+
+int	exec_bult_in(char **cmd, t_env *env)
+{
+	int	exit_status;
+	
+	if (ft_strncmp(cmd[0], "echo", 5) == 0)
+		exit_status = ft_echo(cmd);
+	if (ft_strncmp(cmd[0], "cd", 3) == 0)
+		exit_status = ft_cd(cmd, env);
+	return (exit_status);
+}
 
 void	print_tab(char **tabl)
 {
@@ -35,10 +55,10 @@ int	execution(t_ast *ast, t_env *env)
 		{
 			expand_function(ast, env);
 			//print_tab(ast->cmd2);
-			if (ft_strncmp(ast->cmd2[0], "echo", 5) == 0)
+			if (is_bult_in(ast->cmd2) == 1)
 			{
 				redirection(ast);
-				exit_status = ft_echo(ast->cmd2);
+				exit_status = exec_bult_in(ast->cmd2, env);
 				restore_redirection(ast);
 			}
 			else
