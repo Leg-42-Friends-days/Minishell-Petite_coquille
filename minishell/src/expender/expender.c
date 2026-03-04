@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/04 15:54:02 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:05:44 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,10 @@ char	*app_expend(char *str, t_env *env, bool state)
 		else if (state == false)
 			str = new_string(str, env);
 	}
+	// if (check_if_wildcard(str) == 0)
+	// {
+		
+	// }
 	return (str);
 }
 
