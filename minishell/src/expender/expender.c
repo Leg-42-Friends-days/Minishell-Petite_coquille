@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/04 13:53:35 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/04 14:22:15 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,7 +338,9 @@ char	*call_join(char **str)
 	char	*full_string;
 
 	i = 0;
-	full_string = calloc(1, 1);
+	if (!str || !*str)
+		return (NULL);
+	full_string = ft_calloc(1, 1);
 	while (str[i])
 	{
 		full_string = strjoin_exp(full_string, str[i]);
@@ -432,12 +434,7 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		k++;
 		current_token = current_token->next;
 	}
-	// i = 0;
-	// while (ast->cmd[i])
-	// {
-	// 	printf("%s\n", ast->cmd[i]);
-	// 	i++;
-	// }
+	ast->cmd2[k] = NULL;
 	return (ast);
 }
 
