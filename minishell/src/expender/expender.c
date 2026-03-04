@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/04 14:22:15 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/04 15:54:02 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,22 +207,9 @@ char	*app_expend(char *str, t_env *env, bool state)
 	return (str);
 }
 
-int	count_tmp(char **str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (0);
-	while (str[i])
-		i++;
-	return (i);
-}
-
-int	expand_len(t_ast *ast, t_env *env)
+int	expand_len(t_ast *ast)
 {
 	int			i;
-	char		**tmp;
 	t_token		*token;
 	t_sub_token	*sub_token;
 
@@ -236,13 +223,26 @@ int	expand_len(t_ast *ast, t_env *env)
 			if (sub_token->quote == DOUBLE)
 				i++;
 			else if (sub_token->quote == NORMAL)
-			{
-				sub_token->var = app_expend(sub_token->var, env, false);
-				tmp = ft_split(sub_token->var, ' ');
-				i += count_tmp(tmp);
-			}
+				i++;
+			else if (sub_token->quote == SINGLE)
+				i++;
 			sub_token = sub_token->next;
 		}
+		token = token->next;
+	}
+	return (i);
+}
+
+int	expand_len_token(t_ast *ast)
+{
+	int		i;
+	t_token	*token;
+
+	i = 0;
+	token = ast->cmd_token;
+	while (token != NULL && token->type == WORD)
+	{
+		i++;
 		token = token->next;
 	}
 	return (i);
@@ -385,7 +385,6 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	int			j;
 
 	k = 0;
-	ast->cmd2 = malloc(sizeof(char *) * 1000);
 	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
@@ -470,8 +469,11 @@ t_ast	*expand_ast(t_ast *ast, t_env *env)
 		return (NULL);
 	if (check_if_word(ast) == 1)
 	{
-		ast->cmd = malloc(sizeof(char *) * (expand_len(ast, env) + 1));
+		ast->cmd = malloc(sizeof(char *) * (expand_len(ast)));
 		if (!ast->cmd)
+			return (ast);
+		ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast)));
+		if (!ast->cmd2)
 			return (ast);
 		call_expand(ast, env);
 	}
