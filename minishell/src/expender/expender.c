@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/04 16:05:44 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/05 18:11:00 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,18 +74,6 @@ char	*number_str(char *str)
 	key[i] = '\0';
 	return (key);
 }
-
-// char	*unique_key(char *str)
-// {
-// 	int i;
-// 	char	*key;
-
-// 	i = 0;
-// 	while (str[i] && (str[i + 1] != ' ' || str[i + 1] != '$'))
-// 		i++;
-// 	key = malloc(sizeof(char) * (i + 1));
-
-// }
 
 char	*check_key(char *str)
 {
@@ -191,6 +179,20 @@ char	*new_string(char *str, t_env *env)
 	return (new_str);
 }
 
+bool	check_if_wildcard(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '*')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 char	*app_expend(char *str, t_env *env, bool state)
 {
 	if (!str)
@@ -204,10 +206,10 @@ char	*app_expend(char *str, t_env *env, bool state)
 		else if (state == false)
 			str = new_string(str, env);
 	}
-	// if (check_if_wildcard(str) == 0)
-	// {
-		
-	// }
+	if (check_if_wildcard(str) == false && state == false)
+	{
+		printf("WILD CARD!!\n");
+	}
 	return (str);
 }
 
