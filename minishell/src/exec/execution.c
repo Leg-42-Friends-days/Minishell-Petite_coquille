@@ -3,14 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/04 16:37:51 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/05 20:03:05 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+
+char **env_to_tab(t_env *env)
+{
+	int count = 0;
+	t_env *tmp = env;
+
+	while (tmp)
+	{
+		count++;
+		tmp = tmp->next;
+	}
+
+	char **envv = malloc(sizeof(char *) * (count + 1));
+	tmp = env;
+	int i = 0;
+
+	while (tmp)
+	{
+		envv[i] = ft_strdup(tmp->content);
+		tmp = tmp->next;
+		i++;
+	}
+	envv[i] = NULL;
+	return envv;
+}
 
 int	is_bult_in(char **cmd)
 {
@@ -58,7 +84,8 @@ int	execution(t_ast *ast, t_env *env)
 		if (ast->type == AST_CMD)
 		{
 			expand_function(ast, env);
-			//print_tab(ast->cmd2);
+			print_tab(ast->cmd2);
+			printf("lol");
 			if (!ast->cmd2[0])
 				return (0);
 			if (is_bult_in(ast->cmd2) == 1)
@@ -89,6 +116,7 @@ int	exec_cmd(t_ast *ast, t_env *env)
 	int		status;
 
 	status = 0;
+	dprintf(2, "CMD = %s\n", ast->cmd2[0]);
 	path = find_cmd(env, ast->cmd2[0]);
 	if (!path)
 	{
@@ -103,7 +131,7 @@ int	exec_cmd(t_ast *ast, t_env *env)
 	if (pid == 0)
 	{
 		redirection(ast);
-		execve(path, ast->cmd2, NULL);
+		execve(path, ast->cmd2, env_to_tab(env));
 		perror("minishell");
 		exit (127);
 	}

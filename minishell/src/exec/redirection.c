@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/04 16:58:48 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/05 19:45:19 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,18 @@ int	prepare_here_doc(t_redir *node, t_env *env)
 		close(fd[0]);
 		while (1)
 		{
-			line = readline("lol > ");
+			line = readline("> ");
 			if (!line)
 				break ;
-			line = app_expend(line, env, 0);
 			if ((ft_strncmp(line, node->target->sub_token->var, (ft_strlen(node->target->sub_token->var) + 1)) == 0))
 			{
 				free(line);
 				close(fd[1]);
 				exit (0);
 			}
+			line = app_expend(line, env, 0);
+			if (!line)
+				break ;
 			write(fd[1], line, ft_strlen(line));
 			write(fd[1], "\n", 1);
 			free(line);
@@ -58,25 +60,26 @@ int	prepare_here_doc(t_redir *node, t_env *env)
 void	run_through_here_doc(t_ast *ast, t_env *env)
 {
 	t_ast	*current;
+	t_redir	*redir;
 
 	current = ast;
 	if (ast != NULL)
 	{
 		if (current->type == AST_CMD || current->type == AST_SUBSHELL)
 		{
-			if (current->redirs)
+			redir = current->redirs;
+			if (redir)
 			{
-				while (current->redirs)
+				while (redir)
 				{
-					if (current->redirs->type == HEREDOC)
+					if (redir->type == HEREDOC)
 					{
-						prepare_here_doc(current->redirs, env);
-						break ;
+						prepare_here_doc(redir, env);
+						//break ;
 					}
-					if (current->redirs->next)
-						current->redirs = current->redirs->next;
-					else
-						break ;
+					redir = redir->next;
+					//if (!current->redirs->next)
+					//	break ;
 				}
 			}
 		}
@@ -98,10 +101,15 @@ void    redirection(t_ast *node)
 	t_redir	*current;	
 
 	current = node->redirs;
+	dprintf(2, "rhahahhahahah\n");
 	if (!current)
 		return;
+	dprintf(2, "redir type = %d\n", current->type);
+	current->stdin = dup(0);
+	current->stdout = dup(1);
 	while (current)
 	{
+		dprintf(2, "redir type = %d\n", current->type);
 		if (current->type == 1)
 		{
 			fd = open(current->target->sub_token->var, O_RDONLY);
@@ -110,8 +118,8 @@ void    redirection(t_ast *node)
 				perror("minishell");
 				exit (127);
 			}
-			current->stdin = dup(0);
-			current->stdout = dup(1);
+			//current->stdin = dup(0);
+			//current->stdout = dup(1);
 			dup2(fd, 0);
 			close(fd);
 		}
@@ -123,23 +131,17 @@ void    redirection(t_ast *node)
 				perror("minishell");
 				exit (127);
 			}
-			current->stdin = dup(0);
-			current->stdout = dup(1);
+			//current->stdin = dup(0);
+			//current->stdout = dup(1);
 			dup2(fd, 1);
 			close(fd);
 		}
 		if (current->type == 3)
 		{
-			//fd = open(current->fd[0], O_RDONLY);
-			/* if (fd < 0)
-			{
-				perror("minishell");
-				exit (127);
-			} */
 			fd = current->fd;
 			//close(fd[1]);
-			current->stdin = dup(0);
-			current->stdout = dup(1);
+			//current->stdin = dup(0);
+			//current->stdout = dup(1);
 			dup2(fd, 0);
 			close(fd);
 		}
@@ -151,8 +153,8 @@ void    redirection(t_ast *node)
 				perror("minishell");
 				exit (127);
 			}
-			current->stdin = dup(0);
-			current->stdout = dup(1);
+			//current->stdin = dup(0);
+			//current->stdout = dup(1);
 			dup2(fd, 1);
 			close(fd);
 		}
