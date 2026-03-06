@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/06 11:53:07 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/06 18:40:11 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,20 +179,6 @@ char	*new_string(char *str, t_env *env)
 	return (new_str);
 }
 
-bool	check_if_wildcard(char *str)
-{
-	int i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '*')
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
 char	*app_expend(char *str, t_env *env, bool state)
 {
 	if (!str)
@@ -235,20 +221,7 @@ int	expand_len(t_ast *ast)
 	return (i);
 }
 
-int	expand_len_token(t_ast *ast)
-{
-	int		i;
-	t_token	*token;
 
-	i = 0;
-	token = ast->cmd_token;
-	while (token != NULL && token->type == WORD)
-	{
-		i++;
-		token = token->next;
-	}
-	return (i);
-}
 // dans le return (free_split(tmp));
 
 // t_ast	*expension(t_ast *ast, t_sub_token *current_sub, t_env *env)
@@ -377,6 +350,111 @@ char	*remove_dollar(char *str)
 	return (str);
 }
 
+bool	check_if_wildcard(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '*')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+bool	only_wildcard(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != '*')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+bool	first_letter(char *str)
+{
+	int i;
+
+	i = 0;
+	if (str[i] == '.')
+		return (true);
+	return (false);
+}
+int		call_all_dir(t_ast *ast)
+{
+	struct dirent	*entry;
+	char			*dir;
+	DIR				*dp;
+	int				i;
+	
+	i = 0;
+	dir = ".";
+	dp = opendir(dir);
+	if (!dp)
+		return (i);
+	while (ast->cmd2[i])
+	{
+		// printf("%s\n", ast->cmd2[i]);
+		i++;
+	}
+	entry = readdir(dp);
+	while (entry)
+	{
+		if (first_letter(entry->d_name) == false)
+		{
+			ast->cmd2[i] = ft_strdup(entry->d_name);
+			// printf("%s\n", ast->cmd2[i]);
+			i++;
+		}
+		entry = readdir(dp);
+	}
+	return (i);
+}
+
+int	wild_card_len(void)
+{
+	struct dirent	*entry;
+	char			*dir;
+	DIR				*dp;
+	int				i;
+
+	i = 0;
+	dir = ".";
+	dp = opendir(dir);
+	if (!dp)
+		return (0);
+	entry = readdir(dp);
+	while (entry)
+	{
+		i++;
+		entry = readdir(dp);
+	}
+	return (i);
+}
+
+int	expand_wildcard(char *str, t_ast *ast, int *index)
+{
+	if (check_if_wildcard(str) == true)
+	{
+		// printf("STR : %s\n", str);
+		return (*index);
+	}
+	else
+	{
+		if (only_wildcard(str) == true)
+			*index += call_all_dir(ast);
+	}
+	// printf("INDEX : %d\n", *index);
+	return (*index);
+}
+
 t_ast	*call_expand(t_ast *ast, t_env *env)
 {
 	t_token		*current_token;
@@ -409,7 +487,7 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 							|| current_sub->next->quote == SINGLE))
 						current_sub->var = remove_dollar(current_sub->var);
 					current_sub->var = app_expend(current_sub->var, env, false);
-					check_if_wildcard(current_sub->var);x
+					k = expand_wildcard(current_sub->var, ast, &k);
 					ast->cmd[i] = ft_strdup(current_sub->var);
 					i++;
 				}
@@ -424,6 +502,10 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 				current_sub = current_sub->next;
 		}
 		ast->cmd[i] = NULL;
+		while (ast->cmd2[k])
+		{
+			k++;
+		}
 		ast->cmd2[k] = call_join(ast->cmd);
 		k++;
 		current_token = current_token->next;
@@ -455,19 +537,41 @@ void	check_redirection(t_ast *ast, t_env *env)
 	}
 }
 
+int	expand_len_token(t_ast *ast)
+{
+	int		i;
+	t_token	*token;
+
+	i = 0;
+	token = ast->cmd_token;
+	while (token != NULL && token->type == WORD)
+	{
+		if (check_if_wildcard(token->sub_token->var) == false)
+		{
+			if (only_wildcard(token->sub_token->var) == true)
+				i += wild_card_len();
+		}
+		i++;
+		token = token->next;
+	}
+	return (i);
+}
+
 t_ast	*expand_ast(t_ast *ast, t_env *env)
 {
 	t_ast	*tmp;
+	int len;
 
+	len = 0;
 	tmp = ast;
 	if (!ast)
 		return (NULL);
 	if (check_if_word(ast) == 1)
 	{
-		ast->cmd = malloc(sizeof(char *) * (expand_len(ast)));
+		ast->cmd = malloc(sizeof(char *) * (expand_len(ast)) + 1);
 		if (!ast->cmd)
 			return (ast);
-		ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast)));
+		ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast) + 1));
 		if (!ast->cmd2)
 			return (ast);
 		call_expand(ast, env);
