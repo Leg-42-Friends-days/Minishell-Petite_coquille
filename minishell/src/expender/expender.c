@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/05 18:11:00 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/06 11:53:07 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*check_key(char *str)
 		return (key = number_str(str));
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
 		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
-		&& (str[i] != '\'' && str[i]))
+		&& (str[i] != '\'' && str[i]) && str[i] != '*')
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
@@ -93,7 +93,7 @@ char	*check_key(char *str)
 	i = 0;
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
 		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
-		&& (str[i] != '\'' && str[i]))
+		&& (str[i] != '\'' && str[i]) && str[i] != '*')
 	{
 		key[i] = str[i];
 		i++;
@@ -205,10 +205,6 @@ char	*app_expend(char *str, t_env *env, bool state)
 			str = new_string(str, env);
 		else if (state == false)
 			str = new_string(str, env);
-	}
-	if (check_if_wildcard(str) == false && state == false)
-	{
-		printf("WILD CARD!!\n");
 	}
 	return (str);
 }
@@ -385,10 +381,8 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 {
 	t_token		*current_token;
 	t_sub_token	*current_sub;
-	char		**tmp;
 	int			i;
 	int			k;
-	int			j;
 
 	k = 0;
 	current_token = ast->cmd_token;
@@ -398,7 +392,6 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		current_sub = current_token->sub_token;
 		while (current_sub != NULL)
 		{
-			j = 0;
 			if (!(current_sub->quote == NORMAL && ft_strncmp(current_sub->var,
 						"$", -1) == 0 && current_sub->next
 					&& (current_sub->next->quote == DOUBLE
@@ -416,13 +409,9 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 							|| current_sub->next->quote == SINGLE))
 						current_sub->var = remove_dollar(current_sub->var);
 					current_sub->var = app_expend(current_sub->var, env, false);
-					tmp = ft_split(current_sub->var, ' ');
-					while (tmp[j])
-					{
-						ast->cmd[i] = ft_strdup(tmp[j]);
-						j++;
-						i++;
-					}
+					check_if_wildcard(current_sub->var);x
+					ast->cmd[i] = ft_strdup(current_sub->var);
+					i++;
 				}
 				else if (current_sub->quote == SINGLE)
 				{
