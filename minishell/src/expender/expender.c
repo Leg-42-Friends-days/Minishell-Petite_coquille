@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/06 18:40:11 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/06 18:45:38 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -502,10 +502,6 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 				current_sub = current_sub->next;
 		}
 		ast->cmd[i] = NULL;
-		while (ast->cmd2[k])
-		{
-			k++;
-		}
 		ast->cmd2[k] = call_join(ast->cmd);
 		k++;
 		current_token = current_token->next;
