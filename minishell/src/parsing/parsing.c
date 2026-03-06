@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/05 20:08:32 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/06 14:38:40 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,11 @@ t_ast	*parse_cmd(t_token **token)
 			//node = ast_node(AST_CMD);
 			if ((token_list_redir(token, node)) == 1)
 				return (NULL);
+			while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+			{
+				if ((token_list_redir(token, node)) == 1)
+				return (NULL);
+			}
 			if (*token)
 				node->cmd_token = *token;
 		}
@@ -155,6 +160,11 @@ t_ast	*parse_cmd(t_token **token)
 		node = ast_node(AST_CMD);
 		if ((token_list_redir(token, node)) == 1)
 			return (NULL);
+		while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+		{
+			if ((token_list_redir(token, node)) == 1)
+			return (NULL);
+		}
 		if (*token)
 			node->cmd_token = *token;
 	}

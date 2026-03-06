@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:44 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/04 15:48:40 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/06 17:45:59 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_getenv(t_env *env, char *key)
 	current = env;
 	while (current->key != NULL)
 	{
-		if (!ft_strncmp(current->key, key, ft_strlen(key + 1)))
+		if (!ft_strncmp(current->key, key, (ft_strlen(key) + 1)))
 			return (current->content);
 		if (current->next)
 			current = current->next;
@@ -38,7 +38,7 @@ t_env	*ft_getenv_node(t_env *env, char *key)
 	current = env;
 	while (current->key != NULL)
 	{
-		if (!ft_strncmp(current->key, key, ft_strlen(key + 1)))
+		if (!ft_strncmp(current->key, key, (ft_strlen(key) + 1)))
 			return (current);
 		if (current->next)
 			current = current->next;
@@ -52,18 +52,29 @@ char	*define_target(char **cmd, t_env *env)
 
 	target = NULL;
 	if (!cmd[1])
+	{
 		target = ft_getenv(env, "HOME");
+		if (!target)
+		{
+			write(2, "cd: HOME nos set\n", 17);
+			return (NULL);
+		}
+	}
 	if (cmd[1])
 	{
 		if (!ft_strncmp(cmd[1], "-", 2))
+		{
 			target = ft_getenv(env, "OLDPWD");
+			write(1, target, ft_strlen(target));
+			write(1, "\n", 1);
+		}
 		else if (cmd[2] != NULL)
 		{
 			write(2, "cd : too many arguments\n", 24);
 			return (NULL);
 		}
 		else
-			target = ft_strdup(cmd[1]);
+			target = cmd[1];
 	}
 	return (target);
 }
@@ -73,25 +84,53 @@ void	save_pwd(char *oldpwd, char *newpwd, t_env *env)
 	t_env	*old_pwd_env;
 	t_env	*pwd_env;
 
-	(void)oldpwd;
-	(void)newpwd;
 	old_pwd_env = ft_getenv_node(env, "OLDPWD");
 	pwd_env = ft_getenv_node(env, "PWD");
+	if (!old_pwd_env || !pwd_env)
+		return ;
+	if (newpwd == NULL)
+	{
+		if (pwd_env->content)
+		{
+			free(pwd_env->content);
+			pwd_env->content = NULL;
+		}
+		return ;
+	}
+	else
+	{
+		free(pwd_env->content);
+		pwd_env->content = NULL;
+		pwd_env->content = ft_strdup(newpwd);
+		free(newpwd);
+	}
+	if (oldpwd == NULL)
+	{
+		if (old_pwd_env->content)
+		{
+			free(old_pwd_env->content);
+			old_pwd_env->content = NULL;
+		}
+		return ;
+	}
 	free(old_pwd_env->content);
+	old_pwd_env->content = NULL;
 	old_pwd_env->content = ft_strdup(oldpwd);
-	free(pwd_env->content);
-	pwd_env->content = ft_strdup(newpwd);
+	free(oldpwd);
 }
 
 int	ft_cd(char **cmd, t_env *env)
 {
 	char	*oldpwd;
 	char	*target;
+	struct stat	st;
 
 	target = NULL;
 	target = define_target(cmd, env);
+	if (!target)
+		return (1);
 	oldpwd = getcwd(NULL, 0);
-	if (chdir(target) != 0)
+	if (chdir(target) == -1)
 	{
 		perror("cd");
 		return (1);

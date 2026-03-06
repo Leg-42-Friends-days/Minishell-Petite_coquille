@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/05 20:07:45 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/06 14:39:08 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ int	main(int ac, char **av, char **envp)
 		{
 			//printmini(&mini_vars);
 			ast = parser(&mini_vars);
-			//run_through_here_doc(ast, env);
+			run_through_here_doc(ast, env);
 			//expand_function(ast, env);
 			//print_tab(ast->cmd2);
-			//execution(ast, env);
+			execution(ast, env);
 			ft_miniclear(&mini_vars);
 		}
 		free(line);

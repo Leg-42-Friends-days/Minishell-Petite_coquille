@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 14:31:27 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/04 16:08:01 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/06 16:57:27 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,13 @@ int	ft_pwd(char **cmd, t_env *env)
 	char	*pwd;
 
 	(void)cmd;
-	pwd = ft_getenv(env, "PWD");
+	(void)env;
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+	{
+		perror("pwd");
+		return (1);
+	}
 	write(1, pwd, ft_strlen(pwd));
 	write(1, "\n", 1);
 

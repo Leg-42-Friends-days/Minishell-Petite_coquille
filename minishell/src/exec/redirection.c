@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/05 19:45:19 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/06 14:59:27 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ int	prepare_here_doc(t_redir *node, t_env *env)
 				close(fd[1]);
 				exit (0);
 			}
-			line = app_expend(line, env, 0);
+			if (node->target->sub_token->quote == NONE)
+				line = app_expend(line, env, 0);
 			if (!line)
 				break ;
 			write(fd[1], line, ft_strlen(line));
@@ -101,15 +102,12 @@ void    redirection(t_ast *node)
 	t_redir	*current;	
 
 	current = node->redirs;
-	dprintf(2, "rhahahhahahah\n");
 	if (!current)
 		return;
-	dprintf(2, "redir type = %d\n", current->type);
 	current->stdin = dup(0);
 	current->stdout = dup(1);
 	while (current)
 	{
-		dprintf(2, "redir type = %d\n", current->type);
 		if (current->type == 1)
 		{
 			fd = open(current->target->sub_token->var, O_RDONLY);
