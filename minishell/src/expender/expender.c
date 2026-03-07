@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/07 13:31:41 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/07 14:21:21 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*check_key(char *str)
 		return (key = number_str(str));
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
 		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
-		&& (str[i] != '\'' && str[i]) && str[i] != '*')
+		&& (str[i] != '\'' && str[i]) && (str[i] != '*' && str[i]))
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
@@ -93,7 +93,7 @@ char	*check_key(char *str)
 	i = 0;
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
 		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
-		&& (str[i] != '\'' && str[i]) && str[i] != '*')
+		&& (str[i] != '\'' && str[i]) && (str[i] != '*' && str[i]))
 	{
 		key[i] = str[i];
 		i++;
@@ -438,6 +438,20 @@ int	wild_card_len(void)
 	return (i);
 }
 
+bool	check_wild_both_side(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '*' && str[i + 1])
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
 int	expand_wildcard(char *str, t_ast *ast, int *index)
 {
 	if (check_if_wildcard(str) == true)
@@ -448,6 +462,8 @@ int	expand_wildcard(char *str, t_ast *ast, int *index)
 	{
 		if (only_wildcard(str) == true)
 			*index += call_all_dir(ast);
+		// else if (check_wild_both_side(str) == true)
+		// 	*index += call_wild_side(ast);
 	}
 	return (*index);
 }
@@ -552,10 +568,7 @@ int	expand_len_token(t_ast *ast)
 	while (token != NULL && token->type == WORD)
 	{
 		if (check_if_wildcard(token->sub_token->var) == false)
-		{
-			if (only_wildcard(token->sub_token->var) == true)
 				i += wild_card_len();
-		}
 		i++;
 		token = token->next;
 	}
@@ -576,7 +589,8 @@ t_ast	*expand_ast(t_ast *ast, t_env *env)
 		ast->cmd = malloc(sizeof(char *) * (expand_len(ast)) + 1);
 		if (!ast->cmd)
 			return (ast);
-		ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast) + 1));
+		// ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast) + 1));
+		ast->cmd2 = ft_calloc(sizeof(char *), (expand_len_token(ast) + 1));
 		if (!ast->cmd2)
 			return (ast);
 		call_expand(ast, env);
