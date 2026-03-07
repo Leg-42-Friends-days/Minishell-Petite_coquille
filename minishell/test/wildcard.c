@@ -38,7 +38,7 @@ int main()
     char *str;
     DIR *dp;
 
-    str = "/home/mickzhan/Exercice/Minishell/minishell/test";
+    str = ".";
     dp = opendir(str);
     if (!dp)
     {
