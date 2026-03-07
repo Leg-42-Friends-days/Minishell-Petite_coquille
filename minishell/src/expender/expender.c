@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/06 18:45:38 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/07 13:31:41 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,6 @@ int	expand_len(t_ast *ast)
 	return (i);
 }
 
-
 // dans le return (free_split(tmp));
 
 // t_ast	*expension(t_ast *ast, t_sub_token *current_sub, t_env *env)
@@ -380,20 +379,20 @@ bool	only_wildcard(char *str)
 
 bool	first_letter(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (str[i] == '.')
 		return (true);
 	return (false);
 }
-int		call_all_dir(t_ast *ast)
+int	call_all_dir(t_ast *ast)
 {
 	struct dirent	*entry;
 	char			*dir;
 	DIR				*dp;
 	int				i;
-	
+
 	i = 0;
 	dir = ".";
 	dp = opendir(dir);
@@ -443,7 +442,6 @@ int	expand_wildcard(char *str, t_ast *ast, int *index)
 {
 	if (check_if_wildcard(str) == true)
 	{
-		// printf("STR : %s\n", str);
 		return (*index);
 	}
 	else
@@ -451,8 +449,18 @@ int	expand_wildcard(char *str, t_ast *ast, int *index)
 		if (only_wildcard(str) == true)
 			*index += call_all_dir(ast);
 	}
-	// printf("INDEX : %d\n", *index);
 	return (*index);
+}
+
+bool	check_if_next_token_wild(t_sub_token *sub_to)
+{
+	if (sub_to->next && (sub_to->next->quote == DOUBLE
+			|| sub_to->next->quote == SINGLE))
+		return (false);
+	else if (sub_to->prev && (sub_to->prev->quote == DOUBLE
+			|| sub_to->prev->quote == SINGLE))
+		return (false);
+	return (true);
 }
 
 t_ast	*call_expand(t_ast *ast, t_env *env)
@@ -487,7 +495,8 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 							|| current_sub->next->quote == SINGLE))
 						current_sub->var = remove_dollar(current_sub->var);
 					current_sub->var = app_expend(current_sub->var, env, false);
-					k = expand_wildcard(current_sub->var, ast, &k);
+					if (check_if_next_token_wild(current_sub) == true)
+						k = expand_wildcard(current_sub->var, ast, &k);
 					ast->cmd[i] = ft_strdup(current_sub->var);
 					i++;
 				}
@@ -556,7 +565,7 @@ int	expand_len_token(t_ast *ast)
 t_ast	*expand_ast(t_ast *ast, t_env *env)
 {
 	t_ast	*tmp;
-	int len;
+	int		len;
 
 	len = 0;
 	tmp = ast;
