@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:44 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/06 17:45:59 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/07 15:42:53 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int	ft_cd(char **cmd, t_env *env)
 {
 	char	*oldpwd;
 	char	*target;
-	struct stat	st;
+	// struct stat	st;
 
 	target = NULL;
 	target = define_target(cmd, env);
