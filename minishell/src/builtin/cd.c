@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:44 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/06 17:45:59 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/07 15:30:01 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,7 @@ char	*define_target(char **cmd, t_env *env)
 	if (cmd[1])
 	{
 		if (!ft_strncmp(cmd[1], "-", 2))
-		{
 			target = ft_getenv(env, "OLDPWD");
-			write(1, target, ft_strlen(target));
-			write(1, "\n", 1);
-		}
 		else if (cmd[2] != NULL)
 		{
 			write(2, "cd : too many arguments\n", 24);
@@ -123,17 +119,33 @@ int	ft_cd(char **cmd, t_env *env)
 {
 	char	*oldpwd;
 	char	*target;
-	struct stat	st;
 
-	target = NULL;
-	target = define_target(cmd, env);
-	if (!target)
-		return (1);
 	oldpwd = getcwd(NULL, 0);
+	target = define_target(cmd, env);
+	if (!target || target[0] == '\0')
+		return (0);
+	if (!oldpwd)
+	{
+		write(2, "minishell: cd: ", 15);
+		write(2, target, ft_strlen(target));
+		write(2, ": ", 2);
+		write(2, "No such file or directory", 25);
+		write(2, "\n", 1);
+		return (1);
+	}
 	if (chdir(target) == -1)
 	{
-		perror("cd");
+		write(2, "minishell: cd: ", 15);
+		write(2, cmd[1], ft_strlen(cmd[1]));
+		write(2, ": ", 2);
+		write(2, strerror(errno), strlen(strerror(errno)));
+		write(2, "\n", 1);
 		return (1);
+	}
+	if (cmd[1] && !ft_strncmp(cmd[1], "-", 2))
+	{
+		write(1, target, ft_strlen(target));
+		write(1, "\n", 1);
 	}
 	save_pwd(oldpwd, getcwd(NULL, 0), env);
 	//printf("old : %s\n", ft_getenv(env, "OLDPWD"));
