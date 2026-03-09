@@ -6,7 +6,7 @@
 #    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/02/26 15:14:14 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/03/09 15:19:25 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRC =	main.c \
 		builtin/pwd.c \
 		builtin/cd.c \
 		builtin/echo.c \
+		builtin/exit.c \
 		builtin/unset.c \
 		builtin/free_builtin.c \
 		parsing/check_token.c \
