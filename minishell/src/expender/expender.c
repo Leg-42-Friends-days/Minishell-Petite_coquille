@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/09 17:51:00 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/09 18:17:26 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -474,15 +474,9 @@ bool	end_compare(char *str, char *entry)
 	i = 0;
 	j = 0;
 	while (str[i])
-	{
-		// printf("str[i] : [%c]\n", str[i]);
 		i++;
-	}
 	while (entry[j])
-	{
-		// printf("entry[j] : [%c]\n", entry[j]);
 		j++;
-	}
 	i--;
 	j--;
 	if (j < i)
@@ -677,16 +671,14 @@ int	expand_len_token(t_ast *ast)
 
 t_ast	*expand_ast(t_ast *ast, t_env *env)
 {
-	t_ast	*tmp;
 	int		len;
 
 	len = 0;
-	tmp = ast;
 	if (!ast)
 		return (NULL);
 	if (check_if_word(ast) == 1)
 	{
-		ast->cmd = malloc(sizeof(char *) * (expand_len(ast)) + 1);
+		ast->cmd = ft_calloc(sizeof(char *), (expand_len(ast)) + 1);
 		if (!ast->cmd)
 			return (ast);
 		// ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast) + 1));
@@ -696,7 +688,7 @@ t_ast	*expand_ast(t_ast *ast, t_env *env)
 		call_expand(ast, env);
 	}
 	check_redirection(ast, env);
-	return (tmp);
+	return (ast);
 }
 
 t_ast	*expand_function(t_ast *ast, t_env *env)
