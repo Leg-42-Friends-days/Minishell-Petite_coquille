@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/09 14:41:42 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/09 15:04:18 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,11 +121,9 @@ char	*check_new_string(char *str, char *key, char *env)
 	{
 		if (str[i] == '$' && count == 0 && env != NULL)
 		{
-			i++;
 			j = 0;
-			i += ft_strlen(key);
+			i += ft_strlen(key) + 1;
 			count++;
-			// new_string = new_string_cpy(new_string, env, i);
 			while (env[j])
 			{
 				new_string[k] = env[j];
@@ -145,6 +143,13 @@ char	*check_new_string(char *str, char *key, char *env)
 	}
 	// printf("NEW_STRING VALUE : %s\n", new_string);
 	return (free(str), new_string);
+}
+
+void	free_new_string(char *key, char *content)
+{
+	free(key);
+	if (content)
+		free(content);
 }
 
 char	*new_string(char *str, t_env *env)
@@ -172,17 +177,13 @@ char	*new_string(char *str, t_env *env)
 			// printf("ENV->CONTENT : %s\n", content);
 			tmp = check_new_string(new_str, key, content);
 			new_str = tmp;
-			free(key);
-			if (content)
-				free(content);
-			i = 0;
-			continue ;
+			free_new_string(key, content);
+			i = -1;
 		}
 		// printf("VALEUR ACTUELLE DE NEW_CHAR : %c\n", new_str[i]);
 		i++;
 	}
-	free(str);
-	return (new_str);
+	return (free(str), new_str);
 }
 
 char	*app_expend(char *str, t_env *env, bool state)
