@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/09 15:04:18 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/09 15:22:26 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,30 +337,25 @@ bool	first_letter(char *str)
 		return (true);
 	return (false);
 }
+
 int	call_all_dir(t_ast *ast)
 {
 	struct dirent	*entry;
-	char			*dir;
 	DIR				*dp;
 	int				i;
 
 	i = 0;
-	dir = ".";
-	dp = opendir(dir);
+	dp = opendir(".");
 	if (!dp)
 		return (i);
 	while (ast->cmd2[i])
-	{
-		// printf("%s\n", ast->cmd2[i]);
 		i++;
-	}
 	entry = readdir(dp);
 	while (entry)
 	{
 		if (first_letter(entry->d_name) == false)
 		{
 			ast->cmd2[i] = ft_strdup(entry->d_name);
-			// printf("%s\n", ast->cmd2[i]);
 			i++;
 		}
 		entry = readdir(dp);
@@ -371,13 +366,11 @@ int	call_all_dir(t_ast *ast)
 int	wild_card_len(void)
 {
 	struct dirent	*entry;
-	char			*dir;
 	DIR				*dp;
 	int				i;
 
 	i = 0;
-	dir = ".";
-	dp = opendir(dir);
+	dp = opendir(".");
 	if (!dp)
 		return (0);
 	entry = readdir(dp);
@@ -412,19 +405,6 @@ int	check_if_star_alone(char *str)
 	return (count);
 }
 
-bool	check_wild_count(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (check_if_star_alone(str) == 1)
-			return (true);
-		i++;
-	}
-	return (false);
-}
 
 int	expand_wildcard(char *str, t_ast *ast, int *index)
 {
@@ -436,13 +416,13 @@ int	expand_wildcard(char *str, t_ast *ast, int *index)
 	{
 		if (only_wildcard(str) == true)
 			*index += call_all_dir(ast);
-		else if (check_wild_count(str) == true)
+		else if (check_if_star_alone(str) == 1)
 		{
 			printf("IN\n");
 			printf("STRING %s\n", str);
 			// *index += call_wild_side(ast);
 		}
-		else if (check_wild_count(str) == false)
+		else if (check_if_star_alone(str) > 1)
 		{
 			printf("OUT\n");
 			printf("MULTI %s\n", str);
