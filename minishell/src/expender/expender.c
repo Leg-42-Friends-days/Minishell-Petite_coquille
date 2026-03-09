@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/09 15:52:27 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/09 17:51:00 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -457,13 +457,44 @@ bool	start_compare(char *str, char *entry)
 	int	i;
 
 	i = 0;
-	while (str[i])
+	while (str[i] && str[i] != '*')
 	{
 		if (str[i] != entry[i])
-			return (false);
+			return (true);
 		i++;
 	}
-	return (true);
+	return (false);
+}
+
+bool	end_compare(char *str, char *entry)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		// printf("str[i] : [%c]\n", str[i]);
+		i++;
+	}
+	while (entry[j])
+	{
+		// printf("entry[j] : [%c]\n", entry[j]);
+		j++;
+	}
+	i--;
+	j--;
+	if (j < i)
+		return (true);
+	while (i >= 0)
+	{
+		if (str[i] != entry[j])
+			return (true);
+		i--;
+		j--;
+	}
+	return (false);
 }
 
 bool	check_side(char *str, char *entry)
@@ -475,18 +506,21 @@ bool	check_side(char *str, char *entry)
 	i = 0;
 	start = ft_substr(str, 0, len_start(str));
 	end = ft_substr(str, len_start_and_star(str), len_end(str));
-	if (start_compare(str, entry) == true && end_compare(str, entry) == true)
+	if (ft_strlen(start) + ft_strlen(end) > ft_strlen(entry))
+		return (false);
+	// printf("START : [%s]\n", start);
+	// printf("ENTRY : [%s]\n", entry);
+	// printf("END : [%s]\n", end);
+	if (start_compare(start, entry) == false && end_compare(end, entry) == false)
 		return (free(start), free(end), true);
 	return (free(start), free(end), false);
 }
 
-int	call_wild_side(t_ast *ast, char *str)
+int	call_wild_side(t_ast *ast, char *str, int i, bool checker)
 {
 	struct dirent	*entry;
 	DIR				*dp;
-	int				i;
 
-	i = 0;
 	dp = opendir(".");
 	if (!dp)
 		return (i);
@@ -499,10 +533,13 @@ int	call_wild_side(t_ast *ast, char *str)
 				entry->d_name) == true)
 		{
 			ast->cmd2[i] = ft_strdup(entry->d_name);
+			checker = true;
 			i++;
 		}
 		entry = readdir(dp);
 	}
+	if (checker == false)
+		ast->cmd2[i++] = ft_strdup(str);
 	return (i);
 }
 
@@ -518,9 +555,9 @@ int	expand_wildcard(char *str, t_ast *ast, int *index)
 			*index += call_all_dir(ast);
 		else if (check_if_star_alone(str) == 1)
 		{
-			printf("IN\n");
-			printf("STRING %s\n", str);
-			*index += call_wild_side(ast, str);
+			// printf("IN\n");
+			// printf("STRING %s\n", str);
+			*index += call_wild_side(ast, str, 0, false);
 		}
 		else if (check_if_star_alone(str) > 1)
 		{
