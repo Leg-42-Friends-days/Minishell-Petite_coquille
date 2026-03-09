@@ -338,18 +338,16 @@ bool	first_letter(char *str)
 	return (false);
 }
 
-int	call_all_dir(t_ast *ast)
+int	call_all_dir(t_ast *ast, int start)
 {
 	struct dirent	*entry;
 	DIR				*dp;
 	int				i;
 
-	i = 0;
+	i = start;
 	dp = opendir(".");
 	if (!dp)
 		return (i);
-	while (ast->cmd2[i])
-		i++;
 	entry = readdir(dp);
 	while (entry)
 	{
@@ -546,12 +544,12 @@ int	expand_wildcard(char *str, t_ast *ast, int *index)
 	else
 	{
 		if (only_wildcard(str) == true)
-			*index += call_all_dir(ast);
+			*index = call_all_dir(ast, *index);
 		else if (check_if_star_alone(str) == 1)
 		{
 			// printf("IN\n");
 			// printf("STRING %s\n", str);
-			*index += call_wild_side(ast, str, 0, false);
+			*index = call_wild_side(ast, str, *index, false);
 		}
 		else if (check_if_star_alone(str) > 1)
 		{
@@ -579,12 +577,14 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	t_sub_token	*current_sub;
 	int			i;
 	int			k;
+	int			check;
 
 	k = 0;
 	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
 		i = 0;
+		check = k;
 		current_sub = current_token->sub_token;
 		while (current_sub != NULL)
 		{
@@ -621,8 +621,11 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 				current_sub = current_sub->next;
 		}
 		ast->cmd[i] = NULL;
-		ast->cmd2[k] = call_join(ast->cmd);
-		k++;
+		if (k == check)
+		{
+			ast->cmd2[k] = call_join(ast->cmd);
+			k++;
+		}
 		current_token = current_token->next;
 	}
 	ast->cmd2[k] = NULL;
