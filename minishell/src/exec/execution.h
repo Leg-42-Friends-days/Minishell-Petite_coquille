@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/04 16:59:49 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/09 17:38:00 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,20 @@
 # include <unistd.h>
 // getcwd() chdir() isatty() ttyname() ttyslot()
 
+typedef struct s_global t_global;
+
 typedef struct s_exec
 {
 	int	exit_code;
 }		        t_exec;
 
 //EXECUTION
-int	execution(t_ast *ast, t_env *env);
+void	execution(t_global *global);
 int	exec_cmd(t_ast *ast, t_env *env);
-int	exec_pipe(t_ast *ast, t_env *env);
-int	exec_and(t_ast *ast, t_env *env);
-int	exec_or(t_ast *ast, t_env *env);
-int	exec_subshell(t_ast *ast, t_env *env);
+void	exec_pipe(t_ast *ast, t_env *env, int *error_code);
+void	exec_and(t_ast *ast, t_env *env, int *error_code);
+void	exec_or(t_ast *ast, t_env *env, int *error_code);
+void	exec_subshell(t_ast *ast, t_env *env, int *error_code);
 void	print_tab(char **tabl);
 
 //PATH

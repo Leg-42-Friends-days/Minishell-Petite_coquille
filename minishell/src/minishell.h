@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/07 14:26:30 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/09 17:27:40 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,13 @@
 // getcwd() chdir() isatty() ttyname() ttyslot()
 
 // EXPENSION
+
+typedef struct s_global
+{
+    int             *error_code;
+	t_ast			*ast;
+	t_env           *env;
+}				t_global;
 
 t_ast	*expand_function(t_ast *ast, t_env *env);
 char	*app_expend(char *str, t_env *env, bool state);

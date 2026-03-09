@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/09 15:17:38 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/09 17:56:43 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	is_bult_in(char **cmd)
 	return (0);
 }
 
-int	exec_bult_in(char **cmd, t_env *env)
+int	exec_bult_in(char **cmd, t_env *env, int *error_code)
 {
 	int	exit_status;
 	
@@ -37,7 +37,7 @@ int	exec_bult_in(char **cmd, t_env *env)
 	if (ft_strncmp(cmd[0], "pwd", 4) == 0)
 		exit_status = ft_pwd(cmd, env);
 	if (ft_strncmp(cmd[0], "exit", 5) == 0)
-		exit_status = ft_exit(cmd, env);
+		exit_status = ft_exit(cmd, env, error_code);
 	return (exit_status);
 }
 
@@ -53,11 +53,8 @@ void	print_tab(char **tabl)
 	}
 }
 
-int	execution(t_ast *ast, t_env *env)
+void	execution_2(t_ast *ast, t_env *env, int *error_code)
 {
-	int	exit_status;
-
-	exit_status = 0;
 	if (ast != NULL)
 	{
 		if (ast->type == AST_CMD)
@@ -65,28 +62,32 @@ int	execution(t_ast *ast, t_env *env)
 			expand_function(ast, env);
 			//print_tab(ast->cmd2);
 			if (!ast->cmd2[0])
-				return (0);
+				return ;
 			if (is_bult_in(ast->cmd2) == 1)
 			{
 				redirection(ast);
-				exit_status = exec_bult_in(ast->cmd2, env);
+				*error_code = exec_bult_in(ast->cmd2, env, error_code);
 				restore_redirection(ast);
 			}
 			else
-				exit_status = exec_cmd(ast, env);
+				*error_code = exec_cmd(ast, env);
 		}
 		if (ast->type == AST_PIPE)
-			exit_status = exec_pipe(ast, env);
+			exec_pipe(ast, env, error_code);
 		if (ast->type == AST_AND)
-			exit_status = exec_and(ast, env);
+			exec_and(ast, env, error_code);
 		if (ast->type == AST_OR)
-			exit_status = exec_or(ast, env);
+			exec_or(ast, env, error_code);
 		if (ast->type == AST_SUBSHELL)
-			exit_status = exec_subshell(ast, env);
+			exec_subshell(ast, env, error_code);
 	}
-	return (exit_status);
-	printf("\n");
 }
+
+void	execution(t_global *global)
+{
+	execution_2(global->ast, global->env, global->error_code);
+}
+
 int	exec_cmd(t_ast *ast, t_env *env)
 {
 	char	*path;
@@ -118,7 +119,7 @@ int	exec_cmd(t_ast *ast, t_env *env)
 	return (0);
 }
 
-int	exec_pipe(t_ast *ast, t_env *env)
+void	exec_pipe(t_ast *ast, t_env *env, int *error_code)
 {
 	int		fd[2];
 	pid_t	pid[2];
@@ -137,7 +138,7 @@ int	exec_pipe(t_ast *ast, t_env *env)
 		close(fd[0]);
 		dup2(fd[1], 1);
 		close(fd[1]);
-		execution(ast->left, env);
+		execution_2(ast->left, env, error_code);
 		exit(0);
 	}
 	pid[1] = fork();
@@ -148,7 +149,7 @@ int	exec_pipe(t_ast *ast, t_env *env)
 		close(fd[1]);
 		dup2(fd[0], 0);
 		close(fd[0]);
-		execution(ast->right, env);
+		execution_2(ast->right, env, error_code);
 		exit(0);
 	}
 	close(fd[0]);
@@ -156,35 +157,28 @@ int	exec_pipe(t_ast *ast, t_env *env)
 	waitpid(pid[0], NULL, 0);
 	waitpid(pid[1], &status, 0);
 	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	return(0);
+		*error_code = (WEXITSTATUS(status));
+	return ;
 }
 
-int	exec_and(t_ast *ast, t_env *env)
+void	exec_and(t_ast *ast, t_env *env, int *error_code)
 {
-	int	exit_status;
-
-	exit_status = execution(ast->left, env);
-	if (exit_status == 0 )
-		exit_status = execution(ast->right, env);
-	return (exit_status);
+	execution_2(ast->left, env, error_code);
+	if (*error_code == 0 )
+		execution_2(ast->right, env, error_code);
 }
 
-int	exec_or(t_ast *ast, t_env *env)
+void	exec_or(t_ast *ast, t_env *env, int *error_code)
 {
-	int	exit_status;
-
-	exit_status = execution(ast->left, env);
-	if (exit_status != 0 )
-		exit_status = execution(ast->right, env);
-	return (exit_status);
+	execution_2(ast->left, env, error_code);
+	if (*error_code != 0 )
+		execution_2(ast->right, env, error_code);
 }
 
-int	exec_subshell(t_ast *ast, t_env *env)
+void	exec_subshell(t_ast *ast, t_env *env, int *error_code)
 {
 	pid_t	pid;
 	int		status;
-	int		exit_code;
 
 	pid = fork();
 	if (pid == -1)
@@ -193,12 +187,12 @@ int	exec_subshell(t_ast *ast, t_env *env)
 	{
 		expand_function(ast, env);
 		redirection(ast);
-		exit_code = execution(ast->left, env);
-		exit (exit_code);
+		execution_2(ast->left, env, error_code);
+		exit (*error_code);
 	}
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	return (0);
+		*error_code = (WEXITSTATUS(status));
+	return ;
 }
 

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/06 14:39:08 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/09 17:58:34 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,19 @@ int	main(int ac, char **av, char **envp)
 {
 	char	*line;
 	t_token	*mini_vars;
-	t_ast	*ast;
-	t_env	*env;
+	//t_ast	*ast;
+	//t_env	*env;
+	t_global	*global;
 
 	(void)av;
 	(void)ac;
 	(void)envp;
 	mini_vars = NULL;
-	env = NULL;
-	env = env_content(env, envp);
+	global = (t_global *)malloc(sizeof(t_global));
+	global->env = NULL;
+	global->env = env_content(global->env, envp);
+	global->error_code = (int *)malloc(sizeof(int));
+	*global->error_code = 0;
 	/*AFFICHAGE D'ENV
 	while (env->next != NULL)
 	{
@@ -68,11 +72,12 @@ int	main(int ac, char **av, char **envp)
 		if (mini_vars)
 		{
 			//printmini(&mini_vars);
-			ast = parser(&mini_vars);
-			run_through_here_doc(ast, env);
+			global->ast = parser(&mini_vars);
+			run_through_here_doc(global->ast, global->env);
 			//expand_function(ast, env);
 			//print_tab(ast->cmd2);
-			execution(ast, env);
+			execution(global);
+			printf("error_code %d\n", (*global->error_code));
 			ft_miniclear(&mini_vars);
 		}
 		free(line);
