@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/07 15:38:43 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/09 14:41:42 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,15 +107,14 @@ char	*check_new_string(char *str, char *key, char *env)
 	int		i;
 	int		j;
 	int		k;
-	int		len;
 	int		count;
 	char	*new_string;
 
 	i = 0;
 	k = 0;
 	count = 0;
-	len = ft_strlen(str) + ft_strlen(env) - ft_strlen(key) - 1;
-	new_string = malloc(sizeof(char) * (len + 1));
+	new_string = ft_calloc(ft_strlen(str) + ft_strlen(env) - ft_strlen(key),
+			sizeof(char));
 	if (!new_string)
 		return (NULL);
 	while (str[i])
@@ -135,12 +134,15 @@ char	*check_new_string(char *str, char *key, char *env)
 			}
 		}
 		else if (env == NULL && str[i] == '$' && count == 0)
+		{
 			i += ft_strlen(key) + 1;
+			count++;
+			continue ;
+		}
 		new_string[k] = str[i];
 		i++;
 		k++;
 	}
-	new_string[k] = '\0';
 	// printf("NEW_STRING VALUE : %s\n", new_string);
 	return (free(str), new_string);
 }
@@ -170,7 +172,11 @@ char	*new_string(char *str, t_env *env)
 			// printf("ENV->CONTENT : %s\n", content);
 			tmp = check_new_string(new_str, key, content);
 			new_str = tmp;
+			free(key);
+			if (content)
+				free(content);
 			i = 0;
+			continue ;
 		}
 		// printf("VALEUR ACTUELLE DE NEW_CHAR : %c\n", new_str[i]);
 		i++;
@@ -382,14 +388,37 @@ int	wild_card_len(void)
 	return (i);
 }
 
-bool	check_wild_both_side(char *str)
+int	check_if_star_alone(char *str)
+{
+	int	i;
+	int	j;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		j = 0;
+		while (str[i] && str[i] == '*')
+		{
+			i++;
+			j++;
+		}
+		if (0 < j)
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+bool	check_wild_count(char *str)
 {
 	int	i;
 
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '*' && str[i + 1])
+		if (check_if_star_alone(str) == 1)
 			return (true);
 		i++;
 	}
@@ -406,8 +435,17 @@ int	expand_wildcard(char *str, t_ast *ast, int *index)
 	{
 		if (only_wildcard(str) == true)
 			*index += call_all_dir(ast);
-		// else if (check_wild_both_side(str) == true)
-		// 	*index += call_wild_side(ast);
+		else if (check_wild_count(str) == true)
+		{
+			printf("IN\n");
+			printf("STRING %s\n", str);
+			// *index += call_wild_side(ast);
+		}
+		else if (check_wild_count(str) == false)
+		{
+			printf("OUT\n");
+			printf("MULTI %s\n", str);
+		}
 	}
 	return (*index);
 }
@@ -512,7 +550,7 @@ int	expand_len_token(t_ast *ast)
 	while (token != NULL && token->type == WORD)
 	{
 		if (check_if_wildcard(token->sub_token->var) == false)
-				i += wild_card_len();
+			i += wild_card_len();
 		i++;
 		token = token->next;
 	}
