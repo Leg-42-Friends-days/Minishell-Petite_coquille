@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:08 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/03 15:22:00 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/09 11:52:06 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,31 +24,41 @@ void	print_string(char *str)
 	}
 }
 
-void	print_string_tab(char **cmd)
+void	print_string_tab(char **cmd, t_env *env)
 {
 	int	i;
+	char	*home;
 
 	i = 0;
+	home = ft_getenv(env, "HOME");
 	while (cmd[i] != NULL)
 	{
 		if (i != 0)
 			write (1, " ", 1);
-		print_string(cmd[i]);
+		if (ft_strncmp(cmd[i], "~", 2) == 0)
+			write (1, home, ft_strlen(home));
+		else
+			print_string(cmd[i]);
 		i++;
 	}
 	write(1, "\n", 1);
 }
 
-void	print_with_option(char **cmd)
+void	print_with_option(char **cmd, t_env *env)
 {
-	int	i;
+	int		i;
+	char	*home;
 
 	i = 0;
+	home = ft_getenv(env, "HOME");
 	while (cmd[i] != NULL)
 	{
 		if (i != 0)
 			write (1, " ", 1);
-		print_string(cmd[i]);
+		if (ft_strncmp(cmd[i], "~", 2) == 0)
+			write (1, home, ft_strlen(home));
+		else
+			print_string(cmd[i]);
 		i++;
 	}
 }
@@ -81,7 +91,7 @@ int	option_echo(char **cmd)
 	return (count);
 }
 
-int	ft_echo(char **cmd)
+int	ft_echo(char **cmd, t_env *env)
 {
 	int	option;
 
@@ -92,8 +102,8 @@ int	ft_echo(char **cmd)
 	}
 	option = option_echo(cmd);
 	if (option == 1)
-		print_string_tab(&cmd[1]);
+		print_string_tab(&cmd[1], env);
 	else
-		print_with_option(&cmd[option]);
+		print_with_option(&cmd[option], env);
 	return (0);
 }

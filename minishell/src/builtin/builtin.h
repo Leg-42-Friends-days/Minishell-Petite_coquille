@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:16:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/04 16:05:32 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/09 11:48:28 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void				free_pwd(t_pwd *pwd);
 void				free_env(t_env *env);
 
 // ECHO
-int					ft_echo(char **cmd);
+int					ft_echo(char **cmd, t_env *env);
 
 //CD
 int					ft_cd(char **cmd, t_env *env);
