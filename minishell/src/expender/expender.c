@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/09 15:22:26 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/09 15:52:27 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -405,6 +405,106 @@ int	check_if_star_alone(char *str)
 	return (count);
 }
 
+int	len_start(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i] && str[i] != '*')
+		i++;
+	return (i);
+}
+
+int	len_start_and_star(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i] && str[i] != '*')
+		i++;
+	while (str[i] == '*')
+		i++;
+	return (i);
+}
+
+int	len_end(char *str)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	if (!str)
+		return (0);
+	while (str[i] && str[i] != '*')
+		i++;
+	while (str[i] == '*')
+		i++;
+	while (str[i])
+	{
+		i++;
+		j++;
+	}
+	return (j);
+}
+
+bool	start_compare(char *str, char *entry)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != entry[i])
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+bool	check_side(char *str, char *entry)
+{
+	char	*start;
+	char	*end;
+	int		i;
+
+	i = 0;
+	start = ft_substr(str, 0, len_start(str));
+	end = ft_substr(str, len_start_and_star(str), len_end(str));
+	if (start_compare(str, entry) == true && end_compare(str, entry) == true)
+		return (free(start), free(end), true);
+	return (free(start), free(end), false);
+}
+
+int	call_wild_side(t_ast *ast, char *str)
+{
+	struct dirent	*entry;
+	DIR				*dp;
+	int				i;
+
+	i = 0;
+	dp = opendir(".");
+	if (!dp)
+		return (i);
+	while (ast->cmd2[i])
+		i++;
+	entry = readdir(dp);
+	while (entry)
+	{
+		if (first_letter(entry->d_name) == false && check_side(str,
+				entry->d_name) == true)
+		{
+			ast->cmd2[i] = ft_strdup(entry->d_name);
+			i++;
+		}
+		entry = readdir(dp);
+	}
+	return (i);
+}
 
 int	expand_wildcard(char *str, t_ast *ast, int *index)
 {
@@ -420,7 +520,7 @@ int	expand_wildcard(char *str, t_ast *ast, int *index)
 		{
 			printf("IN\n");
 			printf("STRING %s\n", str);
-			// *index += call_wild_side(ast);
+			*index += call_wild_side(ast, str);
 		}
 		else if (check_if_star_alone(str) > 1)
 		{
