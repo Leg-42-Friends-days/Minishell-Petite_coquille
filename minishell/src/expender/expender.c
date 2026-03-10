@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/09 18:45:00 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/09 18:17:26 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,7 +358,7 @@ int	call_all_dir(t_ast *ast, int start)
 		}
 		entry = readdir(dp);
 	}
-	return (closedir(dp), i);
+	return (i);
 }
 
 int	wild_card_len(void)
@@ -377,7 +377,7 @@ int	wild_card_len(void)
 		i++;
 		entry = readdir(dp);
 	}
-	return (closedir(dp), i);
+	return (i);
 }
 
 int	check_if_star_alone(char *str)
@@ -532,7 +532,7 @@ int	call_wild_side(t_ast *ast, char *str, int i, bool checker)
 	}
 	if (checker == false)
 		ast->cmd2[i++] = ft_strdup(str);
-	return (closedir(dp), i);
+	return (i);
 }
 
 int	expand_wildcard(char *str, t_ast *ast, int *index)
