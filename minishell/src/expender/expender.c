@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/09 15:04:18 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/10 15:15:30 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ char	*number_str(char *str)
 	while (str[i] >= 48 && str[i] <= 57)
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
+	if (!key)
+		return (NULL);
 	i = 0;
 	while (str[i] >= 48 && str[i] <= 57)
 	{
@@ -113,7 +115,7 @@ char	*check_new_string(char *str, char *key, char *env)
 	i = 0;
 	k = 0;
 	count = 0;
-	new_string = ft_calloc(ft_strlen(str) + ft_strlen(env) - ft_strlen(key),
+	new_string = ft_calloc(ft_strlen(str) + ft_strlen(env) - ft_strlen(key) + 1,
 			sizeof(char));
 	if (!new_string)
 		return (NULL);
@@ -130,6 +132,7 @@ char	*check_new_string(char *str, char *key, char *env)
 				j++;
 				k++;
 			}
+			continue ;
 		}
 		else if (env == NULL && str[i] == '$' && count == 0)
 		{
@@ -141,6 +144,7 @@ char	*check_new_string(char *str, char *key, char *env)
 		i++;
 		k++;
 	}
+	new_string[k] = '\0';
 	// printf("NEW_STRING VALUE : %s\n", new_string);
 	return (free(str), new_string);
 }
@@ -234,8 +238,6 @@ char	*strjoin_exp(char *s1, char *s2)
 	int		j;
 	char	*str;
 
-	if (!s1 && !s2)
-		return (NULL);
 	i = 0;
 	j = 0;
 	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
@@ -285,7 +287,7 @@ char	*remove_dollar(char *str)
 	len = ft_strlen(str);
 	if (len > 0 && str[len - 1] == '$')
 	{
-		new_str = malloc(sizeof(char) * len);
+		new_str = malloc(sizeof(char) * len + 1);
 		if (!new_str)
 			return (str);
 		i = 0;
@@ -337,47 +339,38 @@ bool	first_letter(char *str)
 		return (true);
 	return (false);
 }
-int	call_all_dir(t_ast *ast)
+
+int	call_all_dir(t_ast *ast, int start)
 {
 	struct dirent	*entry;
-	char			*dir;
 	DIR				*dp;
 	int				i;
 
-	i = 0;
-	dir = ".";
-	dp = opendir(dir);
+	i = start;
+	dp = opendir(".");
 	if (!dp)
 		return (i);
-	while (ast->cmd2[i])
-	{
-		// printf("%s\n", ast->cmd2[i]);
-		i++;
-	}
 	entry = readdir(dp);
 	while (entry)
 	{
 		if (first_letter(entry->d_name) == false)
 		{
 			ast->cmd2[i] = ft_strdup(entry->d_name);
-			// printf("%s\n", ast->cmd2[i]);
 			i++;
 		}
 		entry = readdir(dp);
 	}
-	return (i);
+	return (closedir(dp), i);
 }
 
 int	wild_card_len(void)
 {
 	struct dirent	*entry;
-	char			*dir;
 	DIR				*dp;
 	int				i;
 
 	i = 0;
-	dir = ".";
-	dp = opendir(dir);
+	dp = opendir(".");
 	if (!dp)
 		return (0);
 	entry = readdir(dp);
@@ -386,7 +379,7 @@ int	wild_card_len(void)
 		i++;
 		entry = readdir(dp);
 	}
-	return (i);
+	return (closedir(dp), i);
 }
 
 int	check_if_star_alone(char *str)
@@ -407,23 +400,137 @@ int	check_if_star_alone(char *str)
 		}
 		if (0 < j)
 			count++;
-		i++;
+		else
+			i++;
 	}
 	return (count);
 }
 
-bool	check_wild_count(char *str)
+int	len_start(char *str)
 {
 	int	i;
 
 	i = 0;
+	if (!str)
+		return (0);
+	while (str[i] && str[i] != '*')
+		i++;
+	return (i);
+}
+
+int	len_start_and_star(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i] && str[i] != '*')
+		i++;
+	while (str[i] == '*')
+		i++;
+	return (i);
+}
+
+int	len_end(char *str)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	if (!str)
+		return (0);
+	while (str[i] && str[i] != '*')
+		i++;
+	while (str[i] == '*')
+		i++;
 	while (str[i])
 	{
-		if (check_if_star_alone(str) == 1)
+		i++;
+		j++;
+	}
+	return (j);
+}
+
+bool	start_compare(char *str, char *entry)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != '*')
+	{
+		if (str[i] != entry[i])
 			return (true);
 		i++;
 	}
 	return (false);
+}
+
+bool	end_compare(char *str, char *entry)
+{
+	int	i;
+	int	j;
+
+	i = ft_strlen(str) - 1;
+	j = ft_strlen(entry) - 1;
+	if (j < i)
+		return (true);
+	while (i >= 0)
+	{
+		if (str[i] != entry[j])
+			return (true);
+		i--;
+		j--;
+	}
+	return (false);
+}
+
+bool	check_side(char *str, char *entry)
+{
+	char	*start;
+	char	*end;
+	int		i;
+
+	i = 0;
+	start = ft_substr(str, 0, len_start(str));
+	end = ft_substr(str, len_start_and_star(str), len_end(str));
+	if (ft_strlen(start) + ft_strlen(end) > ft_strlen(entry))
+		return (false);
+	// printf("START : [%s]\n", start);
+	// printf("ENTRY : [%s]\n", entry);
+	// printf("END : [%s]\n", end);
+	if (start_compare(start, entry) == false && end_compare(end,
+			entry) == false)
+		return (free(start), free(end), true);
+	return (free(start), free(end), false);
+}
+
+int	call_wild_side(t_ast *ast, char *str, int index, bool checker)
+{
+	struct dirent	*entry;
+	DIR				*dp;
+	int				i;
+
+	i = index;
+	dp = opendir(".");
+	if (!dp)
+		return (i);
+	entry = readdir(dp);
+	while (entry)
+	{
+		if (first_letter(entry->d_name) == false && check_side(str,
+				entry->d_name) == true)
+		{
+			ast->cmd2[i] = ft_strdup(entry->d_name);
+			checker = true;
+			i++;
+		}
+		entry = readdir(dp);
+	}
+	if (checker == false)
+		ast->cmd2[i++] = ft_strdup(str);
+	return (closedir(dp), i);
 }
 
 int	expand_wildcard(char *str, t_ast *ast, int *index)
@@ -435,14 +542,14 @@ int	expand_wildcard(char *str, t_ast *ast, int *index)
 	else
 	{
 		if (only_wildcard(str) == true)
-			*index += call_all_dir(ast);
-		else if (check_wild_count(str) == true)
+			*index = call_all_dir(ast, *index);
+		else if (check_if_star_alone(str) == 1)
 		{
-			printf("IN\n");
-			printf("STRING %s\n", str);
-			// *index += call_wild_side(ast);
+			// printf("IN\n");
+			// printf("STRING %s\n", str);
+			*index = call_wild_side(ast, str, *index, false);
 		}
-		else if (check_wild_count(str) == false)
+		else if (check_if_star_alone(str) > 1)
 		{
 			printf("OUT\n");
 			printf("MULTI %s\n", str);
@@ -468,12 +575,14 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	t_sub_token	*current_sub;
 	int			i;
 	int			k;
+	int			check;
 
 	k = 0;
 	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
 		i = 0;
+		check = k;
 		current_sub = current_token->sub_token;
 		while (current_sub != NULL)
 		{
@@ -510,8 +619,11 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 				current_sub = current_sub->next;
 		}
 		ast->cmd[i] = NULL;
-		ast->cmd2[k] = call_join(ast->cmd);
-		k++;
+		if (k == check)
+		{
+			ast->cmd2[k] = call_join(ast->cmd);
+			k++;
+		}
 		current_token = current_token->next;
 	}
 	ast->cmd2[k] = NULL;
@@ -560,16 +672,14 @@ int	expand_len_token(t_ast *ast)
 
 t_ast	*expand_ast(t_ast *ast, t_env *env)
 {
-	t_ast	*tmp;
-	int		len;
+	int	len;
 
 	len = 0;
-	tmp = ast;
 	if (!ast)
 		return (NULL);
 	if (check_if_word(ast) == 1)
 	{
-		ast->cmd = malloc(sizeof(char *) * (expand_len(ast)) + 1);
+		ast->cmd = ft_calloc(sizeof(char *), (expand_len(ast)) + 1);
 		if (!ast->cmd)
 			return (ast);
 		// ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast) + 1));
@@ -579,7 +689,7 @@ t_ast	*expand_ast(t_ast *ast, t_env *env)
 		call_expand(ast, env);
 	}
 	check_redirection(ast, env);
-	return (tmp);
+	return (ast);
 }
 
 t_ast	*expand_function(t_ast *ast, t_env *env)
