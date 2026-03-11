@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/06 14:59:27 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/11 11:46:02 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	prepare_here_doc(t_redir *node, t_env *env)
 	//	erreur;
 	if (pid == 0)
 	{
+		g_signal = 0;
+		init_signals();
 		close(fd[0]);
 		while (1)
 		{

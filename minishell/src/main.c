@@ -6,26 +6,42 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/09 17:58:34 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/11 11:44:17 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-
-
 #include "minishell.h"
+
+int	g_signal;
 
 void	handler(int signum)
 {
-	(void)signum;
-	printf("\n%sMinishell >%s", RED, RESET);
+	if (signum == SIGINT)
+	{
+		write(1, "\n", 1);
+		if (g_signal == 0)
+		{
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+		}
+		//g_signal = 130;
+	}
+}
+void	init_signals()
+{
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, handler);
 }
 
+void	init_child_signals()
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
 // SIGQUIT = CTRL + '\'
 // SIGINT = CTRL + C
 // SIGTSTP = CTRL + Z
-// signal(SIGQUIT, SIG_IGN);
-// signal(SIGINT, handler);
 
 int	main(int ac, char **av, char **envp)
 {
@@ -53,21 +69,29 @@ int	main(int ac, char **av, char **envp)
 		env = env->next;
 	}
 	*/
+	g_signal = 0;
+	init_signals();
 	while (true)
 	{
+		g_signal = 0;
 		line = readline("Minishell > ");
 		if (line)
 		{
 			mini_vars = lexing(&mini_vars, line);
 		}
-		if (*line)
-			add_history(line);
 		if (!line)
 		{
-			free(line);
 			if (mini_vars)
 				ft_miniclear(&mini_vars);
 			return (0);
+		}
+		if (*line)
+			add_history(line);
+		printf("%d\n", g_signal);
+		if (g_signal != 0)
+		{
+			*global->error_code = 130;
+			g_signal = 0;
 		}
 		if (mini_vars)
 		{
@@ -77,9 +101,11 @@ int	main(int ac, char **av, char **envp)
 			//expand_function(ast, env);
 			//print_tab(ast->cmd2);
 			execution(global);
-			printf("error_code %d\n", (*global->error_code));
 			ft_miniclear(&mini_vars);
 		}
+		
+		printf("g_signal %d\n", g_signal);
+		printf("error_code %d\n", (*global->error_code));
 		free(line);
 	}
 }

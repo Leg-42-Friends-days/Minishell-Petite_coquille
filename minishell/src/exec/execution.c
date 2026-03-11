@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/09 17:56:43 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/11 11:05:26 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int	exec_cmd(t_ast *ast, t_env *env)
 	pid_t	pid;
 	int		status;
 
+	g_signal = 1;
 	status = 0;
 	path = find_cmd(env, ast->cmd2[0]);
 	if (!path)
@@ -108,12 +109,14 @@ int	exec_cmd(t_ast *ast, t_env *env)
 		printf("error");
 	if (pid == 0)
 	{
+		init_child_signals();
 		redirection(ast);
 		execve(path, ast->cmd2, NULL);
 		perror("minishell");
 		exit (127);
 	}
 	waitpid(pid, &status, 0);
+	signal(SIGINT, handler);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (0);
