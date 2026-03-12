@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/10 15:15:30 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/12 23:38:14 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,13 @@ char	*number_str(char *str)
 	char	*key;
 
 	i = 0;
-	while (str[i] >= 48 && str[i] <= 57)
+	if (str[i] >= 48 && str[i] <= 57)
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
 		return (NULL);
 	i = 0;
-	while (str[i] >= 48 && str[i] <= 57)
+	if (str[i] >= 48 && str[i] <= 57)
 	{
 		key[i] = str[i];
 		i++;
@@ -87,7 +87,8 @@ char	*check_key(char *str)
 		return (key = number_str(str));
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
 		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
-		&& (str[i] != '\'' && str[i]) && (str[i] != '*' && str[i]))
+		&& (str[i] != '/' && str[i]) && (str[i] != '*' && str[i])
+		&& str[i] != ']' && str[i] != '[' && str[i] != '%')
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
@@ -95,7 +96,8 @@ char	*check_key(char *str)
 	i = 0;
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
 		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
-		&& (str[i] != '\'' && str[i]) && (str[i] != '*' && str[i]))
+		&& (str[i] != '/' && str[i]) && (str[i] != '*' && str[i])
+		&& str[i] != ']' && str[i] != '[' && str[i] != '%')
 	{
 		key[i] = str[i];
 		i++;
@@ -506,6 +508,44 @@ bool	check_side(char *str, char *entry)
 	return (free(start), free(end), false);
 }
 
+bool	check_if_liste_existe(char *str, char *entry)
+{
+	printf("STR VALUE : %s\n", str);
+	printf("ENTRY VALUE : %s\n", entry);
+	int i;
+	int j;
+	
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		i++;
+	}
+	return (true);
+}
+
+bool	check_inside(char *str, char *entry)
+{
+	char	**liste;
+	int		i;
+	printf("CHECK INSIDE : %s\n", str);
+	liste = ft_split(str, '*');
+	i = 0;
+	while (liste[i])
+	{
+		if (check_if_liste_existe(liste[i], entry) == true)
+			i++;
+		else
+			return (false);
+	}
+	// while (liste[i])
+	// {
+	// 	printf("LISTE : %s\n", liste[i]);
+	// 	i++;
+	// }
+	return (false);
+}
+
 int	call_wild_side(t_ast *ast, char *str, int index, bool checker)
 {
 	struct dirent	*entry;
@@ -520,6 +560,33 @@ int	call_wild_side(t_ast *ast, char *str, int index, bool checker)
 	while (entry)
 	{
 		if (first_letter(entry->d_name) == false && check_side(str,
+				entry->d_name) == true)
+		{
+			ast->cmd2[i] = ft_strdup(entry->d_name);
+			checker = true;
+			i++;
+		}
+		entry = readdir(dp);
+	}
+	if (checker == false)
+		ast->cmd2[i++] = ft_strdup(str);
+	return (closedir(dp), i);
+}
+
+int	call_wild_multi(t_ast *ast, char *str, int index, bool checker)
+{
+	struct dirent	*entry;
+	DIR				*dp;
+	int				i;
+
+	i = index;
+	dp = opendir(".");
+	if (!dp)
+		return (i);
+	entry = readdir(dp);
+	while (entry)
+	{
+		if (first_letter(entry->d_name) == false && check_inside(str,
 				entry->d_name) == true)
 		{
 			ast->cmd2[i] = ft_strdup(entry->d_name);
@@ -553,6 +620,7 @@ int	expand_wildcard(char *str, t_ast *ast, int *index)
 		{
 			printf("OUT\n");
 			printf("MULTI %s\n", str);
+			// *index = call_wild_multi(ast, str, *index, false);
 		}
 	}
 	return (*index);
@@ -627,6 +695,12 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		current_token = current_token->next;
 	}
 	ast->cmd2[k] = NULL;
+	// i = 0;
+	// while (ast->cmd2[i])
+	// {
+	// 	printf("AST CMD2 VALUE : %s\n", ast->cmd2[i]);
+	// 	i++;
+	// }
 	return (ast);
 }
 
