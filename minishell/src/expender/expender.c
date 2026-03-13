@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/12 23:38:14 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/13 15:37:08 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -510,11 +510,11 @@ bool	check_side(char *str, char *entry)
 
 bool	check_if_liste_existe(char *str, char *entry)
 {
+	int	i;
+	int	j;
+
 	printf("STR VALUE : %s\n", str);
 	printf("ENTRY VALUE : %s\n", entry);
-	int i;
-	int j;
-	
 	i = 0;
 	j = 0;
 	while (str[i])
@@ -528,6 +528,7 @@ bool	check_inside(char *str, char *entry)
 {
 	char	**liste;
 	int		i;
+
 	printf("CHECK INSIDE : %s\n", str);
 	liste = ft_split(str, '*');
 	i = 0;
@@ -637,6 +638,66 @@ bool	check_if_next_token_wild(t_sub_token *sub_to)
 	return (true);
 }
 
+int	len_cmd(char **str)
+{
+	int	i;
+	int	j;
+	int	count;
+
+	i = 0;
+	j = 0;
+	count = 0;
+	if (!str || !*str)
+		return (count);
+	while (str[i])
+	{
+		if (str[i][j] != '\0')
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+void	free_split(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+}
+
+char	**remove_null(char **str)
+{
+	int		i;
+	int		j;
+	int		k;
+	int		len;
+	char	**cmd;
+
+	i = 0;
+	j = 0;
+	k = 0;
+	len = len_cmd(str);
+	cmd = malloc(sizeof(char *) * (len + 1));
+	while (str[i])
+	{
+		if (str[i][j] != '\0')
+		{
+			cmd[k] = ft_strdup(str[i]);
+			k++;
+		}
+		i++;
+	}
+	cmd[k] = NULL;
+	free_split(str);
+	return (cmd);
+}
+
 t_ast	*call_expand(t_ast *ast, t_env *env)
 {
 	t_token		*current_token;
@@ -695,12 +756,7 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		current_token = current_token->next;
 	}
 	ast->cmd2[k] = NULL;
-	// i = 0;
-	// while (ast->cmd2[i])
-	// {
-	// 	printf("AST CMD2 VALUE : %s\n", ast->cmd2[i]);
-	// 	i++;
-	// }
+	ast->cmd2 = remove_null(ast->cmd2);
 	return (ast);
 }
 
