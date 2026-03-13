@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/13 15:37:08 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/13 17:33:34 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -508,43 +508,44 @@ bool	check_side(char *str, char *entry)
 	return (free(start), free(end), false);
 }
 
-bool	check_if_liste_existe(char *str, char *entry)
+bool	check_inside_len(char *str, char *entry)
 {
 	int	i;
-	int	j;
+	int	count;
+	int	len;
 
-	printf("STR VALUE : %s\n", str);
-	printf("ENTRY VALUE : %s\n", entry);
 	i = 0;
-	j = 0;
+	count = 0;
+	len = ft_strlen(entry);
 	while (str[i])
 	{
+		if (str[i] != '*')
+			count++;
 		i++;
 	}
-	return (true);
+	if (count > len)
+		return (true);
+	return (false);
 }
+
+// bool	check_inside_string(char *str, char *entry)
+// {
+// 	int start;
+// 	int end;
+// 	int i;
+
+// 	start = 0;
+// 	end = 0;
+// }
 
 bool	check_inside(char *str, char *entry)
 {
-	char	**liste;
-	int		i;
 
-	printf("CHECK INSIDE : %s\n", str);
-	liste = ft_split(str, '*');
-	i = 0;
-	while (liste[i])
-	{
-		if (check_if_liste_existe(liste[i], entry) == true)
-			i++;
-		else
-			return (false);
-	}
-	// while (liste[i])
-	// {
-	// 	printf("LISTE : %s\n", liste[i]);
-	// 	i++;
-	// }
-	return (false);
+	if (check_inside_len(str, entry) == true)
+		return (false);
+	// else if (check_inside_string(str, entry) == true)
+	// 	return (false);
+	return (true);
 }
 
 int	call_wild_side(t_ast *ast, char *str, int index, bool checker)
@@ -621,7 +622,7 @@ int	expand_wildcard(char *str, t_ast *ast, int *index)
 		{
 			printf("OUT\n");
 			printf("MULTI %s\n", str);
-			// *index = call_wild_multi(ast, str, *index, false);
+			*index = call_wild_multi(ast, str, *index, false);
 		}
 	}
 	return (*index);
@@ -760,6 +761,23 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 	return (ast);
 }
 
+int	expand_len_token(t_ast *ast)
+{
+	int		i;
+	t_token	*token;
+
+	i = 0;
+	token = ast->cmd_token;
+	while (token != NULL && token->type == WORD)
+	{
+		if (check_if_wildcard(token->sub_token->var) == false)
+			i += wild_card_len();
+		i++;
+		token = token->next;
+	}
+	return (i);
+}
+
 void	check_redirection(t_ast *ast, t_env *env)
 {
 	t_ast	*tmp;
@@ -779,25 +797,9 @@ void	check_redirection(t_ast *ast, t_env *env)
 			&& tmp->cmd_token->sub_token->quote == NORMAL)
 			re->target->sub_token->var = app_expend(re->target->sub_token->var,
 					env, false);
+		// expand_wildcard(re->target->sub_token->var, NULL, 0);
 		re = re->next;
 	}
-}
-
-int	expand_len_token(t_ast *ast)
-{
-	int		i;
-	t_token	*token;
-
-	i = 0;
-	token = ast->cmd_token;
-	while (token != NULL && token->type == WORD)
-	{
-		if (check_if_wildcard(token->sub_token->var) == false)
-			i += wild_card_len();
-		i++;
-		token = token->next;
-	}
-	return (i);
 }
 
 t_ast	*expand_ast(t_ast *ast, t_env *env)
