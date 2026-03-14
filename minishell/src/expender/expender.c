@@ -782,7 +782,9 @@ void	check_redirection(t_ast *ast, t_env *env)
 {
 	t_ast	*tmp;
 	t_redir	*re;
+	int		i;
 
+	i = 0;
 	tmp = ast;
 	if (!tmp || !tmp->redirs)
 		return ;
@@ -797,7 +799,8 @@ void	check_redirection(t_ast *ast, t_env *env)
 			&& tmp->cmd_token->sub_token->quote == NORMAL)
 			re->target->sub_token->var = app_expend(re->target->sub_token->var,
 					env, false);
-		// expand_wildcard(re->target->sub_token->var, NULL, 0);
+		i = expand_wildcard(re->target->sub_token->var, tmp, &i);
+		printf("Valeur de i : %d\n", i);
 		re = re->next;
 	}
 }
