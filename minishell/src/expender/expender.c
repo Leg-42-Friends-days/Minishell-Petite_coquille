@@ -168,7 +168,7 @@ char	*check_new_string(char *str, char *key, char *env)
 void	free_new_string(char *key, char *content)
 {
 	if (key)
-		free(key);
+			free(key);
 	if (content)
 		free(content);
 }
