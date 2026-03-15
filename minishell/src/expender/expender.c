@@ -699,64 +699,84 @@ char	**remove_null(char **str)
 	return (cmd);
 }
 
+bool	check_dollars(t_sub_token *current_sub)
+{
+	if (current_sub->quote == NORMAL
+		&& ft_strncmp(current_sub->var, "$", -1) == 0
+		&& current_sub->next
+		&& (current_sub->next->quote == DOUBLE
+			|| current_sub->next->quote == SINGLE))
+		return (true);
+	return (false);
+}
+
+void	in_cmd(t_ast *ast, t_sub_token *current_sub, int *i)
+{
+	ast->cmd[*i] = ft_strdup(current_sub->var);
+	(*i)++;
+}
+
+void	normal_quote(t_ast *ast, t_sub_token *current_sub,
+		t_env *env, int *k)
+{
+	if (current_sub->next && (current_sub->next->quote == DOUBLE
+			|| current_sub->next->quote == SINGLE))
+		current_sub->var = remove_dollar(current_sub->var);
+	current_sub->var = app_expend(current_sub->var, env, false);
+	if (check_if_next_token_wild(current_sub) == true)
+		*k = expand_wildcard(current_sub->var, ast, k);
+}
+
+void	check_sub_status(t_ast *ast, t_sub_token *current_sub,
+		t_env *env, int *i, int *k)
+{
+	if (current_sub->quote == DOUBLE)
+	{
+		current_sub->var = app_expend(current_sub->var, env, true);
+		in_cmd(ast, current_sub, i);
+	}
+	else if (current_sub->quote == NORMAL)
+	{
+		normal_quote(ast, current_sub, env, k);
+		in_cmd(ast, current_sub, i);
+	}
+	else if (current_sub->quote == SINGLE)
+		in_cmd(ast, current_sub, i);
+}
+
+void	expand_token(t_ast *ast, t_token *current_token, t_env *env, int *index)
+{
+	t_sub_token	*current_sub;
+	int			i;
+	int			check;
+
+	i = 0;
+	check = *index;
+	current_sub = current_token->sub_token;
+	while (current_sub != NULL)
+	{
+		if (check_dollars(current_sub) == false)
+			check_sub_status(ast, current_sub, env, &i, index);
+		current_sub = current_sub->next;
+	}
+	ast->cmd[i] = NULL;
+	if (*index == check)
+		ast->cmd2[(*index)++] = call_join(ast->cmd);
+}
+
 t_ast	*call_expand(t_ast *ast, t_env *env)
 {
 	t_token		*current_token;
-	t_sub_token	*current_sub;
-	int			i;
-	int			k;
-	int			check;
+	int			index;
 
-	k = 0;
+	index = 0;
 	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
-		i = 0;
-		check = k;
-		current_sub = current_token->sub_token;
-		while (current_sub != NULL)
-		{
-			if (!(current_sub->quote == NORMAL && ft_strncmp(current_sub->var,
-						"$", -1) == 0 && current_sub->next
-					&& (current_sub->next->quote == DOUBLE
-						|| current_sub->next->quote == SINGLE)))
-			{
-				if (current_sub->quote == DOUBLE)
-				{
-					current_sub->var = app_expend(current_sub->var, env, true);
-					ast->cmd[i] = ft_strdup(current_sub->var);
-					i++;
-				}
-				else if (current_sub->quote == NORMAL)
-				{
-					if (current_sub->next && (current_sub->next->quote == DOUBLE
-							|| current_sub->next->quote == SINGLE))
-						current_sub->var = remove_dollar(current_sub->var);
-					current_sub->var = app_expend(current_sub->var, env, false);
-					if (check_if_next_token_wild(current_sub) == true)
-						k = expand_wildcard(current_sub->var, ast, &k);
-					ast->cmd[i] = ft_strdup(current_sub->var);
-					i++;
-				}
-				else if (current_sub->quote == SINGLE)
-				{
-					ast->cmd[i] = ft_strdup(current_sub->var);
-					i++;
-				}
-				current_sub = current_sub->next;
-			}
-			else
-				current_sub = current_sub->next;
-		}
-		ast->cmd[i] = NULL;
-		if (k == check)
-		{
-			ast->cmd2[k] = call_join(ast->cmd);
-			k++;
-		}
+		expand_token(ast, current_token, env, &index);
 		current_token = current_token->next;
 	}
-	ast->cmd2[k] = NULL;
+	ast->cmd2[index] = NULL;
 	ast->cmd2 = remove_null(ast->cmd2);
 	return (ast);
 }
