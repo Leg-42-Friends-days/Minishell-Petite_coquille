@@ -106,54 +106,69 @@ char	*check_key(char *str)
 	return (key);
 }
 
-char	*check_new_string(char *str, char *key, char *env)
+void	copy_env(char *new_string, char *env, int *k)
 {
-	int		i;
-	int		j;
-	int		k;
-	int		count;
-	char	*new_string;
+	int	j;
+
+	j = 0;
+	while (env && env[j])
+	{
+		new_string[*k] = env[j];
+		(*k)++;
+		j++;
+	}
+}
+
+void	string_advance(char *new_string, char *str, int *i, int *k)
+{
+	new_string[*k] = str[*i];
+	(*i)++;
+	(*k)++;
+}
+
+void	check_new_string2(char *new_string, char *str, char *key, char *env)
+{
+	int	i;
+	int	k;
+	int	count;
 
 	i = 0;
 	k = 0;
 	count = 0;
-	new_string = ft_calloc(ft_strlen(str) + ft_strlen(env) - ft_strlen(key) + 1,
-			sizeof(char));
-	if (!new_string)
-		return (NULL);
 	while (str[i])
 	{
-		if (str[i] == '$' && count == 0 && env != NULL)
-		{
-			j = 0;
-			i += ft_strlen(key) + 1;
-			count++;
-			while (env[j])
-			{
-				new_string[k] = env[j];
-				j++;
-				k++;
-			}
-			continue ;
-		}
-		else if (env == NULL && str[i] == '$' && count == 0)
+		if (str[i] == '$' && count == 0)
 		{
 			i += ft_strlen(key) + 1;
 			count++;
+			copy_env(new_string, env, &k);
 			continue ;
 		}
-		new_string[k] = str[i];
-		i++;
-		k++;
+		string_advance(new_string, str, &i, &k);
 	}
 	new_string[k] = '\0';
-	// printf("NEW_STRING VALUE : %s\n", new_string);
+}
+
+char	*check_new_string(char *str, char *key, char *env)
+{
+	size_t	env_len;
+	char	*new_string;
+
+	env_len = 0;
+	if (env)
+		env_len = ft_strlen(env);
+	new_string = ft_calloc(ft_strlen(str) + env_len - ft_strlen(key) + 1,
+			sizeof(char));
+	if (!new_string)
+		return (free(str), NULL);
+	check_new_string2(new_string, str, key, env);
 	return (free(str), new_string);
 }
 
 void	free_new_string(char *key, char *content)
 {
-	free(key);
+	if (key)
+		free(key);
 	if (content)
 		free(content);
 }
@@ -167,26 +182,19 @@ char	*new_string(char *str, t_env *env)
 	char	*tmp;
 
 	i = 0;
-	// printf("VALEUR ACTUELLE DE STR : %s\n", str);
 	new_str = ft_strdup(str);
-	// printf("VALEUR ACTUELLE DE NEW_STR : %s\n", new_str);
 	while (new_str[i])
 	{
 		if (new_str[i] == '$' && !(new_str[i + 1] == ' ' || new_str[i
 				+ 1] == '\0') && new_str[i + 1] != '"' && new_str[i + 1] != '/')
 		{
-			i++;
-			// printf("AFFICHAGE STR %s\n", str);
-			key = check_key(new_str + i);
+			key = check_key(new_str + i + 1);
 			content = check_string(key, env);
-			// printf("KEY->CONTENT : %s\n", key);
-			// printf("ENV->CONTENT : %s\n", content);
 			tmp = check_new_string(new_str, key, content);
 			new_str = tmp;
 			free_new_string(key, content);
 			i = -1;
 		}
-		// printf("VALEUR ACTUELLE DE NEW_CHAR : %c\n", new_str[i]);
 		i++;
 	}
 	return (free(str), new_str);
@@ -244,7 +252,7 @@ char	*strjoin_exp(char *s1, char *s2)
 	j = 0;
 	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!str)
-		return (NULL);
+		return (free(s1), NULL);
 	while (s1[i])
 	{
 		str[i] = s1[i];
@@ -273,9 +281,24 @@ char	*call_join(char **str)
 	while (str[i])
 	{
 		full_string = strjoin_exp(full_string, str[i]);
+		if (!full_string)
+			return (NULL);
 		i++;
 	}
 	return (full_string);
+}
+
+void	free_cmd(char **cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd && cmd[i])
+	{
+		free(cmd[i]);
+		cmd[i] = NULL;
+		i++;
+	}
 }
 
 char	*remove_dollar(char *str)
@@ -762,6 +785,7 @@ void	expand_token(t_ast *ast, t_token *current_token, t_env *env, int *index)
 	ast->cmd[i] = NULL;
 	if (*index == check)
 		ast->cmd2[(*index)++] = call_join(ast->cmd);
+	free_cmd(ast->cmd);
 }
 
 t_ast	*call_expand(t_ast *ast, t_env *env)
