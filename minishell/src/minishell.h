@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/11 11:02:43 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/16 19:26:31 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include "./builtin/builtin.h"
 # include "lexing/lexer.h"
 # include "parsing/parser.h"
+# include "expender/expander.h"
 # include "exec/execution.h"
 # include <readline/history.h>
 # include <readline/readline.h>
