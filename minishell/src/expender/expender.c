@@ -6,13 +6,12 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/16 17:03:56 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/16 19:13:10 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	free_split(char **str);
 
 bool	check_if_word(t_ast *ast)
 {
