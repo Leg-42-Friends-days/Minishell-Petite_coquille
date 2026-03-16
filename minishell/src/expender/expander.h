@@ -27,6 +27,8 @@ void	string_advance(char *new_string, char *str, int *i, int *k);
 void	check_new_string2(char *new_string, char *str, char *key, char *env);
 char	*check_new_string(char *str, char *key, char *env);
 void	free_new_string(char *key, char *content);
+bool	check_dollar(char *str, int i);
+char	*new_string2(char *new_str, int i, t_env *env);
 char	*new_string(char *str, t_env *env);
 char	*app_expend(char *str, t_env *env, bool state);
 int		expand_len(t_ast *ast);

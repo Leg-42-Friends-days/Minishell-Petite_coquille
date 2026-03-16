@@ -201,26 +201,45 @@ void	free_new_string(char *key, char *content)
 		free(content);
 }
 
+bool	check_dollar(char *str, int i)
+{
+	if (str[i] == '$' && !(str[i + 1] == ' ' || str[i + 1] == '\0')
+		&& str[i + 1] != '"' && str[i + 1] != '/')
+		return (true);
+	return (false);
+}
+
+char	*new_string2(char *new_str, int i, t_env *env)
+{
+	char	*key;
+	char	*content;
+	char	*tmp;
+
+	key = check_key(new_str + i + 1);
+	if (!key)
+		return (free(new_str), NULL);
+	content = check_string(key, env);
+	tmp = check_new_string(new_str, key, content);
+	free_new_string(key, content);
+	return (tmp);
+}
+
 char	*new_string(char *str, t_env *env)
 {
 	int		i;
-	char	*key;
-	char	*content;
 	char	*new_str;
-	char	*tmp;
 
 	i = 0;
 	new_str = ft_strdup(str);
+	if (!new_str)
+		return (free(str), NULL);
 	while (new_str[i])
 	{
-		if (new_str[i] == '$' && !(new_str[i + 1] == ' ' || new_str[i
-				+ 1] == '\0') && new_str[i + 1] != '"' && new_str[i + 1] != '/')
+		if (check_dollar(new_str, i) == true)
 		{
-			key = check_key(new_str + i + 1);
-			content = check_string(key, env);
-			tmp = check_new_string(new_str, key, content);
-			new_str = tmp;
-			free_new_string(key, content);
+			new_str = new_string2(new_str, i, env);
+			if (!new_str)
+				return (free(str), NULL);
 			i = -1;
 		}
 		i++;
@@ -551,7 +570,7 @@ bool	check_side(char *str, char *entry)
 	start = ft_substr(str, 0, len_start(str));
 	end = ft_substr(str, len_start_and_star(str), len_end(str));
 	if (ft_strlen(start) + ft_strlen(end) > ft_strlen(entry))
-		return (false);
+		return (free(start), free(end), false);
 	// printf("START : [%s]\n", start);
 	// printf("ENTRY : [%s]\n", entry);
 	// printf("END : [%s]\n", end);
@@ -793,6 +812,8 @@ void	free_split(char **str)
 {
 	int	i;
 
+	if (!str)
+		return ;
 	i = 0;
 	while (str[i])
 	{
@@ -810,16 +831,22 @@ char	**remove_null(char **str)
 	int		len;
 	char	**cmd;
 
+	if (!str)
+		return (NULL);
 	i = 0;
 	j = 0;
 	k = 0;
 	len = len_cmd(str);
-	cmd = malloc(sizeof(char *) * (len + 1));
+	cmd = ft_calloc(sizeof(char *), (len + 1));
+	if (!cmd)
+		return (free_split(str), NULL);
 	while (str[i])
 	{
 		if (str[i][j] != '\0')
 		{
 			cmd[k] = ft_strdup(str[i]);
+			if (!cmd[k])
+				return (free_split(cmd), free_split(str), NULL);
 			k++;
 		}
 		i++;
@@ -972,7 +999,7 @@ t_ast	*expand_ast(t_ast *ast, t_env *env)
 			return (ast);
 		ast->cmd2 = ft_calloc(sizeof(char *), (expand_len_token(ast) + 1));
 		if (!ast->cmd2)
-			return (ast);
+			return (free(ast->cmd), ast->cmd = NULL, ast);
 		call_expand(ast, env);
 	}
 	check_redirection(ast, env);
