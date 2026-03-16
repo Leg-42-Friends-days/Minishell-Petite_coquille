@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/11 11:05:26 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/16 17:22:16 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int	exec_cmd(t_ast *ast, t_env *env)
 		perror("minishell");
 		exit (127);
 	}
+	free(path);
 	waitpid(pid, &status, 0);
 	signal(SIGINT, handler);
 	if (WIFEXITED(status))

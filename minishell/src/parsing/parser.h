@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/10 14:01:48 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/16 14:30:46 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,11 @@ t_ast			*parse_or(t_token **token);
 void			print_ast(t_ast *ast);
 
 //CHECK_TOKEN.C
-bool	            check_token(t_token *token);
+bool			check_token(t_token *token);
+
+//FREE_PARSER.C
+void    		free_parser(t_ast *ast);
+void    		free_cmd(char **cmmd);
+
 
 #endif

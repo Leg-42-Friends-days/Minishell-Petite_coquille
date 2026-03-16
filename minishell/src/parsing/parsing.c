@@ -6,26 +6,12 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/06 14:38:40 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/16 16:37:41 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "parser.h"
 
-/* t_token	*lstfirst_token(t_token *lst)
-{
-	t_token	*cursor;
-
-	if (!lst || !lst->sub_token)
-		return (lst);
-	cursor = lst;
-	while (cursor->sub_token->prev != NULL)
-		cursor->sub_token = cursor->sub_token->prev;
-	return (cursor);
-} */
-
-// Creation de node
 t_ast	*ast_node(int type)
 {
 	t_ast	*node;
@@ -38,6 +24,8 @@ t_ast	*ast_node(int type)
 	node->right = NULL;
 	node->cmd_token = NULL;
 	node->redirs = NULL;
+	node->cmd= NULL;
+	node->cmd2 = NULL;
 	return (node);
 }
 
@@ -113,16 +101,18 @@ int	token_list_redir(t_token **token, t_ast *node)
 t_ast	*parse_cmd(t_token **token)
 {
 	t_ast	*node;
+	t_token	*current;
 
-	if (*token && (*token)->type == L_PAR)
+	current = *token;
+	if (current && current->type == L_PAR)
 	{
 		node = ast_node(AST_SUBSHELL);
-		*token = (*token)->next;
-		node->left = parse_or(token);
+		current = current->next;
+		node->left = parse_or(&current);
 		node->right = NULL;
-		if (*token && (*token)->type == R_PAR)
+		if (current && current->type == R_PAR)
 		{
-			*token = (*token)->next;
+			current = current->next;
 			//return (node);
 		}
 		else
@@ -130,58 +120,58 @@ t_ast	*parse_cmd(t_token **token)
 			ft_printf(2, "PRINTF TESTERrrr : syntax error near unexpected token\n");
 			return (NULL);
 		}
-		if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+		if (current && (current->type == INFILE || current->type == OUTFILE || current->type == APPEND || current->type == HEREDOC))
 		{
 			//node = ast_node(AST_CMD);
-			if ((token_list_redir(token, node)) == 1)
+			if ((token_list_redir(&current, node)) == 1)
 				return (NULL);
-			while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+			while (current && (current->type == INFILE || current->type == OUTFILE || current->type == APPEND || current->type == HEREDOC))
 			{
-				if ((token_list_redir(token, node)) == 1)
+				if ((token_list_redir(&current, node)) == 1)
 				return (NULL);
 			}
-			if (*token)
-				node->cmd_token = *token;
+			if (current)
+				node->cmd_token = current;
 		}
-		while (*token && (*token)->type < 5)
+		while (current && current->type < 5)
 		{
-			if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+			if (current && (current->type == INFILE || current->type == OUTFILE || current->type == APPEND || current->type == HEREDOC))
 			{
-				if ((token_list_redir(token, node)) == 1)
+				if ((token_list_redir(&current, node)) == 1)
 					return (NULL);
 			}
-			else if (*token)
-				*token = (*token)->next;
+			else if (current)
+				current = current->next;
 		}
 		return (node);
 	}
-	if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+	if (current && (current->type == INFILE || current->type == OUTFILE || current->type == APPEND || current->type == HEREDOC))
 	{
 		node = ast_node(AST_CMD);
-		if ((token_list_redir(token, node)) == 1)
+		if ((token_list_redir(&current, node)) == 1)
 			return (NULL);
-		while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+		while (current && (current->type == INFILE || current->type == OUTFILE || current->type == APPEND || current->type == HEREDOC))
 		{
-			if ((token_list_redir(token, node)) == 1)
+			if ((token_list_redir(&current, node)) == 1)
 			return (NULL);
 		}
-		if (*token)
-			node->cmd_token = *token;
+		if (current)
+			node->cmd_token = current;
 	}
-	else if (*token && (*token)->type == WORD)
+	else if (current && current->type == WORD)
 	{
 		node = ast_node(AST_CMD);
-		node->cmd_token = *token;
+		node->cmd_token = current;
 	}
-	while (*token && (*token)->type < 5)
+	while (current && current->type < 5)
 	{
-		if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+		if (current && (current->type == INFILE || current->type == OUTFILE || current->type == APPEND || current->type == HEREDOC))
 		{
-			if ((token_list_redir(token, node)) == 1)
+			if ((token_list_redir(&current, node)) == 1)
 				return (NULL);
 		}
 		else
-			*token = (*token)->next;
+			current = current->next;
 	}
 	return (node);
 }
@@ -190,14 +180,16 @@ t_ast	*parse_pipe(t_token **token)
 {
 	t_ast	*left;
 	t_ast	*node;
+	t_token	*current;
 
-	left = parse_cmd(token);
-	while (*token && (*token)->type == PIPE)
+	current = *token;
+	left = parse_cmd(&current);
+	while (current && current->type == PIPE)
 	{
 		node = ast_node(AST_PIPE);
-		*token = (*token)->next;
+		current = current->next;
 		node->left = left;
-		node->right = parse_cmd(token);
+		node->right = parse_cmd(&current);
 		left = node;
 	}
 	return (left);
@@ -207,14 +199,16 @@ t_ast	*parse_and(t_token **token)
 {
 	t_ast	*left;
 	t_ast	*node;
+	t_token	*current;
 
-	left = parse_pipe(token);
-	while (*token && (*token)->type == AND)
+	current = *token;
+	left = parse_pipe(&current);
+	while (current && current->type == AND)
 	{
 		node = ast_node(AST_AND);
-		*token = (*token)->next;
+		current = current->next;
 		node->left = left;
-		node->right = parse_pipe(token);
+		node->right = parse_pipe(&current);
 		left = node;
 	}
 	return (left);
@@ -224,15 +218,17 @@ t_ast	*parse_or(t_token **token)
 {
 	t_ast	*left;
 	t_ast	*node;
+	t_token	*current;
 
-	left = parse_and(token);
-	while (*token && (*token)->type == OR)
+	current = *token;
+	left = parse_and(&current);
+	while (current && current->type == OR)
 	{
 
 		node = ast_node(AST_OR);
-		*token = (*token)->next;
+		current = current->next;
 		node->left = left;
-		node->right = parse_and(token);
+		node->right = parse_and(&current);
 		left = node;
 	}
 	return (left);
@@ -276,11 +272,6 @@ void	print_ast(t_ast *ast)
 			print_ast(ast->right);
 		printf("\n");
 	}
-/* 	if (ast->left)
-			print_ast(ast->left);
-	if (ast->right)
-		print_ast(ast->right);
-	printf("\n"); */
 }
 
 t_ast	*parser(t_token **token)

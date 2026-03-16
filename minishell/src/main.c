@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/16 11:53:02 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/16 19:12:38 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,11 @@ int	main(int ac, char **av, char **envp)
 		}
 		if (!line)
 		{
-			if (mini_vars)
-				ft_miniclear(&mini_vars);
+			//if (mini_vars)
+			//	ft_miniclear(&mini_vars);
 			free(global->error_code);
+			//if (global->ast)
+			//	free_parser(global->ast);
 			free(global);
 			return (0);
 		}
@@ -98,12 +100,17 @@ int	main(int ac, char **av, char **envp)
 		if (mini_vars)
 		{
 			//printmini(&mini_vars);
-			//global->ast = parser(&mini_vars);
+			global->ast = parser(&mini_vars);
+			printmini(&mini_vars);
+			//free_parser(global->ast);
 			//run_through_here_doc(global->ast, global->env);
 			//expand_function(ast, env);
 			//print_tab(ast->cmd2);
 			//execution(global);
 			ft_miniclear(&mini_vars);
+			free_parser(global->ast);
+			//free_env(global->env);
+			//free(global);
 		}
 		//printf("g_signal %d\n", g_signal);
 		//printf("error_code %d\n", (*global->error_code));
