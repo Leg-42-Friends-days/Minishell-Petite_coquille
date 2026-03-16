@@ -6,11 +6,13 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/16 12:07:53 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/16 16:43:44 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	free_split(char **str);
 
 bool	check_if_word(t_ast *ast)
 {
@@ -83,7 +85,8 @@ bool	check_condition_key(char *str, int i)
 			&& str[i]) && (str[i] != 39 && str[i]) && (str[i] != '/' && str[i])
 		&& (str[i] != '*' && str[i]) && (str[i] && str[i] != ']') && (str[i]
 			&& str[i] != '[') && (str[i] && str[i] != '%') && (str[i]
-			&& str[i] != '{') && (str[i] && str[i] != '}'))
+			&& str[i] != '{') && (str[i] && str[i] != '}') && (str[i]
+			&& str[i] != '!'))
 		return (true);
 	return (false);
 }
@@ -517,6 +520,8 @@ bool	start_compare(char *str, char *entry)
 			return (true);
 		i++;
 	}
+	// printf("START COMPARE TRUE : %s\n", entry);
+	// printf("START COMPARE TRUE : %s\n", str);
 	return (false);
 }
 
@@ -579,22 +584,112 @@ bool	check_inside_len(char *str, char *entry)
 	return (false);
 }
 
-// bool	check_inside_string(char *str, char *entry)
-// {
-// 	int start;
-// 	int end;
-// 	int i;
+bool	start_wildcard(char *str)
+{
+	int	i;
 
-// 	start = 0;
-// 	end = 0;
-// }
+	i = 0;
+	if (str[i] != '*')
+		return (true);
+	return (false);
+}
+
+bool	end_wildcard(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	i--;
+	if (str[i] != '*')
+		return (true);
+	return (false);
+}
+
+int	last_index(char **str)
+{
+	int	i;
+
+	i = 0;
+	if (!str || !*str)
+		return (0);
+	while (str[i])
+		i++;
+	return (i);
+}
+
+bool	mid_compare(char *str, char *entry)
+{
+	int	i;
+	int	j;
+	int	k;
+
+	i = 0;
+	while (entry[i])
+	{
+		j = 0;
+		k = 0;
+		while (entry[i + k] == str[j])
+		{
+			k++;
+			j++;
+			if (str[j] == '\0')
+			{
+				// printf("MID COMPARE TRUE : %s\n", entry);
+				// printf("MID COMPARE TRUE : %s\n", str);
+				return (false);
+			}
+		}
+		i++;
+	}
+	// printf("LAST false entry : %s\n", entry);
+	// printf("LAST false str : %s\n", str);
+	return (true);
+}
+
+bool	inside_string(bool start, bool end, char **str, char *entry)
+{
+	int	i;
+	int	len;
+
+	i = 0;
+	len = last_index(str) - 1;
+	if (!*str || !str)
+		return (false);
+	while (str[i])
+	{
+		if (start_compare(str[0], entry) == true && start == true)
+			return (false);
+		else if (end_compare(str[len], entry) == true && end == true)
+			return (false);
+		else if (mid_compare(str[i], entry) == true)
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+bool	check_inside_string(char *str, char *entry)
+{
+	bool	start;
+	bool	end;
+	char	**tableau;
+
+	start = start_wildcard(str);
+	end = end_wildcard(str);
+	tableau = ft_split(str, '*');
+	if (inside_string(start, end, tableau, entry) == true)
+		return (free_split(tableau), false);
+	return (free_split(tableau), true);
+}
 
 bool	check_inside(char *str, char *entry)
 {
 	if (check_inside_len(str, entry) == true)
 		return (false);
-	// else if (check_inside_string(str, entry) == true)
-	// 	return (false);
+	else if (check_inside_string(str, entry) == true)
+		return (false);
 	return (true);
 }
 
@@ -663,17 +758,9 @@ int	expand_wildcard(char *str, t_ast *ast, int *index)
 		if (only_wildcard(str) == true)
 			*index = call_all_dir(ast, *index);
 		else if (check_if_star_alone(str) == 1)
-		{
-			// printf("IN\n");
-			// printf("STRING %s\n", str);
 			*index = call_wild_side(ast, str, *index, false);
-		}
 		else if (check_if_star_alone(str) > 1)
-		{
-			printf("OUT\n");
-			printf("MULTI %s\n", str);
 			*index = call_wild_multi(ast, str, *index, false);
-		}
 	}
 	return (*index);
 }
@@ -709,18 +796,18 @@ int	len_cmd(char **str)
 	return (count);
 }
 
-// void	free_split(char **str)
-// {
-// 	int	i;
+void	free_split(char **str)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (str[i])
-// 	{
-// 		free(str[i]);
-// 		i++;
-// 	}
-// 	free(str);
-// }
+	i = 0;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+}
 
 char	**remove_null(char **str)
 {
@@ -745,7 +832,7 @@ char	**remove_null(char **str)
 		i++;
 	}
 	cmd[k] = NULL;
-	// free_split(str);
+	free_split(str);
 	return (cmd);
 }
 
@@ -870,8 +957,10 @@ void	check_redirection(t_ast *ast, t_env *env)
 			&& tmp->cmd_token->sub_token->quote == NORMAL)
 			re->target->sub_token->var = app_expend(re->target->sub_token->var,
 					env, false);
-		i = expand_wildcard(re->target->sub_token->var, tmp, &i);
-		printf("Valeur de i : %d\n", i);
+		// printf("VALEUR DE TMP : %s\n", tmp->cmd_token->sub_token->var);
+		// printf("VALEUR TREDIR : %s\n", re->target->sub_token->var);
+		// i = expand_wildcard(tmp->cmd_token->sub_token->var, tmp, &i);
+		// printf("Valeur de i : %d\n", i);
 		re = re->next;
 	}
 }
