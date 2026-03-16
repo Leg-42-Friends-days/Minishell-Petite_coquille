@@ -67,7 +67,7 @@ bool	check_dollars(t_sub_token *current_sub);
 void	in_cmd(t_ast *ast, t_sub_token *current_sub, int *i);
 void	normal_quote(t_ast *ast, t_sub_token *current_sub, t_env *env, int *k);
 void	check_sub_status(t_ast *ast, t_sub_token *current_sub, t_env *env,
-			int *i, int *k);
+			int *pos);
 void	expand_token(t_ast *ast, t_token *current_token, t_env *env,
 			int *index);
 t_ast	*call_expand(t_ast *ast, t_env *env);

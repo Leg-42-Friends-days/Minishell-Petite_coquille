@@ -882,43 +882,45 @@ void	normal_quote(t_ast *ast, t_sub_token *current_sub, t_env *env, int *k)
 }
 
 void	check_sub_status(t_ast *ast, t_sub_token *current_sub, t_env *env,
-		int *i, int *k)
+		int *pos)
 {
 	if (current_sub->quote == DOUBLE)
 	{
 		current_sub->var = app_expend(current_sub->var, env, true);
-		in_cmd(ast, current_sub, i);
+		in_cmd(ast, current_sub, &pos[0]);
 	}
 	else if (current_sub->quote == NORMAL)
 	{
-		normal_quote(ast, current_sub, env, k);
-		in_cmd(ast, current_sub, i);
+		normal_quote(ast, current_sub, env, &pos[1]);
+		in_cmd(ast, current_sub, &pos[0]);
 	}
 	else if (current_sub->quote == SINGLE)
-		in_cmd(ast, current_sub, i);
+		in_cmd(ast, current_sub, &pos[0]);
 }
 
 void	expand_token(t_ast *ast, t_token *current_token, t_env *env, int *index)
 {
 	t_sub_token	*current_sub;
-	int			i;
+	int			pos[2];
 	int			check;
 
-	i = 0;
-	check = *index;
+	pos[0] = 0;
+	pos[1] = *index;
+	check = pos[1];
 	current_sub = current_token->sub_token;
 	while (current_sub != NULL)
 	{
 		if (check_dollars(current_sub) == false)
-			check_sub_status(ast, current_sub, env, &i, index);
+			check_sub_status(ast, current_sub, env, pos);
 		current_sub = current_sub->next;
 	}
-	ast->cmd[i] = NULL;
-	if (*index == check)
+	ast->cmd[pos[0]] = NULL;
+	if (pos[1] == check)
 	{
-		ast->cmd2[*index] = call_join(ast->cmd);
-		(*index)++;
+		ast->cmd2[pos[1]] = call_join(ast->cmd);
+		pos[1]++;
 	}
+	*index = pos[1];
 	free_cmd(ast->cmd);
 }
 
