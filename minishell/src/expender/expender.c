@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/16 11:39:39 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/16 12:07:53 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,38 @@ char	*number_str(char *str)
 	return (key);
 }
 
+bool	check_condition_key(char *str, int i)
+{
+	if ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i]) && (str[i] != 34
+			&& str[i]) && (str[i] != 39 && str[i]) && (str[i] != '/' && str[i])
+		&& (str[i] != '*' && str[i]) && (str[i] && str[i] != ']') && (str[i]
+			&& str[i] != '[') && (str[i] && str[i] != '%') && (str[i]
+			&& str[i] != '{') && (str[i] && str[i] != '}'))
+		return (true);
+	return (false);
+}
+
+char	*star_str(char *str)
+{
+	int		i;
+	char	*key;
+
+	i = 0;
+	if (str[i] == '*')
+		i++;
+	key = malloc(sizeof(char) * (i + 1));
+	if (!key)
+		return (NULL);
+	i = 0;
+	if (str[i] == '*')
+	{
+		key[i] = str[i];
+		i++;
+	}
+	key[i] = '\0';
+	return (key);
+}
+
 char	*check_key(char *str)
 {
 	int		i;
@@ -85,19 +117,15 @@ char	*check_key(char *str)
 	i = 0;
 	if (str[i] >= '0' && str[i] <= '9')
 		return (key = number_str(str));
-	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
-		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
-		&& (str[i] != '/' && str[i]) && (str[i] != '*' && str[i])
-		&& str[i] != ']' && str[i] != '[' && str[i] != '%' && str[i] != '{' && str[i] != '}')
+	if (str[i] == '*')
+		return (key = star_str(str));
+	while (check_condition_key(str, i) == true)
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
 		return (NULL);
 	i = 0;
-	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
-		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
-		&& (str[i] != '/' && str[i]) && (str[i] != '*' && str[i])
-		&& str[i] != ']' && str[i] != '[' && str[i] != '%' && str[i] != '{' && str[i] != '}')
+	while (check_condition_key(str, i) == true)
 	{
 		key[i] = str[i];
 		i++;
@@ -563,7 +591,6 @@ bool	check_inside_len(char *str, char *entry)
 
 bool	check_inside(char *str, char *entry)
 {
-
 	if (check_inside_len(str, entry) == true)
 		return (false);
 	// else if (check_inside_string(str, entry) == true)
@@ -724,10 +751,8 @@ char	**remove_null(char **str)
 
 bool	check_dollars(t_sub_token *current_sub)
 {
-	if (current_sub->quote == NORMAL
-		&& ft_strncmp(current_sub->var, "$", -1) == 0
-		&& current_sub->next
-		&& (current_sub->next->quote == DOUBLE
+	if (current_sub->quote == NORMAL && ft_strncmp(current_sub->var, "$",
+			-1) == 0 && current_sub->next && (current_sub->next->quote == DOUBLE
 			|| current_sub->next->quote == SINGLE))
 		return (true);
 	return (false);
@@ -739,8 +764,7 @@ void	in_cmd(t_ast *ast, t_sub_token *current_sub, int *i)
 	(*i)++;
 }
 
-void	normal_quote(t_ast *ast, t_sub_token *current_sub,
-		t_env *env, int *k)
+void	normal_quote(t_ast *ast, t_sub_token *current_sub, t_env *env, int *k)
 {
 	if (current_sub->next && (current_sub->next->quote == DOUBLE
 			|| current_sub->next->quote == SINGLE))
@@ -750,8 +774,8 @@ void	normal_quote(t_ast *ast, t_sub_token *current_sub,
 		*k = expand_wildcard(current_sub->var, ast, k);
 }
 
-void	check_sub_status(t_ast *ast, t_sub_token *current_sub,
-		t_env *env, int *i, int *k)
+void	check_sub_status(t_ast *ast, t_sub_token *current_sub, t_env *env,
+		int *i, int *k)
 {
 	if (current_sub->quote == DOUBLE)
 	{
@@ -784,14 +808,17 @@ void	expand_token(t_ast *ast, t_token *current_token, t_env *env, int *index)
 	}
 	ast->cmd[i] = NULL;
 	if (*index == check)
-		ast->cmd2[(*index)++] = call_join(ast->cmd);
+	{
+		ast->cmd2[*index] = call_join(ast->cmd);
+		(*index)++;
+	}
 	// free_cmd(ast->cmd);
 }
 
 t_ast	*call_expand(t_ast *ast, t_env *env)
 {
-	t_token		*current_token;
-	int			index;
+	t_token	*current_token;
+	int		index;
 
 	index = 0;
 	current_token = ast->cmd_token;

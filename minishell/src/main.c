@@ -3,15 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/06 14:39:08 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/16 11:46:21 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
-
 
 #include "minishell.h"
 
@@ -56,8 +53,6 @@ int	main(int ac, char **av, char **envp)
 		{
 			mini_vars = lexing(&mini_vars, line);
 		}
-		if (*line)
-			add_history(line);
 		if (!line)
 		{
 			free(line);
@@ -65,13 +60,15 @@ int	main(int ac, char **av, char **envp)
 				ft_miniclear(&mini_vars);
 			return (0);
 		}
+		if (*line)
+			add_history(line);
 		if (mini_vars)
 		{
-			//printmini(&mini_vars);
+			// printmini(&mini_vars);
 			ast = parser(&mini_vars);
 			run_through_here_doc(ast, env);
-			//expand_function(ast, env);
-			//print_tab(ast->cmd2);
+			// expand_function(ast, env);
+			// print_tab(ast->cmd2);
 			execution(ast, env);
 			ft_miniclear(&mini_vars);
 		}
