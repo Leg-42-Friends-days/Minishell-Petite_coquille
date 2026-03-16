@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/11 11:44:17 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/11 15:22:44 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	main(int ac, char **av, char **envp)
 		}
 		if (*line)
 			add_history(line);
-		printf("%d\n", g_signal);
+		//printf("%d\n", g_signal);
 		if (g_signal != 0)
 		{
 			*global->error_code = 130;
@@ -104,8 +104,8 @@ int	main(int ac, char **av, char **envp)
 			ft_miniclear(&mini_vars);
 		}
 		
-		printf("g_signal %d\n", g_signal);
-		printf("error_code %d\n", (*global->error_code));
+		//printf("g_signal %d\n", g_signal);
+		//printf("error_code %d\n", (*global->error_code));
 		free(line);
 	}
 }

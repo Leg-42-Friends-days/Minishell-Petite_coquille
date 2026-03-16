@@ -6,7 +6,7 @@
 #    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/03/09 15:19:25 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/03/11 16:24:09 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,8 +70,13 @@ fclean: clean
 
 re: fclean all
 
-val:
-	valgrind --trace-children=yes --leak-check=full --track-origins=yes --track-fds=yes --show-leak-kinds=all ./$(NAME) $(ARGS) || true
+val: 
+	valgrind -s \
+  --leak-check=full \
+  --show-leak-kinds=all \
+  --suppressions=./_devtools/readline.supp \
+  ./minishell
+		 
 
 libft:
 	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory
