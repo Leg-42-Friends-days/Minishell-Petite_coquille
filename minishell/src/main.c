@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/11 15:22:44 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/16 11:53:02 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	main(int ac, char **av, char **envp)
 	mini_vars = NULL;
 	global = (t_global *)malloc(sizeof(t_global));
 	global->env = NULL;
-	global->env = env_content(global->env, envp);
+	//global->env = env_content(global->env, envp);
 	global->error_code = (int *)malloc(sizeof(int));
 	*global->error_code = 0;
 	/*AFFICHAGE D'ENV
@@ -83,6 +83,8 @@ int	main(int ac, char **av, char **envp)
 		{
 			if (mini_vars)
 				ft_miniclear(&mini_vars);
+			free(global->error_code);
+			free(global);
 			return (0);
 		}
 		if (*line)
@@ -96,18 +98,18 @@ int	main(int ac, char **av, char **envp)
 		if (mini_vars)
 		{
 			//printmini(&mini_vars);
-			global->ast = parser(&mini_vars);
-			run_through_here_doc(global->ast, global->env);
+			//global->ast = parser(&mini_vars);
+			//run_through_here_doc(global->ast, global->env);
 			//expand_function(ast, env);
 			//print_tab(ast->cmd2);
-			execution(global);
+			//execution(global);
 			ft_miniclear(&mini_vars);
 		}
-		
 		//printf("g_signal %d\n", g_signal);
 		//printf("error_code %d\n", (*global->error_code));
 		free(line);
 	}
+
 }
 
 // Test KILL
