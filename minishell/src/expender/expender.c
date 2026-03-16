@@ -6,11 +6,13 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/10 15:15:30 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/16 17:03:56 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	free_split(char **str);
 
 bool	check_if_word(t_ast *ast)
 {
@@ -48,7 +50,6 @@ char	*check_string(char *str, t_env *env)
 		if (ft_strncmp(env->key, str, -1) == 0)
 		{
 			str_env = ft_strdup(env->content);
-			// printf("ENV->CONTENT : %s\n", str_env);
 			break ;
 		}
 		env = env->next;
@@ -62,13 +63,46 @@ char	*number_str(char *str)
 	char	*key;
 
 	i = 0;
-	while (str[i] >= 48 && str[i] <= 57)
+	if (str[i] >= 48 && str[i] <= 57)
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
 		return (NULL);
 	i = 0;
-	while (str[i] >= 48 && str[i] <= 57)
+	if (str[i] >= 48 && str[i] <= 57)
+	{
+		key[i] = str[i];
+		i++;
+	}
+	key[i] = '\0';
+	return (key);
+}
+
+bool	check_condition_key(char *str, int i)
+{
+	if ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i]) && (str[i] != 34
+			&& str[i]) && (str[i] != 39 && str[i]) && (str[i] != '/' && str[i])
+		&& (str[i] != '*' && str[i]) && (str[i] && str[i] != ']') && (str[i]
+			&& str[i] != '[') && (str[i] && str[i] != '%') && (str[i]
+			&& str[i] != '{') && (str[i] && str[i] != '}') && (str[i]
+			&& str[i] != '!'))
+		return (true);
+	return (false);
+}
+
+char	*star_str(char *str)
+{
+	int		i;
+	char	*key;
+
+	i = 0;
+	if (str[i] == '*')
+		i++;
+	key = malloc(sizeof(char) * (i + 1));
+	if (!key)
+		return (NULL);
+	i = 0;
+	if (str[i] == '*')
 	{
 		key[i] = str[i];
 		i++;
@@ -85,17 +119,15 @@ char	*check_key(char *str)
 	i = 0;
 	if (str[i] >= '0' && str[i] <= '9')
 		return (key = number_str(str));
-	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
-		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
-		&& (str[i] != '\'' && str[i]) && (str[i] != '*' && str[i]))
+	if (str[i] == '*')
+		return (key = star_str(str));
+	while (check_condition_key(str, i) == true)
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
 		return (NULL);
 	i = 0;
-	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
-		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
-		&& (str[i] != '\'' && str[i]) && (str[i] != '*' && str[i]))
+	while (check_condition_key(str, i) == true)
 	{
 		key[i] = str[i];
 		i++;
@@ -104,54 +136,69 @@ char	*check_key(char *str)
 	return (key);
 }
 
-char	*check_new_string(char *str, char *key, char *env)
+void	copy_env(char *new_string, char *env, int *k)
 {
-	int		i;
-	int		j;
-	int		k;
-	int		count;
-	char	*new_string;
+	int	j;
+
+	j = 0;
+	while (env && env[j])
+	{
+		new_string[*k] = env[j];
+		(*k)++;
+		j++;
+	}
+}
+
+void	string_advance(char *new_string, char *str, int *i, int *k)
+{
+	new_string[*k] = str[*i];
+	(*i)++;
+	(*k)++;
+}
+
+void	check_new_string2(char *new_string, char *str, char *key, char *env)
+{
+	int	i;
+	int	k;
+	int	count;
 
 	i = 0;
 	k = 0;
 	count = 0;
-	new_string = ft_calloc(ft_strlen(str) + ft_strlen(env) - ft_strlen(key) + 1,
-			sizeof(char));
-	if (!new_string)
-		return (NULL);
 	while (str[i])
 	{
-		if (str[i] == '$' && count == 0 && env != NULL)
-		{
-			j = 0;
-			i += ft_strlen(key) + 1;
-			count++;
-			while (env[j])
-			{
-				new_string[k] = env[j];
-				j++;
-				k++;
-			}
-			continue ;
-		}
-		else if (env == NULL && str[i] == '$' && count == 0)
+		if (str[i] == '$' && count == 0)
 		{
 			i += ft_strlen(key) + 1;
 			count++;
+			copy_env(new_string, env, &k);
 			continue ;
 		}
-		new_string[k] = str[i];
-		i++;
-		k++;
+		string_advance(new_string, str, &i, &k);
 	}
 	new_string[k] = '\0';
-	// printf("NEW_STRING VALUE : %s\n", new_string);
+}
+
+char	*check_new_string(char *str, char *key, char *env)
+{
+	size_t	env_len;
+	char	*new_string;
+
+	env_len = 0;
+	if (env)
+		env_len = ft_strlen(env);
+	new_string = ft_calloc(ft_strlen(str) + env_len - ft_strlen(key) + 1,
+			sizeof(char));
+	if (!new_string)
+		return (free(str), NULL);
+	check_new_string2(new_string, str, key, env);
 	return (free(str), new_string);
 }
 
 void	free_new_string(char *key, char *content)
 {
-	free(key);
+	if (key)
+		free(key);
 	if (content)
 		free(content);
 }
@@ -165,26 +212,19 @@ char	*new_string(char *str, t_env *env)
 	char	*tmp;
 
 	i = 0;
-	// printf("VALEUR ACTUELLE DE STR : %s\n", str);
 	new_str = ft_strdup(str);
-	// printf("VALEUR ACTUELLE DE NEW_STR : %s\n", new_str);
 	while (new_str[i])
 	{
 		if (new_str[i] == '$' && !(new_str[i + 1] == ' ' || new_str[i
 				+ 1] == '\0') && new_str[i + 1] != '"' && new_str[i + 1] != '/')
 		{
-			i++;
-			// printf("AFFICHAGE STR %s\n", str);
-			key = check_key(new_str + i);
+			key = check_key(new_str + i + 1);
 			content = check_string(key, env);
-			// printf("KEY->CONTENT : %s\n", key);
-			// printf("ENV->CONTENT : %s\n", content);
 			tmp = check_new_string(new_str, key, content);
 			new_str = tmp;
 			free_new_string(key, content);
 			i = -1;
 		}
-		// printf("VALEUR ACTUELLE DE NEW_CHAR : %c\n", new_str[i]);
 		i++;
 	}
 	return (free(str), new_str);
@@ -242,7 +282,7 @@ char	*strjoin_exp(char *s1, char *s2)
 	j = 0;
 	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!str)
-		return (NULL);
+		return (free(s1), NULL);
 	while (s1[i])
 	{
 		str[i] = s1[i];
@@ -271,9 +311,24 @@ char	*call_join(char **str)
 	while (str[i])
 	{
 		full_string = strjoin_exp(full_string, str[i]);
+		if (!full_string)
+			return (NULL);
 		i++;
 	}
 	return (full_string);
+}
+
+void	free_cmd(char **cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd && cmd[i])
+	{
+		free(cmd[i]);
+		cmd[i] = NULL;
+		i++;
+	}
 }
 
 char	*remove_dollar(char *str)
@@ -464,6 +519,8 @@ bool	start_compare(char *str, char *entry)
 			return (true);
 		i++;
 	}
+	// printf("START COMPARE TRUE : %s\n", entry);
+	// printf("START COMPARE TRUE : %s\n", str);
 	return (false);
 }
 
@@ -506,6 +563,131 @@ bool	check_side(char *str, char *entry)
 	return (free(start), free(end), false);
 }
 
+bool	check_inside_len(char *str, char *entry)
+{
+	int	i;
+	int	count;
+	int	len;
+
+	i = 0;
+	count = 0;
+	len = ft_strlen(entry);
+	while (str[i])
+	{
+		if (str[i] != '*')
+			count++;
+		i++;
+	}
+	if (count > len)
+		return (true);
+	return (false);
+}
+
+bool	start_wildcard(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[i] != '*')
+		return (true);
+	return (false);
+}
+
+bool	end_wildcard(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	i--;
+	if (str[i] != '*')
+		return (true);
+	return (false);
+}
+
+int	last_index(char **str)
+{
+	int	i;
+
+	i = 0;
+	if (!str || !*str)
+		return (0);
+	while (str[i])
+		i++;
+	return (i);
+}
+
+bool	mid_compare(char *str, char *entry)
+{
+	int	i;
+	int	j;
+	int	k;
+
+	i = 0;
+	while (entry[i])
+	{
+		j = 0;
+		k = 0;
+		while (entry[i + k] == str[j])
+		{
+			k++;
+			j++;
+			if (str[j] == '\0')
+			{
+				return (false);
+			}
+		}
+		i++;
+	}
+	return (true);
+}
+
+bool	inside_string(bool start, bool end, char **str, char *entry)
+{
+	int	i;
+	int	len;
+
+	i = 0;
+	len = last_index(str) - 1;
+	if (!*str || !str)
+		return (false);
+	while (str[i])
+	{
+		if (start_compare(str[0], entry) == true && start == true)
+			return (false);
+		else if (end_compare(str[len], entry) == true && end == true)
+			return (false);
+		else if (mid_compare(str[i], entry) == true)
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+bool	check_inside_string(char *str, char *entry)
+{
+	bool	start;
+	bool	end;
+	char	**tableau;
+
+	start = start_wildcard(str);
+	end = end_wildcard(str);
+	tableau = ft_split(str, '*');
+	if (inside_string(start, end, tableau, entry) == true)
+		return (free_split(tableau), false);
+	return (free_split(tableau), true);
+}
+
+bool	check_inside(char *str, char *entry)
+{
+	if (check_inside_len(str, entry) == true)
+		return (false);
+	else if (check_inside_string(str, entry) == true)
+		return (false);
+	return (true);
+}
+
 int	call_wild_side(t_ast *ast, char *str, int index, bool checker)
 {
 	struct dirent	*entry;
@@ -533,6 +715,33 @@ int	call_wild_side(t_ast *ast, char *str, int index, bool checker)
 	return (closedir(dp), i);
 }
 
+int	call_wild_multi(t_ast *ast, char *str, int index, bool checker)
+{
+	struct dirent	*entry;
+	DIR				*dp;
+	int				i;
+
+	i = index;
+	dp = opendir(".");
+	if (!dp)
+		return (i);
+	entry = readdir(dp);
+	while (entry)
+	{
+		if (first_letter(entry->d_name) == false && check_inside(str,
+				entry->d_name) == true)
+		{
+			ast->cmd2[i] = ft_strdup(entry->d_name);
+			checker = true;
+			i++;
+		}
+		entry = readdir(dp);
+	}
+	if (checker == false)
+		ast->cmd2[i++] = ft_strdup(str);
+	return (closedir(dp), i);
+}
+
 int	expand_wildcard(char *str, t_ast *ast, int *index)
 {
 	if (check_if_wildcard(str) == true)
@@ -544,16 +753,9 @@ int	expand_wildcard(char *str, t_ast *ast, int *index)
 		if (only_wildcard(str) == true)
 			*index = call_all_dir(ast, *index);
 		else if (check_if_star_alone(str) == 1)
-		{
-			// printf("IN\n");
-			// printf("STRING %s\n", str);
 			*index = call_wild_side(ast, str, *index, false);
-		}
 		else if (check_if_star_alone(str) > 1)
-		{
-			printf("OUT\n");
-			printf("MULTI %s\n", str);
-		}
+			*index = call_wild_multi(ast, str, *index, false);
 	}
 	return (*index);
 }
@@ -569,88 +771,147 @@ bool	check_if_next_token_wild(t_sub_token *sub_to)
 	return (true);
 }
 
-t_ast	*call_expand(t_ast *ast, t_env *env)
+int	len_cmd(char **str)
 {
-	t_token		*current_token;
+	int	i;
+	int	j;
+	int	count;
+
+	i = 0;
+	j = 0;
+	count = 0;
+	if (!str || !*str)
+		return (count);
+	while (str[i])
+	{
+		if (str[i][j] != '\0')
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+void	free_split(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+}
+
+char	**remove_null(char **str)
+{
+	int		i;
+	int		j;
+	int		k;
+	int		len;
+	char	**cmd;
+
+	i = 0;
+	j = 0;
+	k = 0;
+	len = len_cmd(str);
+	cmd = malloc(sizeof(char *) * (len + 1));
+	while (str[i])
+	{
+		if (str[i][j] != '\0')
+		{
+			cmd[k] = ft_strdup(str[i]);
+			k++;
+		}
+		i++;
+	}
+	cmd[k] = NULL;
+	free_split(str);
+	return (cmd);
+}
+
+bool	check_dollars(t_sub_token *current_sub)
+{
+	if (current_sub->quote == NORMAL && ft_strncmp(current_sub->var, "$",
+			-1) == 0 && current_sub->next && (current_sub->next->quote == DOUBLE
+			|| current_sub->next->quote == SINGLE))
+		return (true);
+	return (false);
+}
+
+void	in_cmd(t_ast *ast, t_sub_token *current_sub, int *i)
+{
+	ast->cmd[*i] = ft_strdup(current_sub->var);
+	(*i)++;
+}
+
+void	normal_quote(t_ast *ast, t_sub_token *current_sub, t_env *env, int *k)
+{
+	if (current_sub->next && (current_sub->next->quote == DOUBLE
+			|| current_sub->next->quote == SINGLE))
+		current_sub->var = remove_dollar(current_sub->var);
+	current_sub->var = app_expend(current_sub->var, env, false);
+	if (check_if_next_token_wild(current_sub) == true)
+		*k = expand_wildcard(current_sub->var, ast, k);
+}
+
+void	check_sub_status(t_ast *ast, t_sub_token *current_sub, t_env *env,
+		int *i, int *k)
+{
+	if (current_sub->quote == DOUBLE)
+	{
+		current_sub->var = app_expend(current_sub->var, env, true);
+		in_cmd(ast, current_sub, i);
+	}
+	else if (current_sub->quote == NORMAL)
+	{
+		normal_quote(ast, current_sub, env, k);
+		in_cmd(ast, current_sub, i);
+	}
+	else if (current_sub->quote == SINGLE)
+		in_cmd(ast, current_sub, i);
+}
+
+void	expand_token(t_ast *ast, t_token *current_token, t_env *env, int *index)
+{
 	t_sub_token	*current_sub;
 	int			i;
-	int			k;
 	int			check;
 
-	k = 0;
+	i = 0;
+	check = *index;
+	current_sub = current_token->sub_token;
+	while (current_sub != NULL)
+	{
+		if (check_dollars(current_sub) == false)
+			check_sub_status(ast, current_sub, env, &i, index);
+		current_sub = current_sub->next;
+	}
+	ast->cmd[i] = NULL;
+	if (*index == check)
+	{
+		ast->cmd2[*index] = call_join(ast->cmd);
+		(*index)++;
+	}
+	free_cmd(ast->cmd);
+}
+
+t_ast	*call_expand(t_ast *ast, t_env *env)
+{
+	t_token	*current_token;
+	int		index;
+
+	index = 0;
 	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
-		i = 0;
-		check = k;
-		current_sub = current_token->sub_token;
-		while (current_sub != NULL)
-		{
-			if (!(current_sub->quote == NORMAL && ft_strncmp(current_sub->var,
-						"$", -1) == 0 && current_sub->next
-					&& (current_sub->next->quote == DOUBLE
-						|| current_sub->next->quote == SINGLE)))
-			{
-				if (current_sub->quote == DOUBLE)
-				{
-					current_sub->var = app_expend(current_sub->var, env, true);
-					ast->cmd[i] = ft_strdup(current_sub->var);
-					i++;
-				}
-				else if (current_sub->quote == NORMAL)
-				{
-					if (current_sub->next && (current_sub->next->quote == DOUBLE
-							|| current_sub->next->quote == SINGLE))
-						current_sub->var = remove_dollar(current_sub->var);
-					current_sub->var = app_expend(current_sub->var, env, false);
-					if (check_if_next_token_wild(current_sub) == true)
-						k = expand_wildcard(current_sub->var, ast, &k);
-					ast->cmd[i] = ft_strdup(current_sub->var);
-					i++;
-				}
-				else if (current_sub->quote == SINGLE)
-				{
-					ast->cmd[i] = ft_strdup(current_sub->var);
-					i++;
-				}
-				current_sub = current_sub->next;
-			}
-			else
-				current_sub = current_sub->next;
-		}
-		ast->cmd[i] = NULL;
-		if (k == check)
-		{
-			ast->cmd2[k] = call_join(ast->cmd);
-			k++;
-		}
+		expand_token(ast, current_token, env, &index);
 		current_token = current_token->next;
 	}
-	ast->cmd2[k] = NULL;
+	ast->cmd2[index] = NULL;
+	ast->cmd2 = remove_null(ast->cmd2);
 	return (ast);
-}
-
-void	check_redirection(t_ast *ast, t_env *env)
-{
-	t_ast	*tmp;
-	t_redir	*re;
-
-	tmp = ast;
-	if (!tmp || !tmp->redirs)
-		return ;
-	re = tmp->redirs;
-	while (re != NULL)
-	{
-		if (check_if_expendable(re->target->sub_token->var) == 1
-			&& tmp->cmd_token->sub_token->quote == DOUBLE)
-			re->target->sub_token->var = app_expend(re->target->sub_token->var,
-					env, true);
-		else if (check_if_expendable(re->target->sub_token->var) == 1
-			&& tmp->cmd_token->sub_token->quote == NORMAL)
-			re->target->sub_token->var = app_expend(re->target->sub_token->var,
-					env, false);
-		re = re->next;
-	}
 }
 
 int	expand_len_token(t_ast *ast)
@@ -670,19 +931,47 @@ int	expand_len_token(t_ast *ast)
 	return (i);
 }
 
+void	check_redirection(t_ast *ast, t_env *env)
+{
+	t_ast	*tmp;
+	t_redir	*re;
+	int		i;
+
+	i = 0;
+	tmp = ast;
+	if (!tmp || !tmp->redirs)
+		return ;
+	re = tmp->redirs;
+	while (re != NULL)
+	{
+		if (check_if_expendable(re->target->sub_token->var) == 1
+			&& tmp->cmd_token->sub_token->quote == DOUBLE)
+			re->target->sub_token->var = app_expend(re->target->sub_token->var,
+					env, true);
+		else if (check_if_expendable(re->target->sub_token->var) == 1
+			&& tmp->cmd_token->sub_token->quote == NORMAL)
+			re->target->sub_token->var = app_expend(re->target->sub_token->var,
+					env, false);
+		// printf("VALEUR DE TMP : %s\n", tmp->cmd_token->sub_token->var);
+		// printf("VALEUR TREDIR : %s\n", re->target->sub_token->var);
+		// i = expand_wildcard(tmp->cmd_token->sub_token->var, tmp, &i);
+		// printf("Valeur de i : %d\n", i);
+		re = re->next;
+	}
+}
+
 t_ast	*expand_ast(t_ast *ast, t_env *env)
 {
 	int	len;
 
 	len = 0;
 	if (!ast)
-		return (NULL);
+		return (ast);
 	if (check_if_word(ast) == 1)
 	{
 		ast->cmd = ft_calloc(sizeof(char *), (expand_len(ast)) + 1);
 		if (!ast->cmd)
 			return (ast);
-		// ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast) + 1));
 		ast->cmd2 = ft_calloc(sizeof(char *), (expand_len_token(ast) + 1));
 		if (!ast->cmd2)
 			return (ast);
