@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/13 17:33:34 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/16 11:39:39 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ char	*check_key(char *str)
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
 		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
 		&& (str[i] != '/' && str[i]) && (str[i] != '*' && str[i])
-		&& str[i] != ']' && str[i] != '[' && str[i] != '%')
+		&& str[i] != ']' && str[i] != '[' && str[i] != '%' && str[i] != '{' && str[i] != '}')
 		i++;
 	key = malloc(sizeof(char) * (i + 1));
 	if (!key)
@@ -97,7 +97,7 @@ char	*check_key(char *str)
 	while ((str[i] != ' ' && str[i]) && (str[i] != '$' && str[i])
 		&& (str[i] != 34 && str[i]) && (str[i] != 39 && str[i])
 		&& (str[i] != '/' && str[i]) && (str[i] != '*' && str[i])
-		&& str[i] != ']' && str[i] != '[' && str[i] != '%')
+		&& str[i] != ']' && str[i] != '[' && str[i] != '%' && str[i] != '{' && str[i] != '}')
 	{
 		key[i] = str[i];
 		i++;
@@ -168,7 +168,7 @@ char	*check_new_string(char *str, char *key, char *env)
 void	free_new_string(char *key, char *content)
 {
 	if (key)
-			free(key);
+		free(key);
 	if (content)
 		free(content);
 }
@@ -288,18 +288,18 @@ char	*call_join(char **str)
 	return (full_string);
 }
 
-void	free_cmd(char **cmd)
-{
-	int	i;
+// void	free_cmd(char **cmd)
+// {
+// 	int	i;
 
-	i = 0;
-	while (cmd && cmd[i])
-	{
-		free(cmd[i]);
-		cmd[i] = NULL;
-		i++;
-	}
-}
+// 	i = 0;
+// 	while (cmd && cmd[i])
+// 	{
+// 		free(cmd[i]);
+// 		cmd[i] = NULL;
+// 		i++;
+// 	}
+// }
 
 char	*remove_dollar(char *str)
 {
@@ -682,18 +682,18 @@ int	len_cmd(char **str)
 	return (count);
 }
 
-void	free_split(char **str)
-{
-	int	i;
+// void	free_split(char **str)
+// {
+// 	int	i;
 
-	i = 0;
-	while (str[i])
-	{
-		free(str[i]);
-		i++;
-	}
-	free(str);
-}
+// 	i = 0;
+// 	while (str[i])
+// 	{
+// 		free(str[i]);
+// 		i++;
+// 	}
+// 	free(str);
+// }
 
 char	**remove_null(char **str)
 {
@@ -718,7 +718,7 @@ char	**remove_null(char **str)
 		i++;
 	}
 	cmd[k] = NULL;
-	free_split(str);
+	// free_split(str);
 	return (cmd);
 }
 
@@ -785,7 +785,7 @@ void	expand_token(t_ast *ast, t_token *current_token, t_env *env, int *index)
 	ast->cmd[i] = NULL;
 	if (*index == check)
 		ast->cmd2[(*index)++] = call_join(ast->cmd);
-	free_cmd(ast->cmd);
+	// free_cmd(ast->cmd);
 }
 
 t_ast	*call_expand(t_ast *ast, t_env *env)
