@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/16 16:43:44 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/16 17:03:56 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ char	*check_string(char *str, t_env *env)
 		if (ft_strncmp(env->key, str, -1) == 0)
 		{
 			str_env = ft_strdup(env->content);
-			// printf("ENV->CONTENT : %s\n", str_env);
 			break ;
 		}
 		env = env->next;
@@ -319,18 +318,18 @@ char	*call_join(char **str)
 	return (full_string);
 }
 
-// void	free_cmd(char **cmd)
-// {
-// 	int	i;
+void	free_cmd(char **cmd)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (cmd && cmd[i])
-// 	{
-// 		free(cmd[i]);
-// 		cmd[i] = NULL;
-// 		i++;
-// 	}
-// }
+	i = 0;
+	while (cmd && cmd[i])
+	{
+		free(cmd[i]);
+		cmd[i] = NULL;
+		i++;
+	}
+}
 
 char	*remove_dollar(char *str)
 {
@@ -636,15 +635,11 @@ bool	mid_compare(char *str, char *entry)
 			j++;
 			if (str[j] == '\0')
 			{
-				// printf("MID COMPARE TRUE : %s\n", entry);
-				// printf("MID COMPARE TRUE : %s\n", str);
 				return (false);
 			}
 		}
 		i++;
 	}
-	// printf("LAST false entry : %s\n", entry);
-	// printf("LAST false str : %s\n", str);
 	return (true);
 }
 
@@ -899,7 +894,7 @@ void	expand_token(t_ast *ast, t_token *current_token, t_env *env, int *index)
 		ast->cmd2[*index] = call_join(ast->cmd);
 		(*index)++;
 	}
-	// free_cmd(ast->cmd);
+	free_cmd(ast->cmd);
 }
 
 t_ast	*call_expand(t_ast *ast, t_env *env)
@@ -971,13 +966,12 @@ t_ast	*expand_ast(t_ast *ast, t_env *env)
 
 	len = 0;
 	if (!ast)
-		return (NULL);
+		return (ast);
 	if (check_if_word(ast) == 1)
 	{
 		ast->cmd = ft_calloc(sizeof(char *), (expand_len(ast)) + 1);
 		if (!ast->cmd)
 			return (ast);
-		// ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast) + 1));
 		ast->cmd2 = ft_calloc(sizeof(char *), (expand_len_token(ast) + 1));
 		if (!ast->cmd2)
 			return (ast);
