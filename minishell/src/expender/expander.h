@@ -62,7 +62,7 @@ int		expand_wildcard(char *str, t_ast *ast, int *index);
 bool	check_if_next_token_wild(t_sub_token *sub_to);
 int		len_cmd(char **str);
 void	free_split(char **str);
-char	**remove_null(char **str);
+char	*remove_null(char *str);
 bool	check_dollars(t_sub_token *current_sub);
 void	in_cmd(t_ast *ast, t_sub_token *current_sub, int *i);
 void	normal_quote(t_ast *ast, t_sub_token *current_sub, t_env *env, int *k);

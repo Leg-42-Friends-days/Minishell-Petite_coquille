@@ -823,37 +823,13 @@ void	free_split(char **str)
 	free(str);
 }
 
-char	**remove_null(char **str)
+char	*remove_null(char *str)
 {
-	int		i;
-	int		j;
-	int		k;
-	int		len;
-	char	**cmd;
-
 	if (!str)
 		return (NULL);
-	i = 0;
-	j = 0;
-	k = 0;
-	len = len_cmd(str);
-	cmd = ft_calloc(sizeof(char *), (len + 1));
-	if (!cmd)
-		return (free_split(str), NULL);
-	while (str[i])
-	{
-		if (str[i][j] != '\0')
-		{
-			cmd[k] = ft_strdup(str[i]);
-			if (!cmd[k])
-				return (free_split(cmd), free_split(str), NULL);
-			k++;
-		}
-		i++;
-	}
-	cmd[k] = NULL;
-	free_split(str);
-	return (cmd);
+	if (str[0] == '\0')
+		return (free(str), NULL);
+	return (str);
 }
 
 bool	check_dollars(t_sub_token *current_sub)
@@ -877,6 +853,9 @@ void	normal_quote(t_ast *ast, t_sub_token *current_sub, t_env *env, int *k)
 			|| current_sub->next->quote == SINGLE))
 		current_sub->var = remove_dollar(current_sub->var);
 	current_sub->var = app_expend(current_sub->var, env, false);
+	current_sub->var = remove_null(current_sub->var);
+	if (!current_sub->var)
+		return ;
 	if (check_if_next_token_wild(current_sub) == true)
 		*k = expand_wildcard(current_sub->var, ast, k);
 }
@@ -892,7 +871,8 @@ void	check_sub_status(t_ast *ast, t_sub_token *current_sub, t_env *env,
 	else if (current_sub->quote == NORMAL)
 	{
 		normal_quote(ast, current_sub, env, &pos[1]);
-		in_cmd(ast, current_sub, &pos[0]);
+		if (current_sub->var)
+			in_cmd(ast, current_sub, &pos[0]);
 	}
 	else if (current_sub->quote == SINGLE)
 		in_cmd(ast, current_sub, &pos[0]);
@@ -918,7 +898,8 @@ void	expand_token(t_ast *ast, t_token *current_token, t_env *env, int *index)
 	if (pos[1] == check)
 	{
 		ast->cmd2[pos[1]] = call_join(ast->cmd);
-		pos[1]++;
+		if (ast->cmd2[pos[1]])
+			pos[1]++;
 	}
 	*index = pos[1];
 	free_cmd(ast->cmd);
@@ -937,7 +918,6 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		current_token = current_token->next;
 	}
 	ast->cmd2[index] = NULL;
-	ast->cmd2 = remove_null(ast->cmd2);
 	return (ast);
 }
 
