@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/16 16:37:41 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:20:05 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ t_ast	*parse_cmd(t_token **token)
 			current = current->next;
 			//return (node);
 		}
-		else
+		else if (!current && current->type != R_PAR
 		{
 			ft_printf(2, "PRINTF TESTERrrr : syntax error near unexpected token\n");
 			return (NULL);

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/16 19:12:38 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:18:52 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	main(int ac, char **av, char **envp)
 	//t_ast	*ast;
 	//t_env	*env;
 	t_global	*global;
+	t_token	*head;
 
 	(void)av;
 	(void)ac;
@@ -99,6 +100,7 @@ int	main(int ac, char **av, char **envp)
 		}
 		if (mini_vars)
 		{
+			head = mini_vars;
 			//printmini(&mini_vars);
 			global->ast = parser(&mini_vars);
 			printmini(&mini_vars);
@@ -107,7 +109,7 @@ int	main(int ac, char **av, char **envp)
 			//expand_function(ast, env);
 			//print_tab(ast->cmd2);
 			//execution(global);
-			ft_miniclear(&mini_vars);
+			ft_miniclear(&head);
 			free_parser(global->ast);
 			//free_env(global->env);
 			//free(global);

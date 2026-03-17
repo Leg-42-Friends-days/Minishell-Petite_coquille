@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 14:04:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/16 17:13:11 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:10:26 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,23 +44,26 @@ void	ft_miniclear_parse(t_token *lst)
 
 void    free_parser(t_ast *ast)
 {
-	if (ast != NULL)
+	t_redir	*current;
+	t_redir	*tmp;
+
+	if (!ast)
+		return ;
+	if (ast->left)
+		free_parser(ast->left);
+	if (ast->right)
+		free_parser(ast->right);
+	free_cmd(ast->cmd);
+	free_cmd(ast->cmd2);
+	current = ast->redirs;
+	if (current)
 	{
-		if (ast->left)
-			free_parser(ast->left);
-		if (ast->right)
-			free_parser(ast->right);
-		free_cmd(ast->cmd);
-		free_cmd(ast->cmd2);
-		if (ast->redirs)
-		{
-			free(ast->redirs->target->sub_token->var);
-			free(ast->redirs->target->sub_token);
-			free(ast->redirs->target);
-			free(ast->redirs);
-			//ft_minidelone(ast->redirs->target->sub_token);
-			//free(ast->redirs->target);
-		}
+		free(current->target->sub_token->var);
+		free(current->target->sub_token);
+		free(current->target);
+		tmp = current->next;
+		free(current);
+		current = tmp;
 	}
 	free(ast);
 }
