@@ -179,13 +179,13 @@ void	check_new_string2(char *new_string, char *str, char *key, char *env)
 
 char	*check_new_string(char *str, char *key, char *env)
 {
-	size_t	env_len;
+	int		env_len;
 	char	*new_string;
 
 	env_len = 0;
 	if (env)
 		env_len = ft_strlen(env);
-	new_string = ft_calloc(ft_strlen(str) + env_len - ft_strlen(key) + 1,
+	new_string = malloc(ft_strlen(str) + env_len - ft_strlen(key) + 1 *
 			sizeof(char));
 	if (!new_string)
 		return (free(str), NULL);
@@ -300,10 +300,13 @@ char	*strjoin_exp(char *s1, char *s2)
 	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!str)
 		return (free(s1), NULL);
-	while (s1[i])
+	if (s1)
 	{
-		str[i] = s1[i];
-		i++;
+		while (s1[i])
+		{
+			str[i] = s1[i];
+			i++;
+		}
 	}
 	while (s2[j])
 	{
@@ -324,8 +327,8 @@ char	*call_join(char **str)
 	i = 0;
 	if (!str || !*str)
 		return (NULL);
-	full_string = ft_calloc(1, 1);
-	while (str[i])
+	full_string = NULL;
+	while  (str[i])
 	{
 		full_string = strjoin_exp(full_string, str[i]);
 		if (!full_string)
@@ -341,6 +344,22 @@ void	free_cmd(char **cmd)
 
 	i = 0;
 	while (cmd && cmd[i])
+	{
+		free(cmd[i]);
+		cmd[i] = NULL;
+		i++;
+	}
+	free(cmd);
+}
+
+void	free_cmd_content(char **cmd)
+{
+	int	i;
+
+	i = 0;
+	if (!cmd)
+		return ;
+	while (cmd[i])
 	{
 		free(cmd[i]);
 		cmd[i] = NULL;
@@ -569,6 +588,8 @@ bool	check_side(char *str, char *entry)
 	i = 0;
 	start = ft_substr(str, 0, len_start(str));
 	end = ft_substr(str, len_start_and_star(str), len_end(str));
+	if (!start || !end)
+		return (free(start), free(end), false);
 	if (ft_strlen(start) + ft_strlen(end) > ft_strlen(entry))
 		return (free(start), free(end), false);
 	// printf("START : [%s]\n", start);
@@ -666,9 +687,9 @@ bool	inside_string(bool start, bool end, char **str, char *entry)
 	int	len;
 
 	i = 0;
-	len = last_index(str) - 1;
-	if (!*str || !str)
+	if (!str || !*str)
 		return (false);
+	len = last_index(str) - 1;
 	while (str[i])
 	{
 		if (start_compare(str[0], entry) == true && start == true)
@@ -850,27 +871,15 @@ void	in_cmd(t_ast *ast, t_sub_token *current_sub, int *i)
 void	normal_quote(t_ast *ast, t_sub_token *current_sub, t_env *env, int *k)
 {
 	// char	**split;
-	// int		i;
+	int		i;
 
 	if (current_sub->next && (current_sub->next->quote == DOUBLE
 			|| current_sub->next->quote == SINGLE))
 		current_sub->var = remove_dollar(current_sub->var);
 	current_sub->var = app_expend(current_sub->var, env, false);
-	// split = ft_split(current_sub->var, ' ');
 	current_sub->var = remove_null(current_sub->var);
 	if (!current_sub->var)
 		return ;
-	// i = 0;
-	// while (split[i])
-	// {
-	// 	if (check_if_next_token_wild(current_sub) == false)
-	// 	{
-	// 		ast->cmd2[*k] = ft_strdup(split[i]);
-	// 		(*k)++;
-	// 	}
-	// 	i++;
-	// }
-	// AVOIR LE CALCUL DE LA TAILLE DE L'EXPAND
 	if (check_if_next_token_wild(current_sub) == true)
 		*k = expand_wildcard(current_sub->var, ast, k);
 }
@@ -917,7 +926,7 @@ void	expand_token(t_ast *ast, t_token *current_token, t_env *env, int *index)
 			pos[1]++;
 	}
 	*index = pos[1];
-	free_cmd(ast->cmd);
+	free_cmd_content(ast->cmd);
 }
 
 t_ast	*call_expand(t_ast *ast, t_env *env)
@@ -933,22 +942,90 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		current_token = current_token->next;
 	}
 	ast->cmd2[index] = NULL;
+	free(ast->cmd);
+	ast->cmd = NULL;
 	return (ast);
 }
 
-int	expand_len_token(t_ast *ast)
+int	wildcard_len_add(void)
 {
+	int	len;
+
+	len = wild_card_len();
+	if (len > 1)
+		return (len - 1);
+	return (0);
+}
+
+int	add_normal_len(char **split)
+{
+	int	i;
+	int	string;
+	int	len;
+
+	i = 0;
+	string = 0;
+	len = 0;
+	while (split[i])
+	{
+		if (split[i][0] != '\0')
+		{
+			string++;
+			if (check_if_wildcard(split[i]) == false)
+				len += wildcard_len_add();
+		}
+		i++;
+	}
+	if (string > 1)
+		len += (string - 1);
+	return (len);
+}
+
+int	check_if_add(t_sub_token *sub, t_env *env)
+{
+	char	*str;
+	char	**split;
 	int		i;
+
+	i = 0;
+	if (sub->quote != NORMAL || check_if_next_token_wild(sub) == false)
+		return (0);
+	str = ft_strdup(sub->var);
+	if (!str)
+		return (0);
+	str = app_expend(str, env, false);
+	if (!str || str[0] == '\0')
+		return (free(str), 0);
+	if (ft_strchr(str, ' '))
+	{
+		split = ft_split(str, ' ');
+		if (!split)
+			return (free(str), 0);
+		i += add_normal_len(split);
+		free_split(split);
+	}
+	else if (check_if_wildcard(str) == false)
+		i += wildcard_len_add();
+	return (free(str), i);
+}
+
+int	expand_len_token(t_ast *ast, t_env *env)
+{
+	int			i;
 	t_token	*token;
+	t_sub_token	*sub_tok;
 
 	i = 0;
 	token = ast->cmd_token;
 	while (token != NULL && token->type == WORD)
 	{
-		if (check_if_wildcard(token->sub_token->var) == false)
-			i += wild_card_len();
-		// if (check_if_expand_normal(token->sub_token->var))
 		i++;
+		sub_tok = token->sub_token;
+		while (sub_tok)
+		{
+			i += check_if_add(sub_tok, env);
+			sub_tok = sub_tok->next;
+		}
 		token = token->next;
 	}
 	return (i);
@@ -992,10 +1069,10 @@ t_ast	*expand_ast(t_ast *ast, t_env *env)
 		return (ast);
 	if (check_if_word(ast) == 1)
 	{
-		ast->cmd = ft_calloc(sizeof(char *), (expand_len(ast)) + 1);
+		ast->cmd = malloc(sizeof(char *) * (expand_len(ast) + 1));
 		if (!ast->cmd)
 			return (ast);
-		ast->cmd2 = ft_calloc(sizeof(char *), (expand_len_token(ast) + 1));
+		ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast, env) + 1));
 		if (!ast->cmd2)
 			return (free(ast->cmd), ast->cmd = NULL, ast);
 		call_expand(ast, env);
