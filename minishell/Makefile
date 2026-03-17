@@ -15,7 +15,7 @@
 
 NAME = minishell
 CC = cc
-CFLAGS = -I./includes -I./libft -g3
+CFLAGS = -Wall -Werror -Wextra -I./includes -I./libft -g3
 SRC_DIR = src/
 SRC =	main.c \
 		lexing/add_nodes.c \
