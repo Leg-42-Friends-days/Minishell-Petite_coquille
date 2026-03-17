@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/17 20:56:01 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/17 21:29:35 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	main(int ac, char **av, char **envp)
 	mini_vars = NULL;
 	global = (t_global *)malloc(sizeof(t_global));
 	global->env = NULL;
-	global->env = env_content(global->env, envp);
+	//global->env = env_content(global->env, envp);
 	global->error_code = (int *)malloc(sizeof(int));
 	*global->error_code = 0;
 	/*AFFICHAGE D'ENV
@@ -101,7 +101,7 @@ int	main(int ac, char **av, char **envp)
 		if (mini_vars)
 		{
 			head = mini_vars;
-			printmini(&mini_vars);
+			//printmini(&mini_vars);
 			global->ast = parser(&mini_vars);
 			//printmini(&mini_vars);
 			//free_parser(global->ast);

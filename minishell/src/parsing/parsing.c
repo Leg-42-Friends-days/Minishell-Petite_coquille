@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/17 21:04:17 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/17 21:47:22 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,51 @@ int	redir_node(t_redir **redir, t_token **token)
 
 int	token_list_redir(t_token **token, t_ast *node)
 {
-	t_token	*prev;
-	t_token	*next;
 	t_token	*redir;
 	t_token	*file;
+	t_token	*prev;
+	t_token	*next;
 
-	if ((*token)->prev)
+	if (!(*token)->next)
+	{
+		printf("minishell: syntax error near unexpected token `newline'\n");
+		return (1);
+	}
+
+	if (redir_node(&node->redirs, token) == 1)
+		return (1);
+
+	redir = *token;
+	file = redir->next;
+	prev = redir->prev;
+	next = file->next;
+
+	// reconnecter la liste
+	if (prev)
+		prev->next = next;
+	if (next)
+		next->prev = prev;
+
+	// avancer
+	*token = next;
+
+	// free UNIQUEMENT redir
+	ft_minidelone(redir->sub_token);
+	free(redir);
+
+	// ⚠️ NE PAS free file
+	// ⚠️ car utilisé dans node->redirs
+
+	return (0);
+}
+/* 	if ((*token)->prev)
 		prev = (*token)->prev;
 	else
 		prev = NULL;
 	if ((redir_node(&node->redirs, token)) == 1)
 		return (1);
-	file = (*token)->next;
 	redir = (*token);
+	file = redir->next;
 	*token = (*token)->next;
 	if ((*token)->next)
 		next = (*token)->next;
@@ -96,7 +128,7 @@ int	token_list_redir(t_token **token, t_ast *node)
 	else
 		(*token) = NULL;
 	return (0);
-}
+} */
 
 int	subshell_redirs(t_ast *node, t_token **token)
 {
@@ -143,7 +175,7 @@ int	redir_before_word(t_ast *node, t_token **token)
 	return (0);
 }
 
-t_ast	*parse_cmd(t_token **token)
+/* t_ast	*parse_cmd(t_token **token)
 {
 	t_ast	*node;
 
@@ -196,7 +228,84 @@ t_ast	*parse_cmd(t_token **token)
 			*token = (*token)->next;
 	}
 	return (node);
+} */
+
+t_ast	*parse_cmd(t_token **token)
+{
+	t_ast	*node;
+
+	if (*token && (*token)->type == L_PAR)
+	{
+		node = ast_node(AST_SUBSHELL);
+		*token = (*token)->next;
+		node->left = parse_or(token);
+		node->right = NULL;
+		if (*token && (*token)->type == R_PAR)
+		{
+			*token = (*token)->next;
+			//return (node);
+		}
+		else
+		{
+			ft_printf(2, "PRINTF TESTERrrr : syntax error near unexpected token\n");
+			return (NULL);
+		}
+		if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+		{
+			//node = ast_node(AST_CMD);
+			if ((token_list_redir(token, node)) == 1)
+				return (NULL);
+			while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+			{
+				if ((token_list_redir(token, node)) == 1)
+				return (NULL);
+			}
+			if (*token)
+				node->cmd_token = *token;
+		}
+		while (*token && (*token)->type < 5)
+		{
+			if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+			{
+				if ((token_list_redir(token, node)) == 1)
+					return (NULL);
+			}
+			else if (*token)
+				*token = (*token)->next;
+		}
+		return (node);
+	}
+	if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+	{
+		node = ast_node(AST_CMD);
+		if ((token_list_redir(token, node)) == 1)
+			return (NULL);
+		while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+		{
+			if ((token_list_redir(token, node)) == 1)
+			return (NULL);
+		}
+		if (*token)
+			node->cmd_token = *token;
+	}
+	else if (*token && (*token)->type == WORD)
+	{
+		node = ast_node(AST_CMD);
+		node->cmd_token = *token;
+	}
+	while (*token && (*token)->type < 5)
+	{
+		if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+		{
+			if ((token_list_redir(token, node)) == 1)
+				return (NULL);
+		}
+		else
+			*token = (*token)->next;
+	}
+	return (node);
 }
+
 
 t_ast	*parse_pipe(t_token **token)
 {
