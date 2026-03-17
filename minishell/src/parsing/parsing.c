@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/17 15:29:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/17 21:04:17 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,10 +125,29 @@ int	subshell_redirs(t_ast *node, t_token **token)
 		return (0);
 }
 
+int	redir_before_word(t_ast *node, t_token **token)
+{
+	if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+	{
+		node = ast_node(AST_CMD);
+		if ((token_list_redir(token, node)) == 1)
+			return (1);
+		while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+		{
+			if ((token_list_redir(token, node)) == 1)
+			return (1);
+		}
+		if (*token)
+			node->cmd_token = *token;
+	}
+	return (0);
+}
+
 t_ast	*parse_cmd(t_token **token)
 {
 	t_ast	*node;
 
+	//node = NULL;
 	if (*token && (*token)->type == L_PAR)
 	{
 		node = ast_node(AST_SUBSHELL);
@@ -159,6 +178,8 @@ t_ast	*parse_cmd(t_token **token)
 		if (*token)
 			node->cmd_token = *token;
 	}
+	//if (redir_before_word(node, token) == 1)
+	//	return (NULL);
 	else if (*token && (*token)->type == WORD)
 	{
 		node = ast_node(AST_CMD);

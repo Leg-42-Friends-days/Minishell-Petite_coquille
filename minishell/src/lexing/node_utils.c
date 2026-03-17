@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 11:35:46 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/27 15:29:32 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/17 21:13:06 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	ft_minidelone(t_sub_token *lst)
 {
 	if (!lst)
 		return ;
-	free(lst->var);
+	if (lst->var)
+		free(lst->var);
 	free(lst);
 }
 
