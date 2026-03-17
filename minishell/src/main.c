@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/11 15:22:44 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:26:01 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_signal;
+int		g_signal;
 
 void	handler(int signum)
 {
@@ -25,16 +25,16 @@ void	handler(int signum)
 			rl_replace_line("", 0);
 			rl_redisplay();
 		}
-		//g_signal = 130;
+		// g_signal = 130;
 	}
 }
-void	init_signals()
+void	init_signals(void)
 {
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, handler);
 }
 
-void	init_child_signals()
+void	init_child_signals(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
@@ -45,12 +45,12 @@ void	init_child_signals()
 
 int	main(int ac, char **av, char **envp)
 {
-	char	*line;
-	t_token	*mini_vars;
-	//t_ast	*ast;
-	//t_env	*env;
+	char		*line;
+	t_token		*mini_vars;
 	t_global	*global;
 
+	// t_ast	*ast;
+	// t_env	*env;
 	(void)av;
 	(void)ac;
 	(void)envp;
@@ -60,15 +60,18 @@ int	main(int ac, char **av, char **envp)
 	global->env = env_content(global->env, envp);
 	global->error_code = (int *)malloc(sizeof(int));
 	*global->error_code = 0;
-	/*AFFICHAGE D'ENV
-	while (env->next != NULL)
-	{
-		printf("%s", env->key);
-		printf("=");
-		printf("%s\n", env->content);
-		env = env->next;
-	}
-	*/
+	// AFFICHAGE D'ENV
+	function_export(global->env, "SALUT2=$USER    $USER");
+	// while (global->env->next != NULL)
+	// {
+	// 	printf("%s", global->env->key);
+	// 	printf("=");
+	// 	printf("%s\n", global->env->content);
+	// 	global->env = global->env->next;
+	// }
+	// printf("%s", global->env->key);
+	// printf("=");
+	// printf("%s\n", global->env->content);
 	g_signal = 0;
 	init_signals();
 	while (true)
@@ -87,7 +90,7 @@ int	main(int ac, char **av, char **envp)
 		}
 		if (*line)
 			add_history(line);
-		//printf("%d\n", g_signal);
+		// printf("%d\n", g_signal);
 		if (g_signal != 0)
 		{
 			*global->error_code = 130;
@@ -95,17 +98,16 @@ int	main(int ac, char **av, char **envp)
 		}
 		if (mini_vars)
 		{
-			//printmini(&mini_vars);
+			// printmini(&mini_vars);
 			global->ast = parser(&mini_vars);
 			run_through_here_doc(global->ast, global->env);
-			//expand_function(ast, env);
-			//print_tab(ast->cmd2);
+			// expand_function(ast, env);
+			// print_tab(ast->cmd2);
 			execution(global);
 			ft_miniclear(&mini_vars);
 		}
-		
-		//printf("g_signal %d\n", g_signal);
-		//printf("error_code %d\n", (*global->error_code));
+		// printf("g_signal %d\n", g_signal);
+		// printf("error_code %d\n", (*global->error_code));
 		free(line);
 	}
 }

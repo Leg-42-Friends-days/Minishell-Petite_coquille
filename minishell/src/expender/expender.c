@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/16 19:24:50 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/17 15:20:54 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,8 +203,8 @@ void	free_new_string(char *key, char *content)
 
 bool	check_dollar(char *str, int i)
 {
-	if (str[i] == '$' && !(str[i + 1] == ' ' || str[i + 1] == '\0')
-		&& str[i + 1] != '"' && str[i + 1] != '/')
+	if (str[i] == '$' && !(str[i + 1] == ' ' || str[i + 1] == '\0') && str[i
+		+ 1] != '"' && str[i + 1] != '/')
 		return (true);
 	return (false);
 }
@@ -849,13 +849,25 @@ void	in_cmd(t_ast *ast, t_sub_token *current_sub, int *i)
 
 void	normal_quote(t_ast *ast, t_sub_token *current_sub, t_env *env, int *k)
 {
+	char	**split;
+	int		i;
+
 	if (current_sub->next && (current_sub->next->quote == DOUBLE
 			|| current_sub->next->quote == SINGLE))
 		current_sub->var = remove_dollar(current_sub->var);
 	current_sub->var = app_expend(current_sub->var, env, false);
+	split = ft_split(current_sub->var, ' ');
 	current_sub->var = remove_null(current_sub->var);
 	if (!current_sub->var)
 		return ;
+	i = 0;
+	while (split[i])
+	{
+		ast->cmd2[*k] = ft_strdup(split[i]);
+		(*k)++;
+		i++;
+	}
+	// AVOIR LE CALCUL DE LA TAILLE DE L'EXPAND
 	if (check_if_next_token_wild(current_sub) == true)
 		*k = expand_wildcard(current_sub->var, ast, k);
 }
@@ -932,6 +944,7 @@ int	expand_len_token(t_ast *ast)
 	{
 		if (check_if_wildcard(token->sub_token->var) == false)
 			i += wild_card_len();
+		// if (check_if_expand_normal(token->sub_token->var))
 		i++;
 		token = token->next;
 	}
