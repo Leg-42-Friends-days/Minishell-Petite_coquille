@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/17 15:24:03 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/17 20:10:07 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ t_env	*function_export(t_env *env, char *test)
 		return (env);
 	key = get_key(test);
 	content = get_content(test);
-	content = new_string(content, env);
 	env = lstadd_back_exp(env, key, content);
 	env = lstfirst_env(env);
 	return (env);
