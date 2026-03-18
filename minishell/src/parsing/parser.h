@@ -6,12 +6,9 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/16 14:30:46 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/18 11:10:26 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
-
 
 #ifndef PARSER_H
 # define PARSER_H
@@ -22,6 +19,7 @@
 # include "../libft/libft.h"
 # include "../lexing/lexer.h"
 # include "../builtin/builtin.h"
+# include "../minishell.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 // readline rl_clear_history, rl_on_new_line,
@@ -90,11 +88,12 @@ typedef struct s_ast
 	char			**cmd2;
 }					t_ast;
 
+typedef struct s_global t_global;
 
 //PARSING.C
-t_ast			*parser(t_token **token);
+t_ast			*parser(t_token **token, t_global *global);
 
-t_ast			*parse_or(t_token **token);
+t_ast			*parse_or(t_token **token, t_global *global);
 void			print_ast(t_ast *ast);
 
 //CHECK_TOKEN.C

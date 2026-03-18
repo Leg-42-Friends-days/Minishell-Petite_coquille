@@ -6,11 +6,11 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 14:04:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/17 15:10:26 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/18 12:01:59 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "parser.h"
+# include "../minishell.h"
 
 void	ft_miniclear_parse(t_token *lst)
 {
@@ -56,7 +56,7 @@ void    free_parser(t_ast *ast)
 	free_cmd(ast->cmd);
 	free_cmd(ast->cmd2);
 	current = ast->redirs;
-	if (current)
+	while (current)
 	{
 		free(current->target->sub_token->var);
 		free(current->target->sub_token);
