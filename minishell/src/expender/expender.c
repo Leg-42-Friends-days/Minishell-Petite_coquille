@@ -209,6 +209,26 @@ bool	check_dollar(char *str, int i)
 	return (false);
 }
 
+int	new_string_len(char *new_str, int i, t_env *env)
+{
+	char	*key;
+	char	*content;
+	int		len;
+
+	len = 0;
+	key = check_key(new_str + i + 1);
+	if (!key)
+		return (0);
+	content = check_string(key, env);
+	if (content)
+		len = ft_strlen(content);
+	else
+		len = ft_strlen(key) + 1;
+	free(key);
+	free(content);
+	return (len);
+}
+
 char	*new_string2(char *new_str, int i, t_env *env)
 {
 	char	*key;
@@ -228,6 +248,7 @@ char	*new_string(char *str, t_env *env)
 {
 	int		i;
 	char	*new_str;
+	int		len;
 
 	i = 0;
 	new_str = ft_strdup(str);
@@ -237,12 +258,14 @@ char	*new_string(char *str, t_env *env)
 	{
 		if (check_dollar(new_str, i) == true)
 		{
+			len = new_string_len(new_str, i, env);
 			new_str = new_string2(new_str, i, env);
 			if (!new_str)
 				return (free(str), NULL);
-			i = -1;
+			i += len;
 		}
-		i++;
+		else
+			i++;
 	}
 	return (free(str), new_str);
 }

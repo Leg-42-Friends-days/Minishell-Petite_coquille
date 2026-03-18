@@ -97,7 +97,6 @@ int	function_export(t_env *env, char **cmd)
 		content = get_content(cmd[i]);
 		printf("key : %s\n", key);
 		printf("content : %s\n", content);
-		content = new_string(content, env);
 		env = lstadd_back_exp(env, key, content);
 		env = lstfirst_env(env);
 		i++;
