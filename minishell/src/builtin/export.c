@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/17 20:10:07 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/18 14:48:49 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,17 @@ bool	get_equal(char *test)
 	return (false);
 }
 
-t_env	*function_export(t_env *env, char *test)
+int	function_export(t_env *env, char *test)
 {
 	char	*key;
 	char	*content;
 
 	if (get_equal(test) == 0)
-		return (env);
+		return (1);
 	key = get_key(test);
 	content = get_content(test);
+	content = new_string(content, env);
 	env = lstadd_back_exp(env, key, content);
 	env = lstfirst_env(env);
-	return (env);
+	return (0);
 }

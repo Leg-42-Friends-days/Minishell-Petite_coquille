@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/17 20:55:05 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/18 14:44:18 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,8 +185,8 @@ char	*check_new_string(char *str, char *key, char *env)
 	env_len = 0;
 	if (env)
 		env_len = ft_strlen(env);
-	new_string = malloc(ft_strlen(str) + env_len - ft_strlen(key) + 1 *
-			sizeof(char));
+	new_string = malloc(ft_strlen(str) + env_len - ft_strlen(key) + 1
+			* sizeof(char));
 	if (!new_string)
 		return (free(str), NULL);
 	check_new_string2(new_string, str, key, env);
@@ -328,7 +328,7 @@ char	*call_join(char **str)
 	if (!str || !*str)
 		return (NULL);
 	full_string = NULL;
-	while  (str[i])
+	while (str[i])
 	{
 		full_string = strjoin_exp(full_string, str[i]);
 		if (!full_string)
@@ -782,19 +782,12 @@ int	call_wild_multi(t_ast *ast, char *str, int index, bool checker)
 
 int	expand_wildcard(char *str, t_ast *ast, int *index)
 {
-	if (check_if_wildcard(str) == true)
-	{
-		return (*index);
-	}
-	else
-	{
-		if (only_wildcard(str) == true)
-			*index = call_all_dir(ast, *index);
-		else if (check_if_star_alone(str) == 1)
-			*index = call_wild_side(ast, str, *index, false);
-		else if (check_if_star_alone(str) > 1)
-			*index = call_wild_multi(ast, str, *index, false);
-	}
+	if (only_wildcard(str) == true)
+		*index = call_all_dir(ast, *index);
+	else if (check_if_star_alone(str) == 1)
+		*index = call_wild_side(ast, str, *index, false);
+	else if (check_if_star_alone(str) > 1)
+		*index = call_wild_multi(ast, str, *index, false);
 	return (*index);
 }
 
@@ -871,17 +864,33 @@ void	in_cmd(t_ast *ast, t_sub_token *current_sub, int *i)
 void	normal_quote(t_ast *ast, t_sub_token *current_sub, t_env *env, int *k)
 {
 	// char	**split;
-	int		i;
+	// int		i;
 
+	// i = 0;
 	if (current_sub->next && (current_sub->next->quote == DOUBLE
 			|| current_sub->next->quote == SINGLE))
 		current_sub->var = remove_dollar(current_sub->var);
+	printf("AVANT : %s\n", current_sub->var);
 	current_sub->var = app_expend(current_sub->var, env, false);
 	current_sub->var = remove_null(current_sub->var);
 	if (!current_sub->var)
 		return ;
-	if (check_if_next_token_wild(current_sub) == true)
+	if (check_if_next_token_wild(current_sub) == true
+		&& check_if_wildcard(current_sub->var) == false)
 		*k = expand_wildcard(current_sub->var, ast, k);
+	// else
+	// {
+	// 	printf("HERE\n");
+	// 	split = ft_split(current_sub->var, ' ');
+	// 	while (split[i])
+	// 	{
+	// 		printf("%s\n", split[i]);
+	// 		ast->cmd2[*k] = ft_strdup(split[i]);
+	// 		(*k)++;
+	// 		i++;
+	// 	}
+	// }
+	// printf("APRES : %s\n", current_sub->var);
 }
 
 void	check_sub_status(t_ast *ast, t_sub_token *current_sub, t_env *env,
@@ -926,6 +935,19 @@ void	expand_token(t_ast *ast, t_token *current_token, t_env *env, int *index)
 			pos[1]++;
 	}
 	*index = pos[1];
+	// int i = 0;
+	// int j = 0;
+
+	// while (ast->cmd[j])
+	// {
+	// 	printf("CMD : %s\n", ast->cmd[j]);
+	// 	j++;
+	// }
+	// while (ast->cmd2[i])
+	// {
+	// 	printf("CMD2 : %s\n", ast->cmd2[i]);
+	// 	i++;
+	// }
 	free_cmd_content(ast->cmd);
 }
 
@@ -1012,7 +1034,7 @@ int	check_if_add(t_sub_token *sub, t_env *env)
 int	expand_len_token(t_ast *ast, t_env *env)
 {
 	int			i;
-	t_token	*token;
+	t_token		*token;
 	t_sub_token	*sub_tok;
 
 	i = 0;
