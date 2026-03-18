@@ -78,5 +78,6 @@ int		expand_len_token(t_ast *ast, t_env *env);
 void	check_redirection(t_ast *ast, t_env *env);
 t_ast	*expand_ast(t_ast *ast, t_env *env);
 t_ast	*expand_function(t_ast *ast, t_env *env);
+int		new_string_len(char *new_str, int i, t_env *env);
 
 #endif
