@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/18 14:55:37 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/18 15:03:09 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ int	exec_bult_in(char **cmd, t_env *env, int *error_code)
 	if (ft_strncmp(cmd[0], "exit", 5) == 0)
 		exit_status = ft_exit(cmd, env, error_code);
 	if (ft_strncmp(cmd[0], "export", 7) == 0)
-		exit_status = function_export(env, cmd[1]);
-	printf("CMD %s\n", cmd[1]);
+		exit_status = function_export(env, cmd);
+	// printf("CMD %s\n", cmd[1]);
 	return (exit_status);
 }
 

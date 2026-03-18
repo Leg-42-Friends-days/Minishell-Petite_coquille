@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/17 15:26:01 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/18 15:02:46 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	main(int ac, char **av, char **envp)
 	global->error_code = (int *)malloc(sizeof(int));
 	*global->error_code = 0;
 	// AFFICHAGE D'ENV
-	function_export(global->env, "SALUT2=$USER    $USER");
+	// function_export(global->env, "SALUT2=$USER    $USER");
 	// while (global->env->next != NULL)
 	// {
 	// 	printf("%s", global->env->key);
