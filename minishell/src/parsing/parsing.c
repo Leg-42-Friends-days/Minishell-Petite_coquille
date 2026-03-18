@@ -6,196 +6,37 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/18 11:47:45 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/18 15:54:41 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_ast	*ast_node(int type)
-{
-	t_ast	*node;
-
-	node = malloc(sizeof(t_ast));
-	if (!node)
-		return (NULL);
-	node->type = type;
-	node->left = NULL;
-	node->right = NULL;
-	node->cmd_token = NULL;
-	node->redirs = NULL;
-	node->cmd = NULL;
-	node->cmd2 = NULL;
-	return (node);
-}
-
-int	redir_node(t_redir **redir, t_token **token)
-{
-	t_redir	*node;
-	t_token	*file;
-	t_redir	*current;
-
-	if (!(*token)->next)
-	{
-		printf("minishell: syntax error near unexpected token `newline'\n");
-		return (1);
-	}
-	node = malloc(sizeof(t_redir));
-	if (!node)
-		return (1);
-	node->type = (*token)->type;
-	file = (*token)->next;
-	node->target = file;
-	node->next = NULL;
-	if (!redir || !(*redir))
-	{
-		(*redir) = node;
-		return (0);
-	}
-	current = *redir;
-	while (current->next != NULL)
-	{
-		current = current->next;
-	}
-	current->next = node;
-	return (0);
-}
-
-int	token_list_redir(t_token **token, t_ast *node)
-{
-	t_token	*redir;
-	t_token	*file;
-	t_token	*prev;
-	t_token	*next;
-
-	if ((*token)->prev)
-		prev = (*token)->prev;
-	else
-		prev = NULL;
-	if ((redir_node(&node->redirs, token)) == 1)
-		return (1);
-	redir = (*token);
-	file = redir->next;
-	*token = (*token)->next;
-	if ((*token)->next)
-		next = (*token)->next;
-	else 
-		next = NULL;
-	redir->next = NULL;
-	redir->prev = NULL;
-	ft_minidelone(redir->sub_token);
-	free(redir);
-	file->prev = NULL;
-	file->next = NULL;
-	if (prev)
-		prev->next = next;
-	if (next)
-		next->prev = prev;
-	if (next)
-		(*token) = next;
-	else
-		(*token) = NULL;
-	return (0);
-}
-
-int	subshell_redirs(t_ast *node, t_token **token)
-{
-	if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
-		{
-			if ((token_list_redir(token, node)) == 1)
-				return (1);
-			while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
-			{
-				if ((token_list_redir(token, node)) == 1)
-				return (1);
-			}
-			if (*token)
-				node->cmd_token = *token;
-		}
-		while (*token && (*token)->type < 5)
-		{
-			if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
-			{
-				if ((token_list_redir(token, node)) == 1)
-					return (1);
-			}
-			else if (*token)
-				*token = (*token)->next;
-		}
-		return (0);
-}
-
-int	redir_before_word(t_ast *node, t_token **token)
-{
-	if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
-	{
-		node = ast_node(AST_CMD);
-		if ((token_list_redir(token, node)) == 1)
-			return (1);
-		while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
-		{
-			if ((token_list_redir(token, node)) == 1)
-			return (1);
-		}
-		if (*token)
-			node->cmd_token = *token;
-	}
-	return (0);
-}
-
 t_ast	*parse_cmd(t_token **token, t_global *global)
 {
 	t_ast	*node;
+	int		is_redir;
+	int		is_subshell;
 
-	//node = NULL;
-	if (*token && (*token)->type == L_PAR)
-	{
-		node = ast_node(AST_SUBSHELL);
-		*token = (*token)->next;
-		node->left = parse_or(token, global);
-		node->right = NULL;
-		if (*token && (*token)->type == R_PAR)
-			*token = (*token)->next;
-		else
-		{
-			ft_printf(2, "PRINTF TESTERrrr : syntax error near unexpected token\n");
-			return (NULL);
-		}
-		if (subshell_redirs(node, token) == 1)
-			return (NULL);
+	node = NULL;
+	is_subshell = parse_subshell(&node, token, global);
+	if (is_subshell == 1)
+		return (NULL);
+	if (is_subshell == 2)
 		return (node);
-	}
-	if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
+	is_redir = redir_before_word(&node, token, global);
+	if (is_redir > 0)
 	{
-		node = ast_node(AST_CMD);
-		if ((token_list_redir(token, node)) == 1)
+		if (is_redir == 1)
 			return (NULL);
-		while (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
-		{
-			if ((token_list_redir(token, node)) == 1)
-			return (NULL);
-		}
-		if (*token)
-			node->cmd_token = *token;
-		global->head = *token;
 	}
-	//if (redir_before_word(node, token) == 1)
-	//	return (NULL);
 	else if (*token && (*token)->type == WORD)
 	{
 		node = ast_node(AST_CMD);
 		node->cmd_token = *token;
 	}
-	while (*token && (*token)->type < 5)
-	{
-		if (*token && ((*token)->type == INFILE || (*token)->type == OUTFILE || (*token)->type == APPEND || (*token)->type == HEREDOC))
-		{
-			if ((token_list_redir(token, node)) == 1)
-				return (NULL);
-		}
-		else
-			*token = (*token)->next;
-	}
+	if (redir_after_word(&node, token) == 1)
+		return (NULL);
 	return (node);
 }
 
@@ -241,7 +82,6 @@ t_ast	*parse_or(t_token **token, t_global *global)
 	left = parse_and(token, global);
 	while (*token && (*token)->type == OR)
 	{
-
 		node = ast_node(AST_OR);
 		*token = (*token)->next;
 		node->left = left;
@@ -251,7 +91,7 @@ t_ast	*parse_or(t_token **token, t_global *global)
 	return (left);
 }
 
-void	print_ast(t_ast *ast)
+/* void	print_ast(t_ast *ast)
 {
 	if (ast != NULL)
 	{
@@ -289,12 +129,7 @@ void	print_ast(t_ast *ast)
 			print_ast(ast->right);
 		printf("\n");
 	}
-/* 	if (ast->left)
-			print_ast(ast->left);
-	if (ast->right)
-		print_ast(ast->right);
-	printf("\n"); */
-}
+} */
 
 t_ast	*parser(t_token **token, t_global *global)
 {
@@ -305,7 +140,9 @@ t_ast	*parser(t_token **token, t_global *global)
 	ast = NULL;
 	if (check_token((*token)) == 1)
 	{
-		ft_printf(2, "Minishell : syntax error near unexpected '%s'\n", (*token)->sub_token->var);
+		write(2, "Minishell : syntax error near unexpected '", 42);
+		write(2, (*token)->sub_token->var, ft_strlen((*token)->sub_token->var));
+		write(2, "'\n", 2);
 		return (NULL);
 	}
 	ast = parse_or(token, global);

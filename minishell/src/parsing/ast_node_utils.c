@@ -1,48 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_parser.c                                      :+:      :+:    :+:   */
+/*   ast_node_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/16 14:04:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/18 12:01:59 by ibrouin-         ###   ########.fr       */
+/*   Created: 2026/03/18 14:33:35 by ibrouin-          #+#    #+#             */
+/*   Updated: 2026/03/18 15:21:55 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../minishell.h"
+#include "../minishell.h"
 
-void	ft_miniclear_parse(t_token *lst)
+t_ast	*ast_node(int type)
 {
-	t_token		*cursor;
-	t_sub_token	*sub_cursor;
-	t_sub_token	*sub_next;
-	t_token		*next;
+	t_ast	*node;
 
-	if (!lst)
-		return ;
-	cursor = lst;
-	while (cursor)
-	{
-		if (!cursor->sub_token)
-			return ;
-		sub_cursor = cursor->sub_token;
-		while (sub_cursor)
-		{
-			sub_next = sub_cursor->next;
-			ft_minidelone(sub_cursor);
-			sub_cursor = sub_next;
-		}
-		if(!cursor->next)
-			return ;
-		next = cursor->next;
-		free(cursor);
-		cursor = next;
-	}
-	lst = NULL;
+	node = malloc(sizeof(t_ast));
+	if (!node)
+		return (NULL);
+	node->type = type;
+	node->left = NULL;
+	node->right = NULL;
+	node->cmd_token = NULL;
+	node->redirs = NULL;
+	node->cmd = NULL;
+	node->cmd2 = NULL;
+	return (node);
 }
 
-void    free_parser(t_ast *ast)
+void	free_parser(t_ast *ast)
 {
 	t_redir	*current;
 	t_redir	*tmp;
@@ -68,10 +55,10 @@ void    free_parser(t_ast *ast)
 	free(ast);
 }
 
-void    free_cmd(char **cmmd)
+void	free_cmd(char **cmmd)
 {
-	int i;
-	
+	int	i;
+
 	if (!cmmd || !*cmmd)
 		return ;
 	i = 0;

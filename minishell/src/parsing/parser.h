@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/18 11:10:26 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/18 15:16:32 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,19 @@ void			print_ast(t_ast *ast);
 //CHECK_TOKEN.C
 bool			check_token(t_token *token);
 
-//FREE_PARSER.C
+//AST_REDIRS.C
+int				redir_node(t_redir **redir, t_token **token);
+int				token_list_redir(t_token **token, t_ast *node);
+
+//AST_NODE_UTILS.c
+t_ast			*ast_node(int type);
 void    		free_parser(t_ast *ast);
 void    		free_cmd(char **cmmd);
 
+//AST_CMD_UTILS.c
+int	redir_before_word(t_ast **node, t_token **token, t_global *global);
+int	redir_after_word(t_ast **node, t_token **token);
+int	subshell_redirs(t_ast *node, t_token **token);
+int	parse_subshell(t_ast **node, t_token **token, t_global *global);
 
 #endif

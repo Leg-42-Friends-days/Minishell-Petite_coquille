@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:06 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/06 14:23:12 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/18 15:47:32 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,14 @@ bool	last_next_token(t_token *token)
 	{
 		if (token->type > 6 && token->next->type > 6)
 			return (true);
-		else if (((token->type == 6) || (token->type == 5)) && (token->next->type > 0 && token->next->type < 5))
+		else if (((token->type == 6) || (token->type == 5))
+			&& (token->next->type > 0 && token->next->type < 5))
 			return (false);
-		else if ((token->type > 0 && token->type < 7) && (token->next->type > 0 && token->next->type < 7))
+		else if ((token->type > 0 && token->type < 7)
+			&& (token->next->type > 0 && token->next->type < 7))
 			return (true);
-		else if ((token->type == 5 || token->type == 6) && (token->next->type == 5 || token->next->type == 6))
+		else if ((token->type == 5 || token->type == 6)
+			&& (token->next->type == 5 || token->next->type == 6))
 			return (true);
 		token = token->next;
 	}

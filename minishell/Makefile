@@ -6,7 +6,7 @@
 #    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/03/16 14:24:52 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/03/18 14:50:26 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,9 @@ SRC =	main.c \
 		builtin/free_builtin.c \
 		parsing/check_token.c \
 		parsing/parsing.c \
-		parsing/free_parser.c \
+		parsing/ast_redirs.c \
+		parsing/ast_node_utils.c \
+		parsing/ast_cmd_utils.c \
 		expender/expender.c \
 		exec/execution.c \
 		exec/path.c \
