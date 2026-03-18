@@ -6,11 +6,17 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/18 15:54:41 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/18 20:49:57 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+t_ast	*free_malloc_error(t_ast *node)
+{
+	free_parser(node);
+	return (NULL);
+}
 
 t_ast	*parse_cmd(t_token **token, t_global *global)
 {
@@ -21,14 +27,14 @@ t_ast	*parse_cmd(t_token **token, t_global *global)
 	node = NULL;
 	is_subshell = parse_subshell(&node, token, global);
 	if (is_subshell == 1)
-		return (NULL);
+		return (free_malloc_error(node));
 	if (is_subshell == 2)
 		return (node);
 	is_redir = redir_before_word(&node, token, global);
 	if (is_redir > 0)
 	{
 		if (is_redir == 1)
-			return (NULL);
+			return(free_malloc_error(node));
 	}
 	else if (*token && (*token)->type == WORD)
 	{
@@ -36,7 +42,7 @@ t_ast	*parse_cmd(t_token **token, t_global *global)
 		node->cmd_token = *token;
 	}
 	if (redir_after_word(&node, token) == 1)
-		return (NULL);
+		return(free_malloc_error(node));
 	return (node);
 }
 
@@ -46,12 +52,16 @@ t_ast	*parse_pipe(t_token **token, t_global *global)
 	t_ast	*node;
 
 	left = parse_cmd(token, global);
+	//if (!left)
+	//	return (NULL);
 	while (*token && (*token)->type == PIPE)
 	{
 		node = ast_node(AST_PIPE);
 		*token = (*token)->next;
 		node->left = left;
 		node->right = parse_cmd(token, global);
+		//if (!node->right)
+		//	return (NULL);
 		left = node;
 	}
 	return (left);
@@ -63,12 +73,16 @@ t_ast	*parse_and(t_token **token, t_global *global)
 	t_ast	*node;
 
 	left = parse_pipe(token, global);
+	//if (!left)
+	//	return (NULL);
 	while (*token && (*token)->type == AND)
 	{
 		node = ast_node(AST_AND);
 		*token = (*token)->next;
 		node->left = left;
 		node->right = parse_pipe(token, global);
+		//if (!node->right)
+		//	return (NULL);
 		left = node;
 	}
 	return (left);
@@ -80,12 +94,16 @@ t_ast	*parse_or(t_token **token, t_global *global)
 	t_ast	*node;
 
 	left = parse_and(token, global);
+	//if (!left)
+	//	return (NULL);
 	while (*token && (*token)->type == OR)
 	{
 		node = ast_node(AST_OR);
 		*token = (*token)->next;
 		node->left = left;
 		node->right = parse_and(token, global);
+		//if (!node->right)
+		//	return (NULL);
 		left = node;
 	}
 	return (left);

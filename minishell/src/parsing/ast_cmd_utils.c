@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 14:32:52 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/18 15:21:11 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/18 20:35:46 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,11 @@ int	parse_subshell(t_ast **node, t_token **token, t_global *global)
 			return (1);
 		}
 		if (subshell_redirs(*node, token) == 1)
+		{
+			free_parser((*node)->left);
+			free(*node);
 			return (1);
+		}
 		return (2);
 	}
 	return (0);
@@ -81,6 +85,7 @@ int	redir_before_word(t_ast **node, t_token **token, t_global *global)
 			return (1);
 		while (is_redir(*token))
 		{
+			global->head = *token;
 			if ((token_list_redir(token, *node)) == 1)
 				return (1);
 		}

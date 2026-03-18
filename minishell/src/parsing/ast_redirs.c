@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 14:04:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/18 16:42:18 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/18 20:45:32 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	redir_node(t_redir **redir, t_token **token)
 		write(2, "minishell: syntax error near unexpected token `newline'\n", 56);
 		return (1);
 	}
-	node = ft_malloc(sizeof(t_redir));
+	node = malloc(sizeof(t_redir));
 	if (!node)
 		return (1);
 	node->type = (*token)->type;

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 14:33:35 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/18 15:21:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/18 20:52:01 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_ast	*ast_node(int type)
 {
 	t_ast	*node;
 
-	node = malloc(sizeof(t_ast));
+	node = ft_malloc(sizeof(t_ast));
 	if (!node)
 		return (NULL);
 	node->type = type;
