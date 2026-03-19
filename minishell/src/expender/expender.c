@@ -331,7 +331,7 @@ char	*strjoin_exp(char *s1, char *s2)
 			i++;
 		}
 	}
-	while (s2[j])
+	while (s2 && s2[j])
 	{
 		str[i + j] = s2[j];
 		j++;
@@ -878,100 +878,212 @@ bool	check_dollars(t_sub_token *current_sub)
 	return (false);
 }
 
-void	in_cmd(t_ast *ast, t_sub_token *current_sub, int *i)
+bool	check_if_empty(char **split, int i)
 {
-	ast->cmd[*i] = ft_strdup(current_sub->var);
-	(*i)++;
+	i++;
+	while (split[i])
+	{
+		if (split[i][0] != '\0')
+			return (true);
+		i++;
+	}
+	return (false);
 }
 
-void	normal_quote(t_ast *ast, t_sub_token *current_sub, t_env *env, int *k)
+void	add_index(t_ast *ast, int *index)
 {
-	// char	**split;
-	// int		i;
+	if (ast->cmd2[*index])
+	{
+		(*index)++;
+		ast->cmd2[*index] = NULL;
+	}
+}
 
-	// i = 0;
-	if (current_sub->next && (current_sub->next->quote == DOUBLE
-			|| current_sub->next->quote == SINGLE))
-		current_sub->var = remove_dollar(current_sub->var);
-	printf("AVANT : %s\n", current_sub->var);
-	current_sub->var = app_expend(current_sub->var, env, false);
-	current_sub->var = remove_null(current_sub->var);
-	if (!current_sub->var)
+void	add_str_to_cmd(t_ast *ast, int *index, char *str)
+{
+	char	*new_str;
+
+	if (!str)
 		return ;
-	if (check_if_next_token_wild(current_sub) == true
-		&& check_if_wildcard(current_sub->var) == false)
-		*k = expand_wildcard(current_sub->var, ast, k);
-	// else
-	// {
-	// 	printf("HERE\n");
-	// 	split = ft_split(current_sub->var, ' ');
-	// 	while (split[i])
-	// 	{
-	// 		printf("%s\n", split[i]);
-	// 		ast->cmd2[*k] = ft_strdup(split[i]);
-	// 		(*k)++;
-	// 		i++;
-	// 	}
-	// }
-	// printf("APRES : %s\n", current_sub->var);
+	if (!ast->cmd2[*index])
+	{
+		ast->cmd2[*index] = ft_strdup(str);
+		return ;
+	}
+	new_str = ft_strjoin(ast->cmd2[*index], str);
+	if (!new_str)
+		return ;
+	free(ast->cmd2[*index]);
+	ast->cmd2[*index] = new_str;
 }
 
-void	check_sub_status(t_ast *ast, t_sub_token *current_sub, t_env *env,
-		int *pos)
+
+char	*check_if_space(char *str)
 {
-	if (current_sub->quote == DOUBLE)
+	char	*new_str;
+	int		i;
+	int		j;
+
+	new_str = malloc(ft_strlen(str) + 1);
+	if (!new_str)
+		return (free(str), NULL);
+	i = 0;
+	j = 0;
+	while (str[i])
 	{
-		current_sub->var = app_expend(current_sub->var, env, true);
-		in_cmd(ast, current_sub, &pos[0]);
+		if (str[i] == ' ')
+		{
+			new_str[j++] = ' ';
+			while (str[i] && str[i] == ' ')
+				i++;
+		}
+		else
+			new_str[j++] = str[i++];
 	}
-	else if (current_sub->quote == NORMAL)
+	new_str[j] = '\0';
+	free(str);
+	return (new_str);
+}
+
+char	*normal_value(t_sub_token *sub, t_env *env)
+{
+	char	*tmp;
+	char	*str;
+	char	*new_str;
+
+	tmp = ft_strdup(sub->var);
+	if (!tmp)
+		return (NULL);
+	if (sub->next && (sub->next->quote == DOUBLE || sub->next->quote == SINGLE))
+		tmp = remove_dollar(tmp);
+	tmp = app_expend(tmp, env, false);
+	tmp = remove_null(tmp);
+	if (!tmp)
+		return (NULL);
+	str = ft_strtrim(tmp, " ");
+	free(tmp);
+	if (!str || str[0] == '\0')
+		return (free(str), NULL);
+	new_str = check_if_space(str);
+	new_str = remove_null(new_str);
+	return (new_str);
+}
+
+void	add_split_words(t_ast *ast, char **split, int *index)
+{
+	int		i;
+
+	i = 0;
+	while (split[i])
 	{
-		normal_quote(ast, current_sub, env, &pos[1]);
-		if (current_sub->var)
-			in_cmd(ast, current_sub, &pos[0]);
+		if (split[i][0] != '\0')
+		{
+			add_str_to_cmd(ast, index, split[i]);
+			if (check_if_empty(split, i))
+				add_index(ast, index);
+		}
+		i++;
 	}
-	else if (current_sub->quote == SINGLE)
-		in_cmd(ast, current_sub, &pos[0]);
+}
+
+void	double_quote(t_ast *ast, t_sub_token *sub, t_env *env, int *index)
+{
+	char	*tmp;
+
+	tmp = ft_strdup(sub->var);
+	if (!tmp)
+		return ;
+	tmp = app_expend(tmp, env, true);
+	tmp = remove_null(tmp);
+	if (!tmp)
+		return ;
+	add_str_to_cmd(ast, index, tmp);
+	free(tmp);
+}
+
+void	single_quote(t_ast *ast, t_sub_token *sub, int *index)
+{
+	add_str_to_cmd(ast, index, sub->var);
+}
+
+void	normal_quote(t_ast *ast, t_sub_token *sub, t_env *env, int *index)
+{
+	char	*tmp;
+	char	**split;
+	int		space;
+
+	tmp = normal_value(sub, env);
+	if (!tmp)
+		return ;
+	if (check_if_next_token_wild(sub) && !check_if_wildcard(tmp))
+	{
+		add_index(ast, index);
+		*index = expand_wildcard(tmp, ast, index);
+		ast->cmd2[*index] = NULL;
+		return (free(tmp));
+	}
+	space = (ft_strchr(tmp, ' ') != NULL);
+	if (!space)
+		return (add_str_to_cmd(ast, index, tmp), free(tmp));
+	if (sub->prev && (sub->prev->quote == DOUBLE || sub->prev->quote == SINGLE))
+		add_index(ast, index);
+	split = ft_split(tmp, ' ');
+	free(tmp);
+	if (!split)
+		return ;
+	add_split_words(ast, split, index);
+	free_split(split);
+}
+
+int	count_split_word(char **split)
+{
+	int	j;
+	int	word;
+
+	j = 0;
+	word = 0;
+	while (split[j])
+	{
+		if (split[j][0] != '\0')
+			word++;
+		j++;
+	}
+	return (word);
+}
+
+int	add_len(t_sub_token *sub, int word)
+{
+	int	i;
+
+	i = 0;
+	if (word > 1)
+		i += (word - 1);
+	if (word > 1 && sub->prev && (sub->prev->quote == DOUBLE
+			|| sub->prev->quote == SINGLE))
+		i++;
+	return (i);
 }
 
 void	expand_token(t_ast *ast, t_token *current_token, t_env *env, int *index)
 {
 	t_sub_token	*current_sub;
-	int			pos[2];
-	int			check;
 
-	pos[0] = 0;
-	pos[1] = *index;
-	check = pos[1];
+	ast->cmd2[*index] = NULL;
 	current_sub = current_token->sub_token;
 	while (current_sub != NULL)
 	{
-		if (check_dollars(current_sub) == false)
-			check_sub_status(ast, current_sub, env, pos);
+		if (!check_dollars(current_sub))
+		{
+			if (current_sub->quote == DOUBLE)
+				double_quote(ast, current_sub, env, index);
+			else if (current_sub->quote == SINGLE)
+				single_quote(ast, current_sub, index);
+			else if (current_sub->quote == NORMAL)
+				normal_quote(ast, current_sub, env, index);
+		}
 		current_sub = current_sub->next;
 	}
-	ast->cmd[pos[0]] = NULL;
-	if (pos[1] == check)
-	{
-		ast->cmd2[pos[1]] = call_join(ast->cmd);
-		if (ast->cmd2[pos[1]])
-			pos[1]++;
-	}
-	*index = pos[1];
-	// int i = 0;
-	// int j = 0;
-
-	// while (ast->cmd[j])
-	// {
-	// 	printf("CMD : %s\n", ast->cmd[j]);
-	// 	j++;
-	// }
-	// while (ast->cmd2[i])
-	// {
-	// 	printf("CMD2 : %s\n", ast->cmd2[i]);
-	// 	i++;
-	// }
-	free_cmd_content(ast->cmd);
+	add_index(ast, index);
 }
 
 t_ast	*call_expand(t_ast *ast, t_env *env)
@@ -1031,9 +1143,10 @@ int	check_if_add(t_sub_token *sub, t_env *env)
 	char	*str;
 	char	**split;
 	int		i;
+	int		word;
 
 	i = 0;
-	if (sub->quote != NORMAL || check_if_next_token_wild(sub) == false)
+	if (sub->quote != NORMAL)
 		return (0);
 	str = ft_strdup(sub->var);
 	if (!str)
@@ -1046,7 +1159,8 @@ int	check_if_add(t_sub_token *sub, t_env *env)
 		split = ft_split(str, ' ');
 		if (!split)
 			return (free(str), 0);
-		i += add_normal_len(split);
+		word = count_split_word(split);
+		i += add_len(sub, word);
 		free_split(split);
 	}
 	else if (check_if_wildcard(str) == false)
@@ -1080,23 +1194,26 @@ void	check_redirection(t_ast *ast, t_env *env)
 {
 	t_ast	*tmp;
 	t_redir	*re;
-	int		i;
-
-	i = 0;
+	t_quote	quote;
+	
 	tmp = ast;
 	if (!tmp || !tmp->redirs)
 		return ;
 	re = tmp->redirs;
 	while (re != NULL)
 	{
-		if (check_if_expendable(re->target->sub_token->var) == 1
-			&& tmp->cmd_token->sub_token->quote == DOUBLE)
-			re->target->sub_token->var = app_expend(re->target->sub_token->var,
-					env, true);
-		else if (check_if_expendable(re->target->sub_token->var) == 1
-			&& tmp->cmd_token->sub_token->quote == NORMAL)
-			re->target->sub_token->var = app_expend(re->target->sub_token->var,
-					env, false);
+		if (re->target && re->target->sub_token && re->target->sub_token->var)
+		{
+			quote = re->target->sub_token->quote;
+			if (check_if_expendable(re->target->sub_token->var) == 1
+				&& quote == DOUBLE)
+				re->target->sub_token->var = app_expend(re->target->sub_token->var,
+						env, true);
+			else if (check_if_expendable(re->target->sub_token->var) == 1
+				&& quote == NORMAL)
+				re->target->sub_token->var = app_expend(re->target->sub_token->var,
+						env, false);
+		}
 		// printf("VALEUR DE TMP : %s\n", tmp->cmd_token->sub_token->var);
 		// printf("VALEUR TREDIR : %s\n", re->target->sub_token->var);
 		// i = expand_wildcard(tmp->cmd_token->sub_token->var, tmp, &i);
@@ -1114,7 +1231,7 @@ t_ast	*expand_ast(t_ast *ast, t_env *env)
 		return (ast);
 	if (check_if_word(ast) == 1)
 	{
-		ast->cmd = malloc(sizeof(char *) * (expand_len(ast) + 1));
+		ast->cmd = malloc(sizeof(char *) * (expand_len_token(ast, env) + 1));
 		if (!ast->cmd)
 			return (ast);
 		ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast, env) + 1));

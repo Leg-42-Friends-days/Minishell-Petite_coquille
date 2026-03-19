@@ -64,10 +64,6 @@ int		len_cmd(char **str);
 void	free_split(char **str);
 char	*remove_null(char *str);
 bool	check_dollars(t_sub_token *current_sub);
-void	in_cmd(t_ast *ast, t_sub_token *current_sub, int *i);
-void	normal_quote(t_ast *ast, t_sub_token *current_sub, t_env *env, int *k);
-void	check_sub_status(t_ast *ast, t_sub_token *current_sub, t_env *env,
-			int *pos);
 void	expand_token(t_ast *ast, t_token *current_token, t_env *env,
 			int *index);
 t_ast	*call_expand(t_ast *ast, t_env *env);
@@ -79,5 +75,18 @@ void	check_redirection(t_ast *ast, t_env *env);
 t_ast	*expand_ast(t_ast *ast, t_env *env);
 t_ast	*expand_function(t_ast *ast, t_env *env);
 int		new_string_len(char *new_str, int i, t_env *env);
+bool	check_if_empty(char **split, int i);
+void	add_index(t_ast *ast, int *index);
+void	add_str_to_cmd(t_ast *ast, int *index, char *str);
+char	*check_if_space(char *str);
+char	*normal_value(t_sub_token *sub, t_env *env);
+void	add_split_words(t_ast *ast, char **split, int *index);
+void	double_quote(t_ast *ast, t_sub_token *sub, t_env *env, int *index);
+void	single_quote(t_ast *ast, t_sub_token *sub, int *index);
+void	normal_quote(t_ast *ast, t_sub_token *sub, t_env *env, int *index);
+int	count_split_word(char **split);
+int	add_len(t_sub_token *sub, int words);
+
+
 
 #endif

@@ -23,9 +23,6 @@ bool	lst_last_token(t_token *token)
 
 bool	last_next_token(t_token *token)
 {
-	int	i;
-
-	i = 0;
 	while (token->next != NULL)
 	{
 		if (token->type > 6 && token->next->type > 6)
