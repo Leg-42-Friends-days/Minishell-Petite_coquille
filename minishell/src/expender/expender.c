@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/18 15:14:00 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/19 14:53:31 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -917,7 +917,6 @@ void	add_str_to_cmd(t_ast *ast, int *index, char *str)
 	ast->cmd2[*index] = new_str;
 }
 
-
 char	*check_if_space(char *str)
 {
 	char	*new_str;
@@ -971,7 +970,7 @@ char	*normal_value(t_sub_token *sub, t_env *env)
 
 void	add_split_words(t_ast *ast, char **split, int *index)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (split[i])
@@ -1195,7 +1194,7 @@ void	check_redirection(t_ast *ast, t_env *env)
 	t_ast	*tmp;
 	t_redir	*re;
 	t_quote	quote;
-	
+
 	tmp = ast;
 	if (!tmp || !tmp->redirs)
 		return ;
