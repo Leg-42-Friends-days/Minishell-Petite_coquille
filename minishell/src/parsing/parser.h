@@ -3,15 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/10 14:01:48 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:39:47 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
-
 
 #ifndef PARSER_H
 # define PARSER_H
@@ -19,9 +16,9 @@
 // Unicode Color
 // Usage > printf("%s Hello World %s", COLOR, RESET);
 
-# include "../libft/libft.h"
-# include "../lexing/lexer.h"
 # include "../builtin/builtin.h"
+# include "../lexing/lexer.h"
+# include "../libft/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 // readline rl_clear_history, rl_on_new_line,
@@ -86,18 +83,16 @@ typedef struct s_ast
 
 	t_token			*cmd_token;
 	t_redir			*redirs;
-	char 			**cmd;
 	char			**cmd2;
 }					t_ast;
 
+// PARSING.C
+t_ast				*parser(t_token **token);
 
-//PARSING.C
-t_ast			*parser(t_token **token);
+t_ast				*parse_or(t_token **token);
+void				print_ast(t_ast *ast);
 
-t_ast			*parse_or(t_token **token);
-void			print_ast(t_ast *ast);
-
-//CHECK_TOKEN.C
-bool	            check_token(t_token *token);
+// CHECK_TOKEN.C
+bool				check_token(t_token *token);
 
 #endif

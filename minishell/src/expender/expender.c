@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/19 14:53:31 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:41:09 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1098,8 +1098,6 @@ t_ast	*call_expand(t_ast *ast, t_env *env)
 		current_token = current_token->next;
 	}
 	ast->cmd2[index] = NULL;
-	free(ast->cmd);
-	ast->cmd = NULL;
 	return (ast);
 }
 
@@ -1230,12 +1228,9 @@ t_ast	*expand_ast(t_ast *ast, t_env *env)
 		return (ast);
 	if (check_if_word(ast) == 1)
 	{
-		ast->cmd = malloc(sizeof(char *) * (expand_len_token(ast, env) + 1));
-		if (!ast->cmd)
-			return (ast);
 		ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast, env) + 1));
 		if (!ast->cmd2)
-			return (free(ast->cmd), ast->cmd = NULL, ast);
+			return (ast);
 		call_expand(ast, env);
 	}
 	check_redirection(ast, env);
