@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/19 17:41:09 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/19 18:18:56 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,26 @@ char	*star_str(char *str)
 	return (key);
 }
 
+// char	*code_str(char *str, int error_code)
+// {
+// 	int	i;
+// 	char	*key;
+
+// 	i = 0;
+// 	if (str[i] == '?')
+// 		i++;
+// 	key = malloc(sizeof(char) * (i + 1));
+// 	if (!key)
+// 		return (NULL);
+// 	i = 0;
+// 	if (str[i] == '?')
+// 	{
+// 		key[i] = error_code + '0';
+// 		i++;
+// 	}
+// 	return (key);
+// }
+
 char	*check_key(char *str)
 {
 	int		i;
@@ -119,6 +139,8 @@ char	*check_key(char *str)
 		return (key = number_str(str));
 	if (str[i] == '*')
 		return (key = star_str(str));
+	// if (str[i] == '?')
+		// return (key = code_str())
 	while (check_condition_key(str, i) == true)
 		i++;
 	key = malloc(sizeof(char) * (i + 1));

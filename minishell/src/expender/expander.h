@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:12:50 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/16 19:21:54 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/19 18:13:35 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,7 @@ void	add_split_words(t_ast *ast, char **split, int *index);
 void	double_quote(t_ast *ast, t_sub_token *sub, t_env *env, int *index);
 void	single_quote(t_ast *ast, t_sub_token *sub, int *index);
 void	normal_quote(t_ast *ast, t_sub_token *sub, t_env *env, int *index);
-int	count_split_word(char **split);
-int	add_len(t_sub_token *sub, int words);
-
-
+int		count_split_word(char **split);
+int		add_len(t_sub_token *sub, int words);
 
 #endif
