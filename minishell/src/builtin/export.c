@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/18 15:14:38 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/20 16:16:07 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,24 @@ bool	get_equal(char *test)
 	return (false);
 }
 
+bool	key_exist(t_env *env, char *key, char *content)
+{
+	while (env != NULL)
+	{
+		if (ft_strncmp(env->key, key, -1) == 0)
+		{
+			free(env->content);
+			env->content = ft_strdup(content);
+			free(content);
+			free(key);
+			return (true);
+		}
+		env = env->next;
+	}
+	env = lstfirst_env(env);
+	return (false);
+}
+
 int	function_export(t_env *env, char **cmd)
 {
 	char	*key;
@@ -95,11 +113,14 @@ int	function_export(t_env *env, char **cmd)
 		}
 		key = get_key(cmd[i]);
 		content = get_content(cmd[i]);
-		printf("key : %s\n", key);
-		printf("content : %s\n", content);
-		env = lstadd_back_exp(env, key, content);
-		env = lstfirst_env(env);
-		i++;
+		if (key_exist(env, key, content) == true)
+			i++;
+		else
+		{
+			env = lstadd_back_exp(env, key, content);
+			env = lstfirst_env(env);
+			i++;
+		}
 	}
 	return (0);
 }

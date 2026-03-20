@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/20 15:03:28 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:02:57 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ typedef struct s_exec
 // EXECUTION
 void					execution(t_global *global);
 int						exec_cmd(t_ast *ast, t_env *env);
-void					exec_pipe(t_ast *ast, t_env *env, int *error_code);
-void					exec_and(t_ast *ast, t_env *env, int *error_code);
-void					exec_or(t_ast *ast, t_env *env, int *error_code);
-void					exec_subshell(t_ast *ast, t_env *env, int *error_code);
+void					exec_pipe(t_ast *ast, t_env *env, int *error_code, t_global *global);
+void					exec_and(t_ast *ast, t_env *env, int *error_code, t_global *global);
+void					exec_or(t_ast *ast, t_env *env, int *error_code, t_global *global);
+void					exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *global);
 void					print_tab(char **tabl);
 
 // PATH
