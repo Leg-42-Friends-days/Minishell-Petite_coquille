@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/20 11:41:56 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 14:47:53 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,35 +84,35 @@ typedef struct s_ast
 
 	t_token			*cmd_token;
 	t_redir			*redirs;
-	char 			**cmd;
+	char			**cmd;
 	char			**cmd2;
 }					t_ast;
 
-typedef struct s_global t_global;
+typedef struct s_global	t_global;
 
 //PARSING.C
-t_ast			*parser(t_token **token, t_global *global);
+t_ast		*parser(t_token **token, t_global *global);
 
-t_ast			*parse_or(t_token **token, t_global *global);
-void			print_ast(t_ast *ast);
+t_ast		*parse_or(t_token **token, t_global *global);
+void		print_ast(t_ast *ast);
 
 //CHECK_TOKEN.C
-bool			check_token(t_token *token);
+bool		check_token(t_token *token);
 
 //AST_REDIRS.C
-int				redir_node(t_redir **redir, t_token **token);
-int				token_list_redir(t_token **token, t_ast *node);
+int			redir_node(t_redir **redir, t_token **token);
+int			token_list_redir(t_token **token, t_ast *node);
 
 //AST_NODE_UTILS.c
-t_ast			*ast_node(int type);
-void    		free_parser(t_ast *ast);
-void    		free_cmd(char **cmmd);
-t_ast			*free_malloc_error(t_ast *node);
+t_ast		*ast_node(int type);
+void		free_parser(t_ast *ast);
+void		free_cmd(char **cmmd);
+t_ast		*free_malloc_error(t_ast *node);
 
 //AST_CMD_UTILS.c
-int	redir_before_word(t_ast **node, t_token **token, t_global *global);
-int	redir_after_word(t_ast **node, t_token **token);
-int	subshell_redirs(t_ast *node, t_token **token);
-int	parse_subshell(t_ast **node, t_token **token, t_global *global);
+int			redir_before_word(t_ast **node, t_token **token, t_global *global);
+int			redir_after_word(t_ast **node, t_token **token);
+int			subshell_redirs(t_ast *node, t_token **token);
+int			parse_subshell(t_ast **node, t_token **token, t_global *global);
 
 #endif

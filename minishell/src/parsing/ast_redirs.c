@@ -6,11 +6,11 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 14:04:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/20 12:15:24 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 14:44:20 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../minishell.h"
+#include "../minishell.h"
 
 int	error_no_target(void)
 {
@@ -26,7 +26,7 @@ int	redir_node(t_redir **redir, t_token **token)
 
 	if (!(*token)->next)
 		return (error_no_target());
-	node = ft_malloc(sizeof(t_redir));
+	node = malloc(sizeof(t_redir));
 	if (!node)
 		return (1);
 	node->type = (*token)->type;
@@ -77,7 +77,7 @@ int	token_list_redir(t_token **token, t_ast *node)
 	*token = (*token)->next;
 	if ((*token)->next)
 		next = (*token)->next;
-	else 
+	else
 		next = NULL;
 	fill_redir(redir, file, prev, next);
 	if (next)

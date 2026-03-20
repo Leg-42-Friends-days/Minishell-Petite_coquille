@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/20 11:32:09 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 14:43:43 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,17 @@ t_ast	*parse_cmd(t_token **token, t_global *global)
 	if (error_code > 0)
 	{
 		if (error_code == 1)
-			return(free_malloc_error(node));
+			return (free_malloc_error(node));
 	}
 	else if (*token && (*token)->type == WORD)
 	{
 		node = ast_node(AST_CMD);
 		if (!node)
-			return(free_malloc_error(node));
+			return (free_malloc_error(node));
 		node->cmd_token = *token;
 	}
 	if (redir_after_word(&node, token) == 1)
-		return(free_malloc_error(node));
+		return (free_malloc_error(node));
 	return (node);
 }
 

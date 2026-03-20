@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 14:32:52 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/20 11:29:49 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 14:44:00 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	parse_subshell(t_ast **node, t_token **token, t_global *global)
 	if (*token && (*token)->type == L_PAR)
 	{
 		*node = ast_node(AST_SUBSHELL);
-		if(!*node)
+		if (!*node)
 			return (1);
 		*token = (*token)->next;
 		(*node)->left = parse_or(token, global);

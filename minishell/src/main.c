@@ -111,6 +111,7 @@ int	main(int ac, char **av, char **envp)
 			//printmini(&(global->head));
 			ft_miniclear(&(global->head));
 			free_parser(global->ast);
+			mini_vars = NULL;
 			//free_env(global->env);
 			//free(global);
 		}
