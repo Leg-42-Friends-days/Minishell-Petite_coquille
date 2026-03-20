@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/20 14:28:07 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/20 14:32:12 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	affichage_env(t_env *env)
 	ft_printf(1, "=");
 	ft_printf(1, "%s\n", env->content);
 }
-	
+
 int	main(int ac, char **av, char **envp)
 {
 	char		*line;
@@ -74,19 +74,7 @@ int	main(int ac, char **av, char **envp)
 	global->env = env_content(global->env, envp);
 	global->error_code = (int *)malloc(sizeof(int));
 	*global->error_code = 0;
-	affichage_env(global->env);
-	// AFFICHAGE D'ENV
-	// function_export(global->env, "SALUT2=$USER    $USER");
-	// while (global->env->next != NULL)
-	// {
-	// 	printf("%s", global->env->key);
-	// 	printf("=");
-	// 	printf("%s\n", global->env->content);
-	// 	global->env = global->env->next;
-	// }
-	// printf("%s", global->env->key);
-	// printf("=");
-	// printf("%s\n", global->env->content);
+	// affichage_env(global->env);
 	g_signal = 0;
 	init_signals();
 	while (true)

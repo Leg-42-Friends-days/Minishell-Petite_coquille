@@ -6,14 +6,17 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:12:50 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/19 18:13:35 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/20 14:39:28 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPANDER_H
 # define EXPANDER_H
 
+# include "../builtin/builtin.h"
+# include "../lexing/lexer.h"
 # include "../minishell.h"
+# include "../parsing/parser.h"
 
 bool	check_if_word(t_ast *ast);
 bool	check_if_expendable(char *str);
