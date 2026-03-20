@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:12:50 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/20 14:39:28 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:09:10 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,7 @@ int		add_normal_len(char **split);
 int		check_if_add(t_sub_token *sub, t_env *env);
 int		expand_len_token(t_ast *ast, t_env *env);
 void	check_redirection(t_ast *ast, t_env *env);
-t_ast	*expand_ast(t_ast *ast, t_env *env);
-t_ast	*expand_function(t_ast *ast, t_env *env);
+void	expand_function(t_global *global);
 int		new_string_len(char *new_str, int i, t_env *env);
 bool	check_if_empty(char **split, int i);
 void	add_index(t_ast *ast, int *index);

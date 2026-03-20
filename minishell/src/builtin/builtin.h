@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:16:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/20 15:11:11 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:11:28 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char				*get_key(char *envp);
 int					find_letter(char *envp, char letter);
 int					function_export(t_env *env, char **cmd);
 t_env				*lstfirst_env(t_env *lst);
-t_env				*function_unset(t_env *env, char *unset);
+int					function_unset(t_env *env, char **unset);
 
 void				free_pwd(t_pwd *pwd);
 void				free_env(t_env *env);
@@ -44,17 +44,17 @@ void				free_env(t_env *env);
 // ECHO
 int					ft_echo(char **cmd, t_env *env);
 
-//CD
+// CD
 int					ft_cd(char **cmd, t_env *env);
 char				*ft_getenv(t_env *env, char *key);
 
-//PWD
+// PWD
 int					ft_pwd(char **cmd, t_env *env);
 
-//EXIT
-int 				ft_exit(char **cmd, t_env *env, int *error_code);
+// EXIT
+int					ft_exit(char **cmd, t_env *env, int *error_code);
 
-//ENV
+// ENV
 int					affichage_env(t_env *env);
 
 #endif

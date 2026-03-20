@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 13:46:04 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/02/09 15:18:44 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:11:17 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool	compare_unset(char *env, char *unset)
 	return (false);
 }
 
-t_env	*function_unset(t_env *env, char *unset)
+int	function_unset(t_env *env, char **unset)
 {
 	t_env	*tmp;
 	t_env	*head;
@@ -35,7 +35,7 @@ t_env	*function_unset(t_env *env, char *unset)
 	env = head;
 	while (env != NULL)
 	{
-		if (compare_unset(env->key, unset) == true)
+		if (compare_unset(env->key, *unset) == true)
 		{
 			tmp = env->next;
 			if (env->previous)
@@ -53,5 +53,5 @@ t_env	*function_unset(t_env *env, char *unset)
 		else
 			env = env->next;
 	}
-	return (head);
+	return (0);
 }

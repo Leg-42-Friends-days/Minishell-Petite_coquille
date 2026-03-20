@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/20 17:03:41 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:11:55 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *global)
 		printf("error");
 	if (pid == 0)
 	{
-		expand_function(ast, env);
+		expand_function(global);
 		redirection(ast);
 		execution_2(ast->left, env, error_code, global);
 		exit (*error_code);

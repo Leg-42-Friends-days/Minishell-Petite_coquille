@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expender.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/20 15:03:38 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:09:27 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1239,29 +1239,19 @@ void	check_redirection(t_ast *ast, t_env *env)
 	}
 }
 
-t_ast	*expand_ast(t_ast *ast, t_env *env)
+void	expand_function(t_global *global)
 {
 	int	len;
 
 	len = 0;
-	if (!ast)
-		return (ast);
-	if (check_if_word(ast) == 1)
+	if (!global)
+		return ;
+	if (check_if_word(global->ast) == 1)
 	{
-		ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast, env) + 1));
-		if (!ast->cmd2)
-			return (ast);
-		call_expand(ast, env);
+		global->ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(global->ast, global->env) + 1));
+		if (!global->ast->cmd2)
+			return ;
+		call_expand(global->ast, global->env);
 	}
-	check_redirection(ast, env);
-	return (ast);
-}
-
-t_ast	*expand_function(t_ast *ast, t_env *env)
-{
-	t_ast	*curseur;
-
-	curseur = ast;
-	ast = expand_ast(curseur, env);
-	return (ast);
+	check_redirection(global->ast, global->env);
 }
