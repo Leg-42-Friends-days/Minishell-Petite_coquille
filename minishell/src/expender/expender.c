@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/19 18:18:56 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/19 18:28:01 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1176,8 +1176,6 @@ int	check_if_add(t_sub_token *sub, t_env *env)
 	if (ft_strchr(str, ' '))
 	{
 		split = ft_split(str, ' ');
-		if (!split)
-			return (free(str), 0);
 		word = count_split_word(split);
 		i += add_len(sub, word);
 		free_split(split);
