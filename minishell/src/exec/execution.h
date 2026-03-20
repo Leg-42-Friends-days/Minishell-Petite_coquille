@@ -6,18 +6,18 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/17 15:13:26 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 15:03:28 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTION_H
 # define EXECUTION_H
 
-# include "../libft/libft.h"
-# include "../lexing/lexer.h"
 # include "../builtin/builtin.h"
-# include "../parsing/parser.h"
+# include "../lexing/lexer.h"
+# include "../libft/libft.h"
 # include "../minishell.h"
+# include "../parsing/parser.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 // readline rl_clear_history, rl_on_new_line,
@@ -53,30 +53,30 @@
 # include <unistd.h>
 // getcwd() chdir() isatty() ttyname() ttyslot()
 
-typedef struct s_global t_global;
+typedef struct s_global	t_global;
 
 typedef struct s_exec
 {
-	int	exit_code;
-}		        t_exec;
+	int					exit_code;
+}						t_exec;
 
-//EXECUTION
-void	execution(t_global *global);
-int	exec_cmd(t_ast *ast, t_env *env);
-void	exec_pipe(t_ast *ast, t_env *env, int *error_code);
-void	exec_and(t_ast *ast, t_env *env, int *error_code);
-void	exec_or(t_ast *ast, t_env *env, int *error_code);
-void	exec_subshell(t_ast *ast, t_env *env, int *error_code);
-void	print_tab(char **tabl);
+// EXECUTION
+void					execution(t_global *global);
+int						exec_cmd(t_ast *ast, t_env *env);
+void					exec_pipe(t_ast *ast, t_env *env, int *error_code);
+void					exec_and(t_ast *ast, t_env *env, int *error_code);
+void					exec_or(t_ast *ast, t_env *env, int *error_code);
+void					exec_subshell(t_ast *ast, t_env *env, int *error_code);
+void					print_tab(char **tabl);
 
-//PATH
-char	*find_path(t_env *env);
-char	*right_path(char **path, char *cmd);
-char    *find_cmd(t_env *env, char *cmd);
+// PATH
+char					*find_path(t_env *env);
+char					*right_path(char **path, char *cmd);
+char					*find_cmd(t_env *env, char *cmd);
 
-//REDIRECTION
-void    redirection(t_ast *node);
-void	run_through_here_doc(t_ast *ast, t_env *env);
-void	restore_redirection(t_ast *node);
+// REDIRECTION
+void					redirection(t_ast *node);
+void					run_through_here_doc(t_ast *ast, t_env *env);
+void					restore_redirection(t_ast *node);
 
 #endif

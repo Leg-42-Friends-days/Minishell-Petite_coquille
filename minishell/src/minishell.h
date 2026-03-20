@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2026/03/18 11:13:27 by ibrouin-         ###   ########.fr       */
+=======
+/*   Updated: 2026/03/20 14:38:13 by mickzhan         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +31,19 @@
 
 # include "../libft/libft.h"
 # include "./builtin/builtin.h"
+# include "exec/execution.h"
+# include "expender/expander.h"
 # include "lexing/lexer.h"
 # include "parsing/parser.h"
-# include "exec/execution.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 // readline rl_clear_history, rl_on_new_line,
 // rl_replace_line, rl_redisplay add_history
 
-# include <time.h>
-# include <sys/wait.h>
-
 # include <dirent.h>
 # include <signal.h>
+# include <sys/wait.h>
+# include <time.h>
 // man 3 kill
 // man 3 signal
 # include <sys/types.h>
@@ -49,7 +53,6 @@
 // ioctl()
 
 # include <errno.h>
-
 # include <termios.h>
 // tcsetattr() tcgetattr()
 
@@ -71,7 +74,7 @@
 
 // EXPENSION
 
-extern int g_signal;
+extern int	g_signal;
 
 typedef struct s_ast t_ast;
 
@@ -83,10 +86,8 @@ typedef struct s_global
 	t_token			*head;
 }				t_global;
 
-t_ast	*expand_function(t_ast *ast, t_env *env);
-char	*app_expend(char *str, t_env *env, bool state);
-void	init_signals();
-void	init_child_signals();
-void	handler(int signum);
+void		init_signals(void);
+void		init_child_signals(void);
+void		handler(int signum);
 
 #endif

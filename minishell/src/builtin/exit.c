@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 11:49:59 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/09 17:31:15 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 14:33:07 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	check_ft_atol(const char *str)
 {
-	int	i;
+	int			i;
 	long long	sign;
 	long long	res;
 
@@ -43,7 +43,7 @@ int	check_ft_atol(const char *str)
 
 int	ft_atol(const char *str)
 {
-	int	i;
+	int			i;
 	long long	sign;
 	long long	res;
 
@@ -72,13 +72,13 @@ int	is_not_numeric(char *cmd)
 
 	i = 0;
 	if (cmd[i] == '+' || cmd[i] == '-')
-			i++;
+		i++;
 	if (cmd[i] == '\0')
 		return (1);
 	while (cmd[i])
 	{
 		if (cmd[i] < '0' || cmd[i] > '9')
-			break;
+			break ;
 		i++;
 	}
 	if (cmd[i] == '\0')
@@ -92,7 +92,7 @@ int	is_not_numeric(char *cmd)
 		return (1);
 }
 
-int ft_exit(char **cmd, t_env *env, int *error_code)
+int	ft_exit(char **cmd, t_env *env, int *error_code)
 {
 	(void)env;
 	write(1, "exit\n", 5);

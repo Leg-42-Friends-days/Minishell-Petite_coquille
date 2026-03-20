@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/20 14:47:53 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 15:04:26 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ typedef struct s_ast
 
 	t_token			*cmd_token;
 	t_redir			*redirs;
-	char			**cmd;
 	char			**cmd2;
 }					t_ast;
 

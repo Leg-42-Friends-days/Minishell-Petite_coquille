@@ -3,16 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2026/03/18 20:37:20 by ibrouin-         ###   ########.fr       */
+=======
+/*   Updated: 2026/03/20 14:32:12 by mickzhan         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_signal;
+int		g_signal;
 
 void	handler(int signum)
 {
@@ -25,16 +29,16 @@ void	handler(int signum)
 			rl_replace_line("", 0);
 			rl_redisplay();
 		}
-		//g_signal = 130;
+		// g_signal = 130;
 	}
 }
-void	init_signals()
+void	init_signals(void)
 {
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, handler);
 }
 
-void	init_child_signals()
+void	init_child_signals(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
@@ -43,14 +47,28 @@ void	init_child_signals()
 // SIGINT = CTRL + C
 // SIGTSTP = CTRL + Z
 
+void	affichage_env(t_env *env)
+{
+	while (env->next != NULL)
+	{
+		ft_printf(1, "%s", env->key);
+		ft_printf(1, "=");
+		ft_printf(1, "%s\n", env->content);
+		env = env->next;
+	}
+	ft_printf(1, "%s", env->key);
+	ft_printf(1, "=");
+	ft_printf(1, "%s\n", env->content);
+}
+
 int	main(int ac, char **av, char **envp)
 {
-	char	*line;
-	t_token	*mini_vars;
-	//t_ast	*ast;
-	//t_env	*env;
+	char		*line;
+	t_token		*mini_vars;
 	t_global	*global;
 
+	// t_ast	*ast;
+	// t_env	*env;
 	(void)av;
 	(void)ac;
 	(void)envp;
@@ -60,15 +78,7 @@ int	main(int ac, char **av, char **envp)
 	//global->env = env_content(global->env, envp);
 	global->error_code = (int *)malloc(sizeof(int));
 	*global->error_code = 0;
-	/*AFFICHAGE D'ENV
-	while (env->next != NULL)
-	{
-		printf("%s", env->key);
-		printf("=");
-		printf("%s\n", env->content);
-		env = env->next;
-	}
-	*/
+	// affichage_env(global->env);
 	g_signal = 0;
 	init_signals();
 	while (true)
@@ -91,7 +101,7 @@ int	main(int ac, char **av, char **envp)
 		}
 		if (*line)
 			add_history(line);
-		//printf("%d\n", g_signal);
+		// printf("%d\n", g_signal);
 		if (g_signal != 0)
 		{
 			*global->error_code = 130;
