@@ -6,12 +6,11 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/20 15:07:20 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 16:22:46 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
-
 
 int	is_bult_in(char **cmd)
 {
@@ -46,7 +45,6 @@ int	exec_bult_in(char **cmd, t_env *env, int *error_code)
 		exit_status = function_export(env, cmd);
 	if (ft_strncmp(cmd[0], "env", 4) == 0)
 		exit_status = affichage_env(env);
-	// printf("CMD %s\n", cmd[1]);
 	return (exit_status);
 }
 
@@ -55,7 +53,7 @@ void	print_tab(char **tabl)
 	int	i;
 
 	i = 0;
-	while(tabl[i] != NULL)
+	while (tabl[i] != NULL)
 	{
 		printf("%s\n", tabl[i]);
 		i++;
@@ -69,7 +67,6 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code)
 		if (ast->type == AST_CMD)
 		{
 			expand_function(ast, env);
-			//print_tab(ast->cmd2);
 			if (!ast->cmd2 || !ast->cmd2[0])
 				return ;
 			if (is_bult_in(ast->cmd2) == 1)
@@ -97,6 +94,49 @@ void	execution(t_global *global)
 	execution_2(global->ast, global->env, global->error_code);
 }
 
+char	*init_path(t_ast **ast, t_env *env)
+{
+	char	*path;
+
+	path = find_cmd(env, (*ast)->cmd2[0]);
+	if (!path)
+	{
+		write(2, "minishell: ", 11);
+		write(2, (*ast)->cmd2[0], ft_strlen((*ast)->cmd2[0]));
+		write(2, ": command not found\n", 21);
+		return (NULL);
+	}
+	return (path);
+}
+
+void	error_pid(char **paths)
+{
+	free(*paths);
+	perror("fork failed");
+	exit (2);
+}
+
+void	error_pid_pipe(void)
+{
+	perror("fork failed");
+	exit (2);
+}
+
+void	error_pipe(void)
+{
+	perror("pipe failed");
+	exit(2);
+}
+
+void	child_cmd(t_ast **ast, char **path)
+{
+	init_child_signals();
+	redirection(*ast);
+	execve(*path, (*ast)->cmd2, NULL);
+	perror("minishell");
+	exit (127);
+}
+
 int	exec_cmd(t_ast *ast, t_env *env)
 {
 	char	*path;
@@ -105,31 +145,38 @@ int	exec_cmd(t_ast *ast, t_env *env)
 
 	g_signal = 1;
 	status = 0;
-	path = find_cmd(env, ast->cmd2[0]);
+	path = init_path(&ast, env);
 	if (!path)
-	{
-		write(2, "minishell: ", 11);
-		write(2, ast->cmd2[0], ft_strlen(ast->cmd2[0]));
-		write(2, ": command not found\n", 21);
 		return (127);
-	}
 	pid = fork();
 	if (pid == -1)
-		printf("error");
+		error_pid(&path);
 	if (pid == 0)
-	{
-		init_child_signals();
-		redirection(ast);
-		execve(path, ast->cmd2, NULL);
-		perror("minishell");
-		exit (127);
-	}
+		child_cmd(&ast, &path);
 	free(path);
 	waitpid(pid, &status, 0);
 	signal(SIGINT, handler);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (0);
+}
+
+void	pipe_first_child(t_ast **ast, int *fd, t_env **env, int **error_code)
+{
+	close(fd[0]);
+	dup2(fd[1], 1);
+	close(fd[1]);
+	execution_2((*ast)->left, *env, *error_code);
+	exit(0);
+}
+
+void	pipe_second_child(t_ast **ast, int *fd, t_env **env, int **error_code)
+{
+	close(fd[1]);
+	dup2(fd[0], 0);
+	close(fd[0]);
+	execution_2((*ast)->right, *env, *error_code);
+	exit(0);
 }
 
 void	exec_pipe(t_ast *ast, t_env *env, int *error_code)
@@ -139,52 +186,36 @@ void	exec_pipe(t_ast *ast, t_env *env, int *error_code)
 	int		status;
 
 	if (pipe(fd) == -1)
-	{
-		perror("pipe failed");
-		exit (2);
-	}
+		error_pipe();
 	pid[0] = fork();
-	//if (pid == -1)
-	//	erreur;
+	if (pid[0] == -1)
+		error_pid_pipe();
 	if (pid[0] == 0)
-	{
-		close(fd[0]);
-		dup2(fd[1], 1);
-		close(fd[1]);
-		execution_2(ast->left, env, error_code);
-		exit(0);
-	}
+		pipe_first_child(&ast, fd, &env, &error_code);
 	pid[1] = fork();
-	//if (pid == -1)
-	//	erreur;
+	if (pid[1] == -1)
+		error_pid_pipe();
 	if (pid[1] == 0)
-	{
-		close(fd[1]);
-		dup2(fd[0], 0);
-		close(fd[0]);
-		execution_2(ast->right, env, error_code);
-		exit(0);
-	}
+		pipe_second_child(&ast, fd, &env, &error_code);
 	close(fd[0]);
 	close(fd[1]);
 	waitpid(pid[0], NULL, 0);
 	waitpid(pid[1], &status, 0);
 	if (WIFEXITED(status))
 		*error_code = (WEXITSTATUS(status));
-	return ;
 }
 
 void	exec_and(t_ast *ast, t_env *env, int *error_code)
 {
 	execution_2(ast->left, env, error_code);
-	if (*error_code == 0 )
+	if (*error_code == 0)
 		execution_2(ast->right, env, error_code);
 }
 
 void	exec_or(t_ast *ast, t_env *env, int *error_code)
 {
 	execution_2(ast->left, env, error_code);
-	if (*error_code != 0 )
+	if (*error_code != 0)
 		execution_2(ast->right, env, error_code);
 }
 
@@ -208,4 +239,3 @@ void	exec_subshell(t_ast *ast, t_env *env, int *error_code)
 		*error_code = (WEXITSTATUS(status));
 	return ;
 }
-
