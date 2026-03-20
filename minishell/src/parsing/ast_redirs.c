@@ -6,13 +6,17 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 14:04:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/18 20:45:32 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 12:15:24 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../minishell.h"
 
-//void	error_no_target()
+int	error_no_target(void)
+{
+	write(2, "minishell: syntax error near unexpected token `newline'\n", 56);
+	return (1);
+}
 
 int	redir_node(t_redir **redir, t_token **token)
 {
@@ -21,11 +25,8 @@ int	redir_node(t_redir **redir, t_token **token)
 	t_redir	*current;
 
 	if (!(*token)->next)
-	{
-		write(2, "minishell: syntax error near unexpected token `newline'\n", 56);
-		return (1);
-	}
-	node = malloc(sizeof(t_redir));
+		return (error_no_target());
+	node = ft_malloc(sizeof(t_redir));
 	if (!node)
 		return (1);
 	node->type = (*token)->type;
@@ -42,6 +43,20 @@ int	redir_node(t_redir **redir, t_token **token)
 		current = current->next;
 	current->next = node;
 	return (0);
+}
+
+void	fill_redir(t_token *r, t_token *f, t_token *p, t_token *n)
+{
+	r->next = NULL;
+	r->prev = NULL;
+	ft_minidelone(r->sub_token);
+	free(r);
+	f->prev = NULL;
+	f->next = NULL;
+	if (p)
+		p->next = n;
+	if (n)
+		n->prev = p;
 }
 
 int	token_list_redir(t_token **token, t_ast *node)
@@ -64,16 +79,7 @@ int	token_list_redir(t_token **token, t_ast *node)
 		next = (*token)->next;
 	else 
 		next = NULL;
-	redir->next = NULL;
-	redir->prev = NULL;
-	ft_minidelone(redir->sub_token);
-	free(redir);
-	file->prev = NULL;
-	file->next = NULL;
-	if (prev)
-		prev->next = next;
-	if (next)
-		next->prev = prev;
+	fill_redir(redir, file, prev, next);
 	if (next)
 		(*token) = next;
 	else

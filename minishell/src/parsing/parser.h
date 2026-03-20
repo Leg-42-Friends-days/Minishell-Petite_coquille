@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/18 15:16:32 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 11:41:56 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int				token_list_redir(t_token **token, t_ast *node);
 t_ast			*ast_node(int type);
 void    		free_parser(t_ast *ast);
 void    		free_cmd(char **cmmd);
+t_ast			*free_malloc_error(t_ast *node);
 
 //AST_CMD_UTILS.c
 int	redir_before_word(t_ast **node, t_token **token, t_global *global);

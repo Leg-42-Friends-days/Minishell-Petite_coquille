@@ -92,13 +92,13 @@ int	lexing_errors(t_token **mini_vars, t_state state, char *buffer)
 		ft_miniclear(mini_vars);
 		if (buffer)
 			free(buffer);
-		printf("minishell: unclosed quote\n");
+		write(2, "minishell: unclosed quote\n", 26);
 		return (1);
 	}
 	if (state == ERROR)
 	{
 		ft_miniclear(mini_vars);
-		printf("minishell: cannot allocate memory\n");
+		write(2, "minishell: cannot allocate memory\n", 34);
 		return (1);
 	}
 	return (0);
@@ -120,7 +120,7 @@ t_token	*lexing(t_token **mini_vars, char *line)
 	if (state == ERROR)
 	{
 		ft_miniclear(mini_vars);
-		printf("minishell: cannot allocate memory\n");
+		write(2, "minishell: cannot allocate memory\n", 34);
 		return (NULL);
 	}
 	if (!(*mini_vars))
