@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/20 15:07:20 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 16:33:12 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	is_bult_in(char **cmd)
 		return (1);
 	if (ft_strncmp(cmd[0], "env", 4) == 0)
 		return (1);
+	if (ft_strncmp(cmd[0], "unset", 6) == 0)
+		return (1);
 	return (0);
 }
 
@@ -46,6 +48,8 @@ int	exec_bult_in(char **cmd, t_env *env, int *error_code)
 		exit_status = function_export(env, cmd);
 	if (ft_strncmp(cmd[0], "env", 4) == 0)
 		exit_status = affichage_env(env);
+	if (ft_strncmp(cmd[0], "unset", 6) == 0)
+		exit_status = function_unset(env, cmd)
 	// printf("CMD %s\n", cmd[1]);
 	return (exit_status);
 }
@@ -68,7 +72,7 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code)
 	{
 		if (ast->type == AST_CMD)
 		{
-			expand_function(ast, env);
+			expand_function(ast, env, error_code);
 			//print_tab(ast->cmd2);
 			if (!ast->cmd2 || !ast->cmd2[0])
 				return ;
