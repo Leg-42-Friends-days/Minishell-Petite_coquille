@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/18 15:14:38 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/20 15:44:48 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,18 @@ bool	get_equal(char *test)
 	return (false);
 }
 
+bool	key_exist(t_env *env, char *str)
+{
+	printf("key EXIST : %s\n", str);
+	while (env != NULL)
+	{
+		if (ft_strncmp(env->key, str, -1) == 0)
+			return (true);
+		env = env->next;
+	}
+	return (false);
+}
+
 int	function_export(t_env *env, char **cmd)
 {
 	char	*key;
@@ -94,6 +106,8 @@ int	function_export(t_env *env, char **cmd)
 			continue ;
 		}
 		key = get_key(cmd[i]);
+		if (key_exist(env , key) == true)
+			printf("HERE\n");
 		content = get_content(cmd[i]);
 		printf("key : %s\n", key);
 		printf("content : %s\n", content);
