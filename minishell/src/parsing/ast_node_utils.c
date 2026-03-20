@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 14:33:35 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/20 14:42:51 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/20 15:12:34 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_ast	*ast_node(int type)
 	node->right = NULL;
 	node->cmd_token = NULL;
 	node->redirs = NULL;
-	node->cmd = NULL;
 	node->cmd2 = NULL;
 	return (node);
 }
@@ -40,8 +39,7 @@ void	free_parser(t_ast *ast)
 		free_parser(ast->left);
 	if (ast->right)
 		free_parser(ast->right);
-	free_cmd(ast->cmd);
-	free_cmd(ast->cmd2);
+	free_cmd2(ast->cmd2);
 	current = ast->redirs;
 	while (current)
 	{
@@ -55,7 +53,7 @@ void	free_parser(t_ast *ast)
 	free(ast);
 }
 
-void	free_cmd(char **cmmd)
+void	free_cmd2(char **cmmd)
 {
 	int	i;
 

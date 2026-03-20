@@ -3,16 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2026/03/18 20:37:20 by ibrouin-         ###   ########.fr       */
-=======
-/*   Updated: 2026/03/20 14:32:12 by mickzhan         ###   ########.fr       */
->>>>>>> main
+/*   Updated: 2026/03/20 15:13:05 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -47,20 +44,6 @@ void	init_child_signals(void)
 // SIGINT = CTRL + C
 // SIGTSTP = CTRL + Z
 
-void	affichage_env(t_env *env)
-{
-	while (env->next != NULL)
-	{
-		ft_printf(1, "%s", env->key);
-		ft_printf(1, "=");
-		ft_printf(1, "%s\n", env->content);
-		env = env->next;
-	}
-	ft_printf(1, "%s", env->key);
-	ft_printf(1, "=");
-	ft_printf(1, "%s\n", env->content);
-}
-
 int	main(int ac, char **av, char **envp)
 {
 	char		*line;
@@ -75,7 +58,7 @@ int	main(int ac, char **av, char **envp)
 	mini_vars = NULL;
 	global = (t_global *)malloc(sizeof(t_global));
 	global->env = NULL;
-	//global->env = env_content(global->env, envp);
+	global->env = env_content(global->env, envp);
 	global->error_code = (int *)malloc(sizeof(int));
 	*global->error_code = 0;
 	// affichage_env(global->env);
@@ -114,10 +97,10 @@ int	main(int ac, char **av, char **envp)
 			global->ast = parser(&mini_vars, global);
 			//printmini(&mini_vars);
 			//free_parser(global->ast);
-			//run_through_here_doc(global->ast, global->env);
+			run_through_here_doc(global->ast, global->env);
 			//expand_function(ast, env);
 			//print_tab(ast->cmd2);
-			//execution(global);
+			execution(global);
 			//printmini(&(global->head));
 			ft_miniclear(&(global->head));
 			free_parser(global->ast);

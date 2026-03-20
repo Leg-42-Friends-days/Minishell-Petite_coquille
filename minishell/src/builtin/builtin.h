@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:16:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/18 15:14:16 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/20 15:11:11 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,8 @@ int					ft_pwd(char **cmd, t_env *env);
 
 //EXIT
 int 				ft_exit(char **cmd, t_env *env, int *error_code);
+
+//ENV
+int					affichage_env(t_env *env);
 
 #endif
