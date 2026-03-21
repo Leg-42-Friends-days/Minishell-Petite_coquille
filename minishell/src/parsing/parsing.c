@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/20 14:43:43 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/21 14:04:15 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ t_ast	*parse_or(t_token **token, t_global *global)
 	return (left);
 }
 
-/* void	print_ast(t_ast *ast)
+void	print_ast(t_ast *ast)
 {
 	if (ast != NULL)
 	{
@@ -136,7 +136,7 @@ t_ast	*parse_or(t_token **token, t_global *global)
 			print_ast(ast->right);
 		printf("\n");
 	}
-} */
+}
 
 t_ast	*parser(t_token **token, t_global *global)
 {

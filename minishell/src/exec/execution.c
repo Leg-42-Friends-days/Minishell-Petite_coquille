@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/20 17:11:55 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/21 13:48:19 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,25 +111,6 @@ char	*init_path(t_ast **ast, t_env *env)
 		return (NULL);
 	}
 	return (path);
-}
-
-void	error_pid(char **paths)
-{
-	free(*paths);
-	perror("fork failed");
-	exit (2);
-}
-
-void	error_pid_pipe(void)
-{
-	perror("fork failed");
-	exit (2);
-}
-
-void	error_pipe(void)
-{
-	perror("pipe failed");
-	exit(2);
 }
 
 void	child_cmd(t_ast **ast, char **path)

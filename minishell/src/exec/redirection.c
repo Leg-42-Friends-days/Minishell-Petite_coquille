@@ -6,11 +6,36 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/11 11:46:02 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/21 13:58:02 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+void	fill_here_doc(int *fd, t_redir **node, t_env **env)
+{
+	char	*line;
+
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+			break ;
+		if ((ft_strncmp(line, (*node)->target->sub_token->var, (ft_strlen((*node)->target->sub_token->var) + 1)) == 0))
+		{
+			free(line);
+			close(fd[1]);
+			exit (0);
+		}
+		if ((*node)->target->sub_token->quote == NONE)
+			line = app_expend(line, (*env), 0);
+		if (!line)
+			break ;
+		write(fd[1], line, ft_strlen(line));
+		write(fd[1], "\n", 1);
+		free(line);
+	}
+}
 
 int	prepare_here_doc(t_redir *node, t_env *env)
 {
@@ -20,20 +45,18 @@ int	prepare_here_doc(t_redir *node, t_env *env)
 	char	*line;
 
 	if (pipe(fd) == -1)
-	{
-		perror("pipe failed");
-		exit (2);
-	}
+		error_pipe();
 	pid = fork();
-	//if (pid == -1)
-	//	erreur;
+	if (pid == -1)
+		error_pid_pipe();
 	if (pid == 0)
 	{
 		g_signal = 0;
 		init_signals();
 		close(fd[0]);
+		//fill_here_doc(fd, &node, &env);
 		while (1)
-		{
+		{	
 			line = readline("> ");
 			if (!line)
 				break ;
