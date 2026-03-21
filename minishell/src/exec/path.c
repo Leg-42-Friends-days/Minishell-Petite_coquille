@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 14:14:15 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/16 17:20:59 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/21 16:14:49 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,18 @@
 char	*find_path(t_env *env)
 {
 	char	*path;
-    t_env   *current;
+	t_env	*current;
 
-    if (!env)
-        return (NULL);
-    current = env;
+	if (!env)
+		return (NULL);
+	current = env;
 	path = "PATH";
 	while (current->key != NULL)
 	{
 		if (!ft_strncmp(current->key, path, 4))
 			return (current->content);
 		if (current->next)
-            current = current->next;
+			current = current->next;
 	}
 	return (NULL);
 }
@@ -83,14 +83,33 @@ char	*right_path(char **path, char *cmd)
 	return (final_path);
 }
 
-char    *find_cmd(t_env *env, char *cmd)
+char	*find_cmd(t_env *env, char *cmd)
 {
-    char    *path;
-    char    **tab_path;
+	char	*path;
+	char	**tab_path;
+	char	*final_path;
 
-    path = find_path(env);
-    tab_path = ft_split(path, ':');
-    if (!tab_path)
-        return (NULL);
-    return (right_path(tab_path, cmd));
+	path = find_path(env);
+	tab_path = ft_split(path, ':');
+	if (!tab_path)
+		return (NULL);
+	final_path = right_path(tab_path, cmd);
+	if (!final_path)
+		free_cmd2(tab_path);
+	return (final_path);
+}
+
+char	*init_path(t_ast **ast, t_env *env)
+{
+	char	*path;
+
+	path = find_cmd(env, (*ast)->cmd2[0]);
+	if (!path)
+	{
+		write(2, "minishell: ", 11);
+		write(2, (*ast)->cmd2[0], ft_strlen((*ast)->cmd2[0]));
+		write(2, ": command not found\n", 21);
+		return (NULL);
+	}
+	return (path);
 }

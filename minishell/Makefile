@@ -6,7 +6,7 @@
 #    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/03/21 13:56:34 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/03/21 15:52:33 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SRC =	main.c \
 		lexing/lexing_2.c \
 		lexing/lexing.c \
 		lexing/cara_types.c \
+		lexing/cara_types_utils.c \
 		lexing/node_utils.c \
 		lexing/test.c \
 		builtin/env.c \
@@ -41,7 +42,10 @@ SRC =	main.c \
 		exec/execution.c \
 		exec/path.c \
 		exec/redirection.c \
-		exec/error_exec.c
+		exec/error_exec.c \
+		exec/redir_utils.c \
+		exec/exec_ast.c \
+		exec/exec_ast_utils.c
 		
 OBJ_DIR = obj/
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/20 15:07:59 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/21 15:41:42 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@
 # define RESET "\033[0m"
 
 # include "../libft/libft.h"
+# include "lexing/lexer.h"
 # include "./builtin/builtin.h"
 # include "exec/execution.h"
 # include "expender/expander.h"
-# include "lexing/lexer.h"
 # include "parsing/parser.h"
 # include <readline/history.h>
 # include <readline/readline.h>

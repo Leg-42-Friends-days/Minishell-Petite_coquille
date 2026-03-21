@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/21 13:48:08 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/21 15:33:20 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,28 +60,41 @@ typedef struct s_exec
 	int					exit_code;
 }						t_exec;
 
-// EXECUTION
-void		execution(t_global *global);
-int			exec_cmd(t_ast *ast, t_env *env);
-void		exec_pipe(t_ast *ast, t_env *env, int *error_code, t_global *global);
-void		exec_and(t_ast *ast, t_env *env, int *error_code, t_global *global);
-void		exec_or(t_ast *ast, t_env *env, int *error_code, t_global *global);
-void		exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *global);
-void		print_tab(char **tabl);
+// EXECUTION.c
+void	execution(t_global *global);
+void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global);
 
-// PATH
-char		*find_path(t_env *env);
-char		*right_path(char **path, char *cmd);
-char		*find_cmd(t_env *env, char *cmd);
+// PATH.c
+char	*find_path(t_env *env);
+char	*right_path(char **path, char *cmd);
+char	*find_cmd(t_env *env, char *cmd);
+char	*init_path(t_ast **ast, t_env *env);
 
-// REDIRECTION
-void		redirection(t_ast *node);
-void		run_through_here_doc(t_ast *ast, t_env *env);
-void		restore_redirection(t_ast *node);
+// REDIRECTION.c
+void	redirection(t_ast *node);
+void	run_through_here_doc(t_ast *ast, t_env *env);
+void	restore_redirection(t_ast *node);
 
 // ERROR_EXEC.c
-void		error_pid(char **paths);
-void		error_pid_pipe(void);
-void		error_pipe(void);
+void	error_pid(char **paths);
+void	error_pid_pipe(void);
+void	error_pipe(void);
+
+// REDIR_UTILS.c
+void	redir_stdin(int fd, t_redir *current);
+void	redir_stdout_trunc(int fd, t_redir *current);
+void	redir_stdout_append(int fd, t_redir *current);
+
+// EXEC_AST.c
+int		exec_cmd(t_ast *ast, t_env *env);
+void	exec_pipe(t_ast *ast, t_env *env, int *error_code, t_global *global);
+void	exec_and(t_ast *ast, t_env *env, int *error_code, t_global *global);
+void	exec_or(t_ast *ast, t_env *env, int *error_code, t_global *global);
+void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g);
+
+// EXEC_AST_UTILS.c
+void	child_cmd(t_ast **ast, char **path);
+void	pipe_first_child(t_ast **ast, int *fd, t_env **env, t_global *global);
+void	pipe_second_child(t_ast **ast, int *fd, t_env **env, t_global *global);
 
 #endif

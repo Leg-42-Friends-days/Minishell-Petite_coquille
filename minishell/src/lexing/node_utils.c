@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 11:35:46 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/18 11:30:36 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/21 15:57:47 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,44 @@ void	printmini(t_token **mini)
 		cursor = next;
 		i++;
 	}
+}
+
+void	add_char_2(char *buffer, char new, char *temp)
+{
+	int	i;
+
+	i = 0;
+	if (buffer)
+	{
+		while (buffer[i] != '\0')
+		{
+			temp[i] = buffer[i];
+			i++;
+		}
+	}
+	temp[i] = new;
+	i++;
+	temp[i] = '\0';
+}
+
+char	*add_char(char *buffer, char new, t_state *state)
+{
+	char	*temp;
+	int		len;
+
+	if (!buffer)
+		len = 0;
+	else
+		len = ft_strlen(buffer);
+	temp = malloc(sizeof(char) * len + 2);
+	if (!temp)
+	{
+		if (buffer)
+			free(buffer);
+		*state = ERROR;
+		return (NULL);
+	}
+	add_char_2(buffer, new, temp);
+	free(buffer);
+	return (temp);
 }

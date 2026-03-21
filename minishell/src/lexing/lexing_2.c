@@ -6,51 +6,11 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:30:32 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/16 14:00:05 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/21 15:58:55 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-
-void	add_char_2(char *buffer, char new, char *temp)
-{
-	int	i;
-
-	i = 0;
-	if (buffer)
-	{
-		while (buffer[i] != '\0')
-		{
-			temp[i] = buffer[i];
-			i++;
-		}
-	}
-	temp[i] = new;
-	i++;
-	temp[i] = '\0';
-}
-
-char	*add_char(char *buffer, char new, t_state *state)
-{
-	char	*temp;
-	int		len;
-
-	if (!buffer)
-		len = 0;
-	else
-		len = ft_strlen(buffer);
-	temp = malloc(sizeof(char) * len + 2);
-	if (!temp)
-	{
-		if (buffer)
-			free(buffer);
-		*state = ERROR;
-		return (NULL);
-	}
-	add_char_2(buffer, new, temp);
-	free(buffer);
-	return (temp);
-}
 
 void	close_token(t_token **mini_vars)
 {

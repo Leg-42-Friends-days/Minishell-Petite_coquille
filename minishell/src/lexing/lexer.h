@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:14:19 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/02/27 15:33:54 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/21 15:58:28 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,11 +119,24 @@ void		meta_cara(char **buffer, char cara, t_token **mini, t_state *state);
 void		other_cara(char **buf, char cara, t_token **mini, t_state *state);
 void		brackets(char **buffer, char cara, t_token **mini, t_state *state);
 
+// CARA_TYPES_UTILS.c
+void		meta_cara_3(char **buffer, char cara, t_token **mini, t_state *s);
+void		meta_cara_2(char **buffer, char cara, t_token **mini, t_state *s);
+void		meta_cara(char **buffer, char cara, t_token **mini, t_state *state);
+void		other_cara_if(char **buffer, t_token **mini_vars, t_state *state);
+void		other_cara(char **buffer, char cara, t_token **mini, t_state *s);
+
 // NODE_UTILS
 void		printmini(t_token **mini);
 void		ft_miniclear(t_token **lst);
 void		ft_minidelone(t_sub_token *lst);
+char		*add_char(char *buffer, char new, t_state *state);
+void		add_char_2(char *buffer, char new, char *temp);
 
+// TEST
 void		*ft_malloc(size_t size);
+void		print_tab(char **tabl);
+
+typedef struct s_ast	t_ast;
 
 #endif

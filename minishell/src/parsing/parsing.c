@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/21 14:04:15 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/21 15:39:18 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,46 +96,6 @@ t_ast	*parse_or(t_token **token, t_global *global)
 		left = node;
 	}
 	return (left);
-}
-
-void	print_ast(t_ast *ast)
-{
-	if (ast != NULL)
-	{
-		if (ast->type)
-			printf("%u\n", ast->type);
-		if (ast->cmd_token)
-		{
-			while (ast->cmd_token && ast->cmd_token->type < 5)
-			{
-				if (ast->cmd_token->sub_token->var)
-					printf("AST CONTENT : %s\n", ast->cmd_token->sub_token->var);
-				if (ast->cmd_token->next)
-					ast->cmd_token = ast->cmd_token->next;
-				else
-					break ;
-			}
-		}
-		if (ast->redirs)
-		{
-			while (ast->redirs)
-			{
-				if (ast->redirs->type)
-					printf("REDIR VALUE : %u\n", ast->redirs->type);
-				if (ast->redirs->target->sub_token->var)
-					printf("REDIR CONTENT : %s\n", ast->redirs->target->sub_token->var);
-				if (ast->redirs->next)
-					ast->redirs = ast->redirs->next;
-				else
-					break ;
-			}
-		}
-		if (ast->left)
-			print_ast(ast->left);
-		if (ast->right)
-			print_ast(ast->right);
-		printf("\n");
-	}
 }
 
 t_ast	*parser(t_token **token, t_global *global)
