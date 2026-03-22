@@ -84,11 +84,20 @@ bool	get_equal(char *str)
 	return (false);
 }
 
+bool	key_add(t_env *env, char *key, char *content)
+{
+
+}
+
 bool	key_exist(t_env *env, char *key, char *content)
 {
 	while (env != NULL)
 	{
-		if (ft_strncmp(env->key, key, -1) == 0)
+		if (key_add(env, key, content) == true)
+		{
+			return (true);
+		}
+		else if (ft_strncmp(env->key, key, -1) == 0)
 		{
 			free(env->content);
 			env->content = ft_strdup(content);
