@@ -995,9 +995,18 @@ void	add_split_words(t_ast *ast, char **split, int *index)
 	{
 		if (split[i][0] != '\0')
 		{
-			add_str_to_cmd(ast, index, split[i]);
-			if (check_if_empty(split, i))
+			if (check_if_wildcard(split[i]) == false)
+			{
 				add_index(ast, index);
+				*index = expand_wildcard(split[i], ast, index);
+				ast->cmd2[*index] = NULL;
+			}
+			else
+			{
+				add_str_to_cmd(ast, index, split[i]);
+				if (check_if_empty(split, i))
+					add_index(ast, index);
+			}
 		}
 		i++;
 	}
@@ -1032,7 +1041,8 @@ void	normal_quote(t_global *global, t_sub_token *sub, int *index)
 	tmp = normal_value(sub, global);
 	if (!tmp)
 		return ;
-	if (check_if_next_token_wild(sub) && !check_if_wildcard(tmp))
+	if (check_if_next_token_wild(sub) && !check_if_wildcard(tmp)
+		&& ft_strchr(tmp, ' ') == NULL)
 	{
 		add_index(global->ast, index);
 		*index = expand_wildcard(tmp, global->ast, index);
@@ -1171,8 +1181,7 @@ int	check_if_add(t_sub_token *sub, t_global *global)
 	if (ft_strchr(str, ' '))
 	{
 		split = ft_split(str, ' ');
-		word = count_split_word(split);
-		i += add_len(sub, word);
+		i += add_normal_len(split);
 		free_split(split);
 	}
 	else if (check_if_wildcard(str) == false)
