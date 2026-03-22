@@ -6,13 +6,34 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/22 15:51:46 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/22 17:34:28 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int	exec_cmd(t_ast *ast, t_env *env)
+int is_directory(char *path)
+{
+    struct stat st;
+
+    if (stat(path, &st) != 0)
+    {
+        perror("minishell");
+		free(path);
+        return (127);
+    }
+    if (S_ISDIR(st.st_mode))
+    {
+		write(1, "minishell: ", 11);
+		write(1, path, ft_strlen(path));
+		write(1, ": Is a directory\n", 17);
+		free(path);
+        return (126);
+    }
+	return (0);
+}
+
+int	exec_cmd(t_ast *ast, t_env *env, t_global *global)
 {
 	char	*path;
 	pid_t	pid;
@@ -23,11 +44,14 @@ int	exec_cmd(t_ast *ast, t_env *env)
 	path = init_path(&ast, env);
 	if (!path)
 		return (127);
+	status = is_directory(path);
+	if (status != 0)
+		return (status);
 	pid = fork();
 	if (pid == -1)
 		error_pid(&path);
 	if (pid == 0)
-		child_cmd(&ast, &path);
+		child_cmd(&ast, &path, global);
 	free(path);
 	waitpid(pid, &status, 0);
 	signal(SIGINT, handler);

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 14:14:15 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/21 16:14:49 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/22 17:18:00 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,7 @@ char	*find_cmd(t_env *env, char *cmd)
 	if (!tab_path)
 		return (NULL);
 	final_path = right_path(tab_path, cmd);
-	if (!final_path)
-		free_cmd2(tab_path);
+	free_cmd2(tab_path);
 	return (final_path);
 }
 

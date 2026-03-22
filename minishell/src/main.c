@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/21 16:33:27 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/22 17:36:03 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	main(int ac, char **av, char **envp)
 			global->ast = parser(&mini_vars, global);
 			//printmini(&mini_vars);
 			//free_parser(global->ast);
-			run_through_here_doc(global->ast, global->env);
+			run_through_here_doc(global->ast, global->env, global);
 			//expand_function(global);
 			//print_tab(global->ast->cmd2);
 			execution(global);

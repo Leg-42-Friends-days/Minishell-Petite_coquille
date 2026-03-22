@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/22 15:52:04 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/22 17:12:21 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,14 @@ void	redir_stdout_trunc(t_redir *current);
 void	redir_stdout_append(t_redir *current);
 
 // EXEC_AST.c
-int		exec_cmd(t_ast *ast, t_env *env);
+int		exec_cmd(t_ast *ast, t_env *env, t_global *global);
 void	exec_pipe(t_ast *ast, t_env *env, int *error_code, t_global *global);
 void	exec_and(t_ast *ast, t_env *env, int *error_code, t_global *global);
 void	exec_or(t_ast *ast, t_env *env, int *error_code, t_global *global);
 void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g);
 
 // EXEC_AST_UTILS.c
-void	child_cmd(t_ast **ast, char **path);
+void	child_cmd(t_ast **ast, char **path, t_global *global);
 void	pipe_first_child(t_ast **ast, int *fd, t_env **env, t_global *global);
 void	pipe_second_child(t_ast **ast, int *fd, t_env **env, t_global *global);
 void	close_saved_fd(t_ast *ast);

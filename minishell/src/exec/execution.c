@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/22 15:37:02 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/22 18:01:36 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global)
 				restore_redirection(ast);
 			}
 			else
-				*error_code = exec_cmd(ast, env);
+				*error_code = exec_cmd(ast, env, global);
 		}
 		if (ast->type == AST_PIPE)
 			exec_pipe(ast, env, error_code, global);

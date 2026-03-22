@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/21 15:39:18 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/22 17:45:47 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ t_ast	*parser(t_token **token, t_global *global)
 		write(2, "Minishell : syntax error near unexpected '", 42);
 		write(2, (*token)->sub_token->var, ft_strlen((*token)->sub_token->var));
 		write(2, "'\n", 2);
+		*global->error_code = 2;
 		return (NULL);
 	}
 	ast = parse_or(token, global);
