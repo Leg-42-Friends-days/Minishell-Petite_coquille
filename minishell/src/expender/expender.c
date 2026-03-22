@@ -1167,7 +1167,6 @@ int	check_if_add(t_sub_token *sub, t_global *global)
 	char	*str;
 	char	**split;
 	int		i;
-	//int		word;
 
 	i = 0;
 	if (sub->quote != NORMAL)
