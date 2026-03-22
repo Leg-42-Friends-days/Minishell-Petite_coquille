@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/22 14:41:04 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/22 15:37:02 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,7 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global)
 		{
 			expand_function(ast, global);
 			if (!ast->cmd2 || !ast->cmd2[0])
-			{
-				printf("lolilol\n");
 				return ;
-			}
 			if (is_bult_in(ast->cmd2) == 1)
 			{
 				redirection(ast);
