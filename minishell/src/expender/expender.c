@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/22 14:39:39 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/22 15:01:45 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1012,7 +1012,7 @@ void	add_split_words(t_ast *ast, char **split, int *index)
 	}
 }
 
-void	double_quote(t_global *global, t_sub_token *sub, int *index)
+void	double_quote(t_ast *ast, t_global *global, t_sub_token *sub, int *index)
 {
 	char	*tmp;
 
@@ -1023,7 +1023,7 @@ void	double_quote(t_global *global, t_sub_token *sub, int *index)
 	tmp = remove_null(tmp);
 	if (!tmp)
 		return ;
-	add_str_to_cmd(global->ast, index, tmp);
+	add_str_to_cmd(ast, index, tmp);
 	free(tmp);
 }
 
@@ -1032,7 +1032,7 @@ void	single_quote(t_ast *ast, t_sub_token *sub, int *index)
 	add_str_to_cmd(ast, index, sub->var);
 }
 
-void	normal_quote(t_global *global, t_sub_token *sub, int *index)
+void	normal_quote(t_ast *ast, t_global *global, t_sub_token *sub, int *index)
 {
 	char	*tmp;
 	char	**split;
@@ -1044,21 +1044,21 @@ void	normal_quote(t_global *global, t_sub_token *sub, int *index)
 	if (check_if_next_token_wild(sub) && !check_if_wildcard(tmp)
 		&& ft_strchr(tmp, ' ') == NULL)
 	{
-		add_index(global->ast, index);
-		*index = expand_wildcard(tmp, global->ast, index);
-		global->ast->cmd2[*index] = NULL;
+		add_index(ast, index);
+		*index = expand_wildcard(tmp, ast, index);
+		ast->cmd2[*index] = NULL;
 		return (free(tmp));
 	}
 	space = (ft_strchr(tmp, ' ') != NULL);
 	if (!space)
-		return (add_str_to_cmd(global->ast, index, tmp), free(tmp));
+		return (add_str_to_cmd(ast, index, tmp), free(tmp));
 	if (sub->prev && (sub->prev->quote == DOUBLE || sub->prev->quote == SINGLE))
-		add_index(global->ast, index);
+		add_index(ast, index);
 	split = ft_split(tmp, ' ');
 	free(tmp);
 	if (!split)
 		return ;
-	add_split_words(global->ast, split, index);
+	add_split_words(ast, split, index);
 	free_split(split);
 }
 
@@ -1091,41 +1091,41 @@ int	add_len(t_sub_token *sub, int word)
 	return (i);
 }
 
-void	expand_token(t_global *global, t_token *current_token, int *index)
+void	expand_token(t_ast *ast, t_global *global, t_token *current_token, int *index)
 {
 	t_sub_token	*current_sub;
 
-	global->ast->cmd2[*index] = NULL;
+	ast->cmd2[*index] = NULL;
 	current_sub = current_token->sub_token;
 	while (current_sub != NULL)
 	{
 		if (!check_dollars(current_sub))
 		{
 			if (current_sub->quote == DOUBLE)
-				double_quote(global, current_sub, index);
+				double_quote(ast, global, current_sub, index);
 			else if (current_sub->quote == SINGLE)
-				single_quote(global->ast, current_sub, index);
+				single_quote(ast, current_sub, index);
 			else if (current_sub->quote == NORMAL)
-				normal_quote(global, current_sub, index);
+				normal_quote(ast, global, current_sub, index);
 		}
 		current_sub = current_sub->next;
 	}
-	add_index(global->ast, index);
+	add_index(ast, index);
 }
 
-void	call_expand(t_global *global)
+void	call_expand(t_ast *ast, t_global *global)
 {
 	t_token	*current_token;
 	int		index;
 
 	index = 0;
-	current_token = global->ast->cmd_token;
+	current_token = ast->cmd_token;
 	while (current_token != NULL && current_token->type == WORD)
 	{
-		expand_token(global, current_token, &index);
+		expand_token(ast, global, current_token, &index);
 		current_token = current_token->next;
 	}
-	global->ast->cmd2[index] = NULL;
+	ast->cmd2[index] = NULL;
 }
 
 int	wildcard_len_add(void)
@@ -1167,7 +1167,7 @@ int	check_if_add(t_sub_token *sub, t_global *global)
 	char	*str;
 	char	**split;
 	int		i;
-	int		word;
+	//int		word;
 
 	i = 0;
 	if (sub->quote != NORMAL)
@@ -1189,14 +1189,14 @@ int	check_if_add(t_sub_token *sub, t_global *global)
 	return (free(str), i);
 }
 
-int	expand_len_token(t_global *global)
+int	expand_len_token(t_ast *ast, t_global *global)
 {
 	int			i;
 	t_token		*token;
 	t_sub_token	*sub_tok;
 
 	i = 0;
-	token = global->ast->cmd_token;
+	token = ast->cmd_token;
 	while (token != NULL && token->type == WORD)
 	{
 		i++;
@@ -1211,13 +1211,13 @@ int	expand_len_token(t_global *global)
 	return (i);
 }
 
-void	check_redirection(t_global *global)
+void	check_redirection(t_ast *ast, t_global *global)
 {
 	t_ast	*tmp;
 	t_redir	*re;
 	t_quote	quote;
 
-	tmp = global->ast;
+	tmp = ast;
 	if (!tmp || !tmp->redirs)
 		return ;
 	re = tmp->redirs;
@@ -1243,19 +1243,21 @@ void	check_redirection(t_global *global)
 	}
 }
 
-void	expand_function(t_global *global)
+void	expand_function(t_ast *ast, t_global *global)
 {
 	int	len;
 
 	len = 0;
 	if (!global)
 		return ;
-	if (check_if_word(global->ast) == 1)
+	if (!ast)
+		return ;
+	if (check_if_word(ast) == 1)
 	{
-		global->ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(global) + 1));
-		if (!global->ast->cmd2)
+		ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast, global) + 1));
+		if (!ast->cmd2)
 			return ;
-		call_expand(global);
+		call_expand(ast, global);
 	}
-	check_redirection(global);
+	check_redirection(ast, global);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:12:50 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/20 17:09:10 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/22 15:01:27 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,14 @@ int		len_cmd(char **str);
 void	free_split(char **str);
 char	*remove_null(char *str);
 bool	check_dollars(t_sub_token *current_sub);
-void	expand_token(t_global *global, t_token *current_token, int *index);
-void	call_expand(t_global *global);
+void	expand_token(t_ast *ast, t_global *global, t_token *current_token, int *index);
+void	call_expand(t_ast *ast, t_global *global);
 int		wildcard_len_add(void);
 int		add_normal_len(char **split);
 int		check_if_add(t_sub_token *sub, t_global *global);
-int		expand_len_token(t_global *global);
-void	check_redirection(t_global *global);
-void	expand_function(t_global *global);
+int		expand_len_token(t_ast *ast, t_global *global);
+void	check_redirection(t_ast *ast, t_global *global);
+void	expand_function(t_ast *ast, t_global *global);
 int		new_string_len(char *new_str, int i, t_global *global);
 bool	check_if_empty(char **split, int i);
 void	add_index(t_ast *ast, int *index);
@@ -82,9 +82,9 @@ void	add_str_to_cmd(t_ast *ast, int *index, char *str);
 char	*check_if_space(char *str);
 char	*normal_value(t_sub_token *sub, t_global *global);
 void	add_split_words(t_ast *ast, char **split, int *index);
-void	double_quote(t_global *global, t_sub_token *sub, int *index);
+void	double_quote(t_ast *ast, t_global *global, t_sub_token *sub, int *index);
 void	single_quote(t_ast *ast, t_sub_token *sub, int *index);
-void	normal_quote(t_global *global, t_sub_token *sub, int *index);
+void	normal_quote(t_ast *ast, t_global *global, t_sub_token *sub, int *index);
 int		count_split_word(char **split);
 int		add_len(t_sub_token *sub, int words);
 
