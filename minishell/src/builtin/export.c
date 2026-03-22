@@ -65,14 +65,19 @@ char	*get_content(char *test)
 	return (str);
 }
 
-bool	get_equal(char *test)
+bool	get_equal(char *str)
 {
 	int	i;
 
 	i = 0;
-	while (test[i])
+	if (str[i] == '=')
 	{
-		if (test[i] == '=')
+		ft_printf(2, "export: `%s: not a valid identifier\n", str);
+		return (false);
+	}
+	while (str[i])
+	{
+		if (str[i] == '=')
 			return (true);
 		i++;
 	}

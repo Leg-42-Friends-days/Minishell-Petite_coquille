@@ -26,32 +26,62 @@ bool	compare_unset(char *env, char *unset)
 	return (false);
 }
 
+void	call_unset(t_env *env, char *str)
+{
+	t_env *tmp;
+	
+	tmp = env;
+	while (tmp != NULL)
+	{
+		if (compare_unset(env->key, str) == true)
+		{
+			printf("true\n");
+		}
+		tmp = tmp->next;
+	}
+}
+
 int	function_unset(t_env *env, char **unset)
 {
-	t_env	*tmp;
-	t_env	*head;
+	int i;
 
-	head = lstfirst_env(env);
-	env = head;
-	while (env != NULL)
+	i = 0;
+
+	while (unset[i])
 	{
-		if (compare_unset(env->key, *unset) == true)
-		{
-			tmp = env->next;
-			if (env->previous)
-				env->previous->next = env->next;
-			else
-				head = env->next;
-			if (env->next)
-				env->next->previous = env->previous;
-			free(env->key);
-			if (env->free_export == true)
-				free(env->content);
-			free(env);
-			env = tmp;
-		}
-		else
-			env = env->next;
+		printf("UNSET\n")																						;
+		call_unset(env, unset[i]);
+		i++;
 	}
 	return (0);
 }
+
+// int	function_unset(t_env *env, char **unset)
+// {
+// 	t_env	*tmp;
+// 	t_env	*head;
+
+// 	head = lstfirst_env(env);
+// 	env = head;
+// 	while (env != NULL)
+// 	{
+// 		if (compare_unset(env->key, *unset) == true)
+// 		{
+// 			tmp = env->next;
+// 			if (env->previous)
+// 				env->previous->next = env->next;
+// 			else
+// 				head = env->next;
+// 			if (env->next)
+// 				env->next->previous = env->previous;
+// 			free(env->key);
+// 			if (env->free_export == true)
+// 				free(env->content);
+// 			free(env);
+// 			env = tmp;
+// 		}
+// 		else
+// 			env = env->next;
+// 	}
+// 	return (0);
+// }
