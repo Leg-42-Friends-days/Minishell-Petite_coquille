@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:44 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/09 11:56:22 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/23 20:45:40 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,61 @@ t_env	*ft_getenv_node(t_env *env, char *key)
 	return (NULL);
 }
 
-char	*define_target(char **cmd, t_env *env)
+int	invalid_option(char **cmd)
+{
+	int	i;
+	int	r;
+
+	i = 0;
+	r = 0;
+	while (cmd[1][i] == '-')
+	{
+		i++;
+	}
+	if (cmd[1][i] == '\0')
+		r = 1;
+	if (i == 2)
+		r = 2;
+	return (r);
+}
+
+char	*target_HOME(t_env *env, int *error_code, char *target)
+{
+	target = ft_getenv(env, "HOME");
+	if (!target)
+	{
+		write(2, "cd: HOME nos set\n", 17);
+		*error_code = 1;
+		return (NULL);
+	}
+	return (target);
+}
+
+char	*define_target(char **cmd, t_env *env, int *error_code)
 {
 	char	*target;
 
 	target = NULL;
 	if (!cmd[1])
-	{
-		target = ft_getenv(env, "HOME");
-		if (!target)
-		{
-			write(2, "cd: HOME nos set\n", 17);
-			return (NULL);
-		}
-	}
+		return(target_HOME(env, error_code, target));
 	if (cmd[1])
 	{
 		if (!ft_strncmp(cmd[1], "-", 2))
-			target = ft_getenv(env, "OLDPWD");
-		else if (cmd[2] != NULL)
+			return(ft_getenv(env, "OLDPWD"));
+		if (invalid_option(cmd) == 2 && cmd[2])
+			return(cmd[2]);
+		if (invalid_option(cmd) == 2 && !cmd[2])
+			return(target_HOME(env, error_code, target));
+		if (invalid_option(cmd) == 1)
+		{
+			write(2, "cd: --: invalid option\n", 23);
+			*error_code = 2;
+			return (NULL);
+		}
+		else if (cmd[2])
 		{
 			write(2, "cd : too many arguments\n", 24);
+			*error_code = 1;
 			return (NULL);
 		}
 		else
@@ -119,11 +153,12 @@ int	ft_cd(char **cmd, t_env *env)
 {
 	char	*oldpwd;
 	char	*target;
+	int		error_code;
 
 	oldpwd = getcwd(NULL, 0);
-	target = define_target(cmd, env);
+	target = define_target(cmd, env, &error_code);
 	if (!target || target[0] == '\0')
-		return (0);
+		return (error_code);
 	if (!oldpwd)
 	{
 		write(2, "minishell: cd: ", 15);

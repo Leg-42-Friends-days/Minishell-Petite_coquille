@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:08 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/23 09:33:39 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/23 19:16:55 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ int	option_echo(char **cmd)
 		else
 			break ;
 		i++;
-		
 	}
 	return (count);
 }
