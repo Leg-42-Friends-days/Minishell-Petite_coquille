@@ -65,24 +65,38 @@ char	*get_content(char *test)
 	return (str);
 }
 
-bool	get_equal(char *test)
+bool	get_equal(char *str)
 {
 	int	i;
 
 	i = 0;
-	while (test[i])
+	if (str[i] == '=')
 	{
-		if (test[i] == '=')
+		ft_printf(2, "export: `%s: not a valid identifier\n", str);
+		return (false);
+	}
+	while (str[i])
+	{
+		if (str[i] == '=')
 			return (true);
 		i++;
 	}
 	return (false);
 }
 
+// bool	key_add(t_env *env, char *key, char *content)
+// {
+
+// }
+
 bool	key_exist(t_env *env, char *key, char *content)
 {
 	while (env != NULL)
 	{
+		// if (key_add(env, key, content) == true)
+		// {
+		// 	return (true);
+		// }
 		if (ft_strncmp(env->key, key, -1) == 0)
 		{
 			free(env->content);

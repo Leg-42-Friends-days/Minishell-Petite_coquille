@@ -26,32 +26,40 @@ bool	compare_unset(char *env, char *unset)
 	return (false);
 }
 
-int	function_unset(t_env *env, char **unset)
+void	call_unset(t_env *env, char *str)
 {
 	t_env	*tmp;
-	t_env	*head;
 
-	head = lstfirst_env(env);
-	env = head;
-	while (env != NULL)
+	tmp = env;
+	while (tmp != NULL)
 	{
-		if (compare_unset(env->key, *unset) == true)
+		if (compare_unset(tmp->key, str) == true)
 		{
-			tmp = env->next;
-			if (env->previous)
-				env->previous->next = env->next;
+			if (tmp->previous)
+				tmp->previous->next = tmp->next;
 			else
-				head = env->next;
-			if (env->next)
-				env->next->previous = env->previous;
-			free(env->key);
-			if (env->free_export == true)
-				free(env->content);
-			free(env);
-			env = tmp;
+				env = tmp->next;
+			if (tmp->next)
+				tmp->next->previous = tmp->previous;
+			free(tmp->key);
+			if (tmp->free_export == true)
+				free(tmp->content);
+			free(tmp);
+			return ;
 		}
-		else
-			env = env->next;
+		tmp = tmp->next;
+	}
+}
+
+int	function_unset(t_env *env, char **unset)
+{
+	int	i;
+
+	i = 1;
+	while (unset[i])
+	{
+		call_unset(env, unset[i]);
+		i++;
 	}
 	return (0);
 }
