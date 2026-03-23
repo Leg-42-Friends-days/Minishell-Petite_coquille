@@ -238,7 +238,7 @@ int	new_string_len(char *new_str, int i, t_global *global)
 	if (content)
 		len = ft_strlen(content);
 	else
-		len = ft_strlen(key) + 1;
+		len = 0;
 	free(key);
 	free(content);
 	return (len);
