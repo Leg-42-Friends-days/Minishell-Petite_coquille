@@ -75,6 +75,8 @@ int	main(int ac, char **av, char **envp)
 		if (!line)
 		{
 			write(1, "exit\n", 5);
+			if (global->env)
+				free_env(global->env);
 			//if (mini_vars)
 			//	ft_miniclear(&mini_vars);
 			free(global->error_code);
@@ -106,7 +108,6 @@ int	main(int ac, char **av, char **envp)
 			ft_miniclear(&(global->head));
 			free_parser(global->ast);
 			mini_vars = NULL;
-			//free_env(global->env);
 			//free(global);
 		}
 		//printf("g_signal %d\n", g_signal);

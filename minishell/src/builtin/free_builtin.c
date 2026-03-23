@@ -16,6 +16,8 @@ void	free_env(t_env *env)
 {
 	t_env	*tmp;
 
+	if (!env)
+		return ;
 	while (env->next != NULL)
 	{
 		tmp = env->next;

@@ -72,7 +72,7 @@ t_env	*lstadd_back_env(t_env *lst, char *key, char *value)
 		return (NULL);
 	last->key = key;
 	last->content = value;
-	last->free_export = false;
+	last->free_export = true;
 	last->next = NULL;
 	if (lst == NULL)
 	{
