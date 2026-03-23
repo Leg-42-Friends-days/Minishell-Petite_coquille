@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/20 15:12:38 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/23 10:53:54 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,11 @@ t_ast		*parse_or(t_token **token, t_global *global);
 void		print_ast(t_ast *ast);
 
 //CHECK_TOKEN.C
-bool		check_token(t_token *token);
+bool		check_token(t_token **token);
 
 //AST_REDIRS.C
-int			redir_node(t_redir **redir, t_token **token);
-int			token_list_redir(t_token **token, t_ast *node);
+int			redir_node(t_redir **redir, t_token **token, t_global *global);
+int			token_list_redir(t_token **token, t_ast *node, t_global *global);
 
 //AST_NODE_UTILS.c
 t_ast		*ast_node(int type);
@@ -110,8 +110,8 @@ t_ast		*free_malloc_error(t_ast *node);
 
 //AST_CMD_UTILS.c
 int			redir_before_word(t_ast **node, t_token **token, t_global *global);
-int			redir_after_word(t_ast **node, t_token **token);
-int			subshell_redirs(t_ast *node, t_token **token);
+int			redir_after_word(t_ast **node, t_token **token, t_global *global);
+int			subshell_redirs(t_ast *node, t_token **token, t_global *global);
 int			parse_subshell(t_ast **node, t_token **token, t_global *global);
 
 #endif

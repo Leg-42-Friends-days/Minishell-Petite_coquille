@@ -6,26 +6,27 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 14:04:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/22 15:56:24 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/23 10:49:09 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	error_no_target(void)
+int	error_no_target(t_global *global)
 {
 	write(2, "minishell: syntax error near unexpected token `newline'\n", 56);
+	*global->error_code = 2;
 	return (1);
 }
 
-int	redir_node(t_redir **redir, t_token **token)
+int	redir_node(t_redir **redir, t_token **token, t_global *global)
 {
 	t_redir	*node;
 	t_token	*file;
 	t_redir	*current;
 
 	if (!(*token)->next)
-		return (error_no_target());
+		return (error_no_target(global));
 	node = malloc(sizeof(t_redir));
 	if (!node)
 		return (1);
@@ -61,7 +62,7 @@ void	fill_redir(t_token *r, t_token *f, t_token *p, t_token *n)
 		n->prev = p;
 }
 
-int	token_list_redir(t_token **token, t_ast *node)
+int	token_list_redir(t_token **token, t_ast *node, t_global *global)
 {
 	t_token	*redir;
 	t_token	*file;
@@ -72,7 +73,7 @@ int	token_list_redir(t_token **token, t_ast *node)
 		prev = (*token)->prev;
 	else
 		prev = NULL;
-	if ((redir_node(&node->redirs, token)) == 1)
+	if ((redir_node(&node->redirs, token, global)) == 1)
 		return (1);
 	redir = (*token);
 	file = redir->next;

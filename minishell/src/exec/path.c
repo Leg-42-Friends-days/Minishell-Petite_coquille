@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 14:14:15 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/22 17:18:00 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/23 09:43:46 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*right_path(char **path, char *cmd)
 	final_path = browse(path, cmdd);
 	if (!final_path)
 		return (NULL);
-	free_cmd(path);
+	//free_cmd2(path);
 	return (final_path);
 }
 

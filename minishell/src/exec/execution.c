@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/22 18:01:36 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/23 11:30:12 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global)
 			expand_function(ast, global);
 			if (!ast->cmd2 || !ast->cmd2[0])
 				return ;
+			//print_tab(ast->cmd2);
 			if (is_bult_in(ast->cmd2) == 1)
 			{
 				redirection(ast);

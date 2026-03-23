@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 14:32:52 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/20 14:44:00 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/23 10:51:45 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,15 @@ int	is_redir(t_token *token)
 		return (0);
 }
 
-int	subshell_redirs(t_ast *node, t_token **token)
+int	subshell_redirs(t_ast *node, t_token **token, t_global *global)
 {
 	if (is_redir(*token))
 	{
-		if ((token_list_redir(token, node)) == 1)
+		if ((token_list_redir(token, node, global)) == 1)
 			return (1);
 		while (is_redir(*token))
 		{
-			if ((token_list_redir(token, node)) == 1)
+			if ((token_list_redir(token, node, global)) == 1)
 				return (1);
 		}
 		if (*token)
@@ -39,7 +39,7 @@ int	subshell_redirs(t_ast *node, t_token **token)
 	{
 		if (is_redir(*token))
 		{
-			if ((token_list_redir(token, node)) == 1)
+			if ((token_list_redir(token, node, global)) == 1)
 				return (1);
 		}
 		else if (*token)
@@ -67,7 +67,7 @@ int	parse_subshell(t_ast **node, t_token **token, t_global *global)
 			write(2, "minishell: syntax error: unclosed parenthesis\n", 46);
 			return (1);
 		}
-		if (subshell_redirs(*node, token) == 1)
+		if (subshell_redirs(*node, token, global) == 1)
 			return (1);
 		return (2);
 	}
@@ -79,12 +79,12 @@ int	redir_before_word(t_ast **node, t_token **token, t_global *global)
 	if (is_redir(*token))
 	{
 		*node = ast_node(AST_CMD);
-		if ((token_list_redir(token, *node)) == 1)
+		if ((token_list_redir(token, *node, global)) == 1)
 			return (1);
 		while (is_redir(*token))
 		{
 			global->head = *token;
-			if ((token_list_redir(token, *node)) == 1)
+			if ((token_list_redir(token, *node, global)) == 1)
 				return (1);
 		}
 		if (*token)
@@ -95,13 +95,13 @@ int	redir_before_word(t_ast **node, t_token **token, t_global *global)
 	return (0);
 }
 
-int	redir_after_word(t_ast **node, t_token **token)
+int	redir_after_word(t_ast **node, t_token **token, t_global *global)
 {
 	while (*token && (*token)->type < 5)
 	{
 		if (is_redir(*token))
 		{
-			if ((token_list_redir(token, *node)) == 1)
+			if ((token_list_redir(token, *node, global)) == 1)
 				return (1);
 		}
 		else

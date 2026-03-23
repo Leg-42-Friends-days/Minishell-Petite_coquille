@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/22 17:45:47 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/23 10:53:12 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_ast	*parse_cmd(t_token **token, t_global *global)
 			return (free_malloc_error(node));
 		node->cmd_token = *token;
 	}
-	if (redir_after_word(&node, token) == 1)
+	if (redir_after_word(&node, token, global) == 1)
 		return (free_malloc_error(node));
 	return (node);
 }
@@ -101,14 +101,16 @@ t_ast	*parse_or(t_token **token, t_global *global)
 t_ast	*parser(t_token **token, t_global *global)
 {
 	t_ast	*ast;
+	t_token	*current;
 
 	if (!token || !*token)
 		return (0);
+	current = (*token);
 	ast = NULL;
-	if (check_token((*token)) == 1)
+	if (check_token((&current)) == 1)
 	{
 		write(2, "Minishell : syntax error near unexpected '", 42);
-		write(2, (*token)->sub_token->var, ft_strlen((*token)->sub_token->var));
+		write(2, current->sub_token->var, ft_strlen(current->sub_token->var));
 		write(2, "'\n", 2);
 		*global->error_code = 2;
 		return (NULL);

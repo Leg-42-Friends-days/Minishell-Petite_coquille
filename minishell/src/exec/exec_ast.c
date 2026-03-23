@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/22 17:34:28 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/23 11:53:33 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	exec_pipe(t_ast *ast, t_env *env, int *error_code, t_global *global)
 	pid_t	pid[2];
 	int		status;
 
+	g_signal = 1;
 	if (pipe(fd) == -1)
 		error_pipe();
 	pid[0] = fork();
@@ -88,6 +89,7 @@ void	exec_pipe(t_ast *ast, t_env *env, int *error_code, t_global *global)
 
 void	exec_and(t_ast *ast, t_env *env, int *error_code, t_global *global)
 {
+	g_signal = 1;
 	execution_2(ast->left, env, error_code, global);
 	if (*error_code == 0)
 		execution_2(ast->right, env, error_code, global);
@@ -95,6 +97,7 @@ void	exec_and(t_ast *ast, t_env *env, int *error_code, t_global *global)
 
 void	exec_or(t_ast *ast, t_env *env, int *error_code, t_global *global)
 {
+	g_signal = 1;
 	execution_2(ast->left, env, error_code, global);
 	if (*error_code != 0)
 		execution_2(ast->right, env, error_code, global);
@@ -105,6 +108,7 @@ void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g)
 	pid_t	pid;
 	int		status;
 
+	g_signal = 1;
 	pid = fork();
 	if (pid == -1)
 		error_pid_pipe();
