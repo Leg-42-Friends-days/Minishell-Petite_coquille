@@ -42,6 +42,11 @@ int					function_unset(t_env *env, char **unset);
 void				free_pwd(t_pwd *pwd);
 void				free_env(t_env *env);
 
+char				**initiate_table_env(t_env *env);
+char				*ft_envdup(t_env *env);
+int					len_table_env(t_env *env);
+
+
 // ECHO
 int					ft_echo(char **cmd, t_env *env);
 
@@ -57,5 +62,9 @@ int					ft_exit(char **cmd, t_env *env, int *error_code);
 
 // ENV
 int					affichage_env(t_env *env);
+
+// UNSET
+void	remove_first_or_last(t_env *tmp);
+void	remove_inside(t_env *tmp);
 
 #endif
