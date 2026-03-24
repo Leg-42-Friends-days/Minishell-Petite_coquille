@@ -3,33 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   exec_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/23 11:53:33 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 15:28:54 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int is_directory(char *path)
+int	is_directory(char *path)
 {
-    struct stat st;
+	struct stat	st;
 
-    if (stat(path, &st) != 0)
-    {
-        perror("minishell");
+	if (stat(path, &st) != 0)
+	{
+		perror("minishell");
 		free(path);
-        return (127);
-    }
-    if (S_ISDIR(st.st_mode))
-    {
+		return (127);
+	}
+	if (S_ISDIR(st.st_mode))
+	{
 		write(1, "minishell: ", 11);
 		write(1, path, ft_strlen(path));
 		write(1, ": Is a directory\n", 17);
 		free(path);
-        return (126);
-    }
+		return (126);
+	}
 	return (0);
 }
 
@@ -118,7 +118,7 @@ void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g)
 		redirection(ast);
 		execution_2(ast->left, env, error_code, g);
 		close_saved_fd(ast);
-		exit (*error_code);
+		exit(*error_code);
 	}
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
