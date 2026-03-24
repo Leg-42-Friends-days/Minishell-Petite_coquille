@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/24 15:13:57 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/24 15:22:40 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ char	*ft_envdup(t_env *env)
 	key = ft_strdup(env->key);
 	string = strjoin_exp(key, "=");
 	content = ft_strjoin(string, env->content);
+	free(string);
 	return (content);
 }
 
@@ -110,7 +111,9 @@ void	free_table(char **table)
 	}
 	if (table[i])
 		free(table[i]);
+	free(table);
 }
+
 int	main(int ac, char **av, char **envp)
 {
 	char		*line;
@@ -128,7 +131,7 @@ int	main(int ac, char **av, char **envp)
 	global->env = env_content(global->env, envp);
 	global->env->table = initiate_table_env(global->env);
 	print_env(global->env->table);
-	// free_table(global->env->table);
+	free_table(global->env->table);
 	global->error_code = (int *)malloc(sizeof(int));
 	*global->error_code = 0;
 	// affichage_env(global->env);
