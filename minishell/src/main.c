@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/24 15:37:57 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 19:00:33 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,14 @@ int	main(int ac, char **av, char **envp)
 			//printmini(&mini_vars);
 			if (!parser(&mini_vars, global))
 			{
-				//run_through_here_doc(global->ast, global->env, global);
-				//execution(global);
+				run_through_here_doc(global->ast, global->env, global);
+				execution(global);
+				ft_miniclear(&(global->head));
+				free_parser(global->ast);
+				mini_vars = NULL;
 			}
+			mini_vars = NULL;
+			//ft_miniclear(&(global->head));
 			//printmini(&mini_vars);
 			//free_parser(global->ast);
 			//run_through_here_doc(global->ast, global->env, global);
@@ -110,9 +115,9 @@ int	main(int ac, char **av, char **envp)
 			//print_tab(global->ast->cmd2);
 			//execution(global);
 			//printmini(&(global->head));
-			ft_miniclear(&(global->head));
-			free_parser(global->ast);
-			mini_vars = NULL;
+			//ft_miniclear(&(global->head));
+			//free_parser(global->ast);
+			//mini_vars = NULL;
 			//free(global);
 		}
 		//printf("g_signal %d\n", g_signal);

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/24 15:42:01 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 18:48:03 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,20 @@
 t_ast	*parse_cmd(t_token **token, t_global *global, int *error)
 {
 	t_ast	*node;
-	//int		error_code;
+	int		error_code;
 
 	node = NULL;
-	*error = parse_subshell(&node, token, global, error);
-	if (*error == 1)
+	error_code = parse_subshell(&node, token, global, error);
+	//*error = error_code;
+	if (error_code == 1)
 		return (free_malloc_error(node, error));
-	if (*error == 2)
+	if (error_code == 2)
 		return (node);
-	*error = redir_before_word(&node, token, global);
-	if (*error > 0)
+	error_code = redir_before_word(&node, token, global);
+	//*error = error_code;
+	if (error_code > 0)
 	{
-		if (*error == 1)
+		if (error_code == 1)
 			return (free_malloc_error(node, error));
 	}
 	else if (*token && (*token)->type == WORD)
@@ -87,6 +89,7 @@ int	parser(t_token **token, t_global *global)
 	t_token	*current;
 	int		error;
 
+	error = 0;
 	if (!token || !*token)
 		return (0);
 	current = (*token);
@@ -101,6 +104,6 @@ int	parser(t_token **token, t_global *global)
 	global->ast = parse_or_and(token, global, &error);
 	if (error != 0)
 		return (1);
-	print_ast(global->ast);
+	//print_ast(global->ast);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/24 10:27:20 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 18:46:40 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g)
 		redirection(ast);
 		execution_2(ast->left, env, error_code, g);
 		close_saved_fd(ast);
+		ft_miniclear(&(g->head));
+		free_parser(g->ast);
 		exit (*error_code);
 	}
 	waitpid(pid, &status, 0);

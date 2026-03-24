@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 14:33:35 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/24 15:06:21 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 18:55:44 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	free_parser(t_ast *ast)
 	t_redir	*current;
 	t_redir	*tmp;
 
+	current = NULL;
 	if (!ast)
 		return ;
 	if (ast->left)
@@ -40,7 +41,8 @@ void	free_parser(t_ast *ast)
 	if (ast->right)
 		free_parser(ast->right);
 	free_cmd2(ast->cmd2);
-	current = ast->redirs;
+	if (ast->redirs)
+		current = ast->redirs;
 	while (current)
 	{
 		free(current->target->sub_token->var);
@@ -70,6 +72,7 @@ void	free_cmd2(char **cmmd)
 
 t_ast	*free_malloc_error(t_ast *node, int *error)
 {
+	(void)error;
 	//write(2, "minishell: cannot allocate memory\n", 34);
 	*error = 1;
 	free_parser(node);
