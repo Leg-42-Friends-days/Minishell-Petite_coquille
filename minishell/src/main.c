@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/24 15:35:53 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/24 15:40:50 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,19 +100,7 @@ void	print_env(char **table)
 	}
 }
 
-void	free_table(char **table)
-{
-	int i;
 
-	i = 0;
-	while (table[i])
-	{
-		free(table[i]);
-		i++;
-	}
-	if (table[i])
-		free(table[i]);
-}
 
 int	main(int ac, char **av, char **envp)
 {
@@ -131,7 +119,6 @@ int	main(int ac, char **av, char **envp)
 	global->env = env_content(global->env, envp);
 	global->env->table = initiate_table_env(global->env);
 	// print_env(global->env->table);
-	// free_table(global->env->table);
 	global->error_code = (int *)malloc(sizeof(int));
 	*global->error_code = 0;
 	// affichage_env(global->env);
