@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 14:33:35 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/24 18:55:44 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 22:21:57 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,8 @@ void	free_cmd2(char **cmmd)
 
 t_ast	*free_malloc_error(t_ast *node, int *error)
 {
-	(void)error;
 	//write(2, "minishell: cannot allocate memory\n", 34);
-	*error = 1;
 	free_parser(node);
+	*error = 1;
 	return (NULL);
 }

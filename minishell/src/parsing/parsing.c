@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/24 18:48:03 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 22:13:12 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,11 @@ t_ast	*parse_cmd(t_token **token, t_global *global, int *error)
 
 	node = NULL;
 	error_code = parse_subshell(&node, token, global, error);
-	//*error = error_code;
 	if (error_code == 1)
 		return (free_malloc_error(node, error));
 	if (error_code == 2)
 		return (node);
 	error_code = redir_before_word(&node, token, global);
-	//*error = error_code;
 	if (error_code > 0)
 	{
 		if (error_code == 1)
@@ -99,11 +97,16 @@ int	parser(t_token **token, t_global *global)
 		write(2, current->sub_token->var, ft_strlen(current->sub_token->var));
 		write(2, "'\n", 2);
 		*global->error_code = 2;
+		ft_miniclear(&(global->head));
 		return (1);
 	}
 	global->ast = parse_or_and(token, global, &error);
 	if (error != 0)
+	{
+		ft_miniclear(&(global->head));
+		free_parser(global->ast);
 		return (1);
+	}
 	//print_ast(global->ast);
 	return (0);
 }

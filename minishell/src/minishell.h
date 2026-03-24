@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/21 15:41:42 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 22:54:23 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,11 @@ typedef struct s_ast t_ast;
 typedef struct s_global
 {
     int             *error_code;
+	t_token			*mini_vars;
 	t_ast			*ast;
 	t_env           *env;
 	t_token			*head;
+	t_token			*true_head;
 }				t_global;
 
 void		init_signals(void);
