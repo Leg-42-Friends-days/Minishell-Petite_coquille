@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:16:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/20 17:11:28 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/24 14:14:20 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_env
 	bool			free_export;
 	struct s_env	*next;
 	struct s_env	*previous;
+	char			**table;
 }					t_env;
 
 typedef struct s_pwd
