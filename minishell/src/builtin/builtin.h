@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:16:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/20 17:11:28 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/24 10:37:38 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define BUILTIN_H
 
 # include <stdbool.h>
+
+typedef struct s_global	t_global;
 
 typedef struct s_env
 {
@@ -52,7 +54,7 @@ char				*ft_getenv(t_env *env, char *key);
 int					ft_pwd(char **cmd, t_env *env);
 
 // EXIT
-int					ft_exit(char **cmd, t_env *env, int *error_code);
+int					ft_exit(char **cmd, t_env *env, int *error_code, t_global *global);
 
 // ENV
 int					affichage_env(t_env *env);

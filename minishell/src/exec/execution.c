@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/23 20:18:54 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 11:40:20 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,11 @@ int	is_bult_in(char **cmd)
 	return (0);
 }
 
-int	exec_bult_in(char **cmd, t_env *env, int *error_code)
+int	exec_bult_in(char **cmd, t_env *env, int *error_code, t_global *global)
 {
 	int	exit_status;
 
+	exit_status = 0;
 	if (ft_strncmp(cmd[0], "echo", 5) == 0)
 		exit_status = ft_echo(cmd, env);
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
@@ -42,7 +43,7 @@ int	exec_bult_in(char **cmd, t_env *env, int *error_code)
 	if (ft_strncmp(cmd[0], "pwd", 4) == 0)
 		exit_status = ft_pwd(cmd, env);
 	if (ft_strncmp(cmd[0], "exit", 5) == 0)
-		exit_status = ft_exit(cmd, env, error_code);
+		exit_status = ft_exit(cmd, env, error_code, global);
 	if (ft_strncmp(cmd[0], "export", 7) == 0)
 		exit_status = function_export(env, cmd);
 	if (ft_strncmp(cmd[0], "env", 4) == 0)
@@ -65,7 +66,7 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global)
 			if (is_bult_in(ast->cmd2) == 1)
 			{
 				redirection(ast);
-				*error_code = exec_bult_in(ast->cmd2, env, error_code);
+				*error_code = exec_bult_in(ast->cmd2, env, error_code, global);
 				restore_redirection(ast);
 			}
 			else

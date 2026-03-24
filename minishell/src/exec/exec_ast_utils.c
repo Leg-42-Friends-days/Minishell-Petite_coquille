@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:22:04 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/22 17:30:01 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 10:26:31 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	pipe_first_child(t_ast **ast, int *fd, t_env **env, t_global *global)
 	close_saved_fd(*ast);
 	ft_miniclear(&(global->head));
 	free_parser(global->ast);
-	exit(0);
+	exit(*global->error_code);
 }
 
 void	pipe_second_child(t_ast **ast, int *fd, t_env **env, t_global *global)
@@ -66,5 +66,5 @@ void	pipe_second_child(t_ast **ast, int *fd, t_env **env, t_global *global)
 	close_saved_fd(*ast);
 	ft_miniclear(&(global->head));
 	free_parser(global->ast);
-	exit(0);
+	exit(*global->error_code);
 }

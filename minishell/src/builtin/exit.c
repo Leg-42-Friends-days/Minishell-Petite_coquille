@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 11:49:59 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/20 14:33:07 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/24 11:43:25 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	free_before_exit(t_global *global)
+{
+	ft_miniclear(&(global->head));
+	free_parser(global->ast);
+	if (global->env)
+		free_env(global->env);
+	free(global->error_code);
+	free(global);
+}
 
 int	check_ft_atol(const char *str)
 {
@@ -92,12 +102,19 @@ int	is_not_numeric(char *cmd)
 		return (1);
 }
 
-int	ft_exit(char **cmd, t_env *env, int *error_code)
+int	ft_exit(char **cmd, t_env *env, int *error_code, t_global *global)
 {
+	int	code;
+
+	code = *error_code;
 	(void)env;
-	write(1, "exit\n", 5);
+	if (g_signal != 1)
+		printf("exit\n");
 	if (!cmd[1])
-		exit((*error_code) % 256);
+	{
+		free_before_exit(global);
+		exit((code) % 256);
+	}
 	else
 	{
 		if (is_not_numeric(cmd[1]))
@@ -105,6 +122,7 @@ int	ft_exit(char **cmd, t_env *env, int *error_code)
 			write(2, "minishell: exit: ", 17);
 			write(2, cmd[1], ft_strlen(cmd[1]));
 			write(2, ": numeric argument required\n", 28);
+			free_before_exit(global);
 			exit(2);
 		}
 	}
@@ -114,6 +132,10 @@ int	ft_exit(char **cmd, t_env *env, int *error_code)
 		return (1);
 	}
 	else
-		exit((ft_atol(cmd[1])) % 256);
+	{
+		code = ft_atol(cmd[1]);
+		free_before_exit(global);
+		exit((code) % 256);
+	}
 	return (0);
 }
