@@ -6,9 +6,10 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/24 15:15:40 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/24 15:35:53 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -43,74 +44,75 @@ void	init_child_signals(void)
 // SIGINT = CTRL + C
 // SIGTSTP = CTRL + Z
 
-// int	len_table_env(t_env *env)
-// {
-// 	int	i;
+int	len_table_env(t_env *env)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (env != NULL)
-// 	{
-// 		i++;
-// 		env = env->next;
-// 	}
-// 	lstfirst_env(env);
-// 	return (i);
-// }
+	i = 0;
+	while (env != NULL)
+	{
+		i++;
+		env = env->next;
+	}
+	lstfirst_env(env);
+	return (i);
+}
 
-// char	*ft_envdup(t_env *env)
-// {
-// 	char	*key;
-// 	char	*content;
-// 	char	*string;
+char	*ft_envdup(t_env *env)
+{
+	char	*key;
+	char	*content;
+	char	*string;
 
-// 	key = ft_strdup(env->key);
-// 	string = strjoin_exp(key, "=");
-// 	content = ft_strjoin(string, env->content);
-// 	return (content);
-// }
+	key = ft_strdup(env->key);
+	string = strjoin_exp(key, "=");
+	content = ft_strjoin(string, env->content);
+	free(string);
+	return (content);
+}
 
-// char	**initiate_table_env(t_env *env)
-// {
-// 	char	**table;
-// 	int		i;
+char	**initiate_table_env(t_env *env)
+{
+	char	**table;
+	int		i;
 
-// 	i = 0;
-// 	table = malloc(sizeof(char *) * (len_table_env(env) + 1));
-// 	while (env != NULL)
-// 	{
-// 		table[i] = ft_envdup(env);
-// 		i++;
-// 		env = env->next;
-// 	}
-// 	table[i] = NULL;
-// 	return (table);
-// }
+	i = 0;
+	table = malloc(sizeof(char *) * (len_table_env(env) + 1));
+	while (env != NULL)
+	{
+		table[i] = ft_envdup(env);
+		i++;
+		env = env->next;
+	}
+	table[i] = NULL;
+	return (table);
+}
 
-// void	print_env(char **table)
-// {
-// 	int	i;
+void	print_env(char **table)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (table[i])
-// 	{
-// 		printf("%s\n", table[i]);
-// 		i++;
-// 	}
-// }
+	i = 0;
+	while (table[i])
+	{
+		printf("%s\n", table[i]);
+		i++;
+	}
+}
 
-// void	free_table(char **table)
-// {
-// 	int i;
+void	free_table(char **table)
+{
+	int i;
 
-// 	i = 0;
-// 	while (table[i])
-// 	{
-// 		free(table[i]);
-// 		i++;
-// 	}
-// 	if (table[i])
-// 		free(table[i]);
-// }
+	i = 0;
+	while (table[i])
+	{
+		free(table[i]);
+		i++;
+	}
+	if (table[i])
+		free(table[i]);
+}
 
 int	main(int ac, char **av, char **envp)
 {
@@ -126,8 +128,8 @@ int	main(int ac, char **av, char **envp)
 	mini_vars = NULL;
 	global = (t_global *)malloc(sizeof(t_global));
 	global->env = NULL;
-	// global->env = env_content(global->env, envp);
-	// global->env->table = initiate_table_env(global->env);
+	global->env = env_content(global->env, envp);
+	global->env->table = initiate_table_env(global->env);
 	// print_env(global->env->table);
 	// free_table(global->env->table);
 	global->error_code = (int *)malloc(sizeof(int));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_ast_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:22:04 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/22 17:30:01 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 15:31:02 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	child_cmd(t_ast **ast, char **path, t_global *global)
 	init_child_signals();
 	redirection(*ast);
 	close_saved_fd(*ast);
-	execve(*path, (*ast)->cmd2, NULL);
+	execve(*path, (*ast)->cmd2, global->env->table);
 	free(*path);
 	ft_miniclear(&(global->head));
 	free_parser(global->ast);
