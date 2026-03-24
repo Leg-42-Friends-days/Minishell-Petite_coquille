@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/24 22:55:54 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 00:25:55 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global)
 			expand_function(ast, global);
 			if ((!ast->cmd2 || !ast->cmd2[0]) && ast->redirs)
 			{
-				global->true_head = global->mini_vars;
+				*(global->what_free) = 1;
+				//global->true_head = global->mini_vars;
 				redirection(ast);
 				close_saved_fd(ast);
-				global->head = global->true_head;
 				return;
 			}
 			else if ((!ast->cmd2 || !ast->cmd2[0]) && !ast->redirs)
@@ -95,5 +95,6 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global)
 
 void	execution(t_global *global)
 {
+	//*(global->what_free) = 1;
 	execution_2(global->ast, global->env, global->error_code, global);
 }

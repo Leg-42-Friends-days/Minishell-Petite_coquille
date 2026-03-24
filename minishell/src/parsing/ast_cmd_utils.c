@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 14:32:52 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/24 15:41:42 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 23:35:32 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,9 @@ int	parse_subshell(t_ast **node, t_token **token, t_global *global, int *error)
 
 int	redir_before_word(t_ast **node, t_token **token, t_global *global)
 {
+	t_token	*save;
+
+	save = *token;
 	if (is_redir(*token))
 	{
 		*node = ast_node(AST_CMD);

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/24 23:06:20 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 00:20:18 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,9 @@ int	main(int ac, char **av, char **envp)
 	(void)envp;
 	mini_vars = NULL;
 	global = (t_global *)malloc(sizeof(t_global));
+	global->what_free = (int *)malloc(sizeof(int));
+	*global->what_free = 0;
+	global->true_head = NULL;
 	global->env = NULL;
 	global->ast = NULL;
 	global->env = env_content(global->env, envp);
@@ -76,14 +79,22 @@ int	main(int ac, char **av, char **envp)
 		if (!line)
 		{
 			write(1, "exit\n", 5);
+			//free(global->what_free);
 			if (global->env)
 				free_env(global->env);
-			//if (mini_vars)
-			//	ft_miniclear(&mini_vars);
 			free(global->error_code);
 			//if (global->ast)
 			//	free_parser(global->ast);
+			printf("%d\n", *(global->what_free));
+			if (*(global->what_free) == 1)
+			{
+				printf("lolilol\n");
+				//free_parser(global->ast);
+				//ft_miniclear(&(global->true_head));
+			}
+			free(global->what_free);
 			free(global);
+			rl_clear_history();
 			return (0);
 		}
 		if (*line)
@@ -97,13 +108,18 @@ int	main(int ac, char **av, char **envp)
 		if (mini_vars)
 		{
 			global->head = mini_vars;
+			global->true_head = mini_vars;
 			//printmini(&mini_vars);
 			if (!parser(&mini_vars, global))
 			{
 				run_through_here_doc(global->ast, global->env, global);
 				execution(global);
-				ft_miniclear(&(global->head));
+				printf("%d\n", *(global->what_free));
+				if (*(global->what_free) == 0)
+					global->true_head = global->head;
+				ft_miniclear(&(global->true_head));
 				free_parser(global->ast);
+				//free(global->what_free);
 				mini_vars = NULL;
 			}
 			mini_vars = NULL;
@@ -124,8 +140,8 @@ int	main(int ac, char **av, char **envp)
 		//printf("error_code %d\n", (*global->error_code));
 		free(line);
 	}
-
 }
+
 
 // Test KILL
 // int	main(void)
