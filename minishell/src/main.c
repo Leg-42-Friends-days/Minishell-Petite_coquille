@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/23 12:08:51 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 15:37:57 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	main(int ac, char **av, char **envp)
 	mini_vars = NULL;
 	global = (t_global *)malloc(sizeof(t_global));
 	global->env = NULL;
+	global->ast = NULL;
 	global->env = env_content(global->env, envp);
 	global->error_code = (int *)malloc(sizeof(int));
 	*global->error_code = 0;
@@ -97,13 +98,17 @@ int	main(int ac, char **av, char **envp)
 		{
 			global->head = mini_vars;
 			//printmini(&mini_vars);
-			global->ast = parser(&mini_vars, global);
+			if (!parser(&mini_vars, global))
+			{
+				//run_through_here_doc(global->ast, global->env, global);
+				//execution(global);
+			}
 			//printmini(&mini_vars);
 			//free_parser(global->ast);
-			run_through_here_doc(global->ast, global->env, global);
+			//run_through_here_doc(global->ast, global->env, global);
 			//expand_function(global);
 			//print_tab(global->ast->cmd2);
-			execution(global);
+			//execution(global);
 			//printmini(&(global->head));
 			ft_miniclear(&(global->head));
 			free_parser(global->ast);

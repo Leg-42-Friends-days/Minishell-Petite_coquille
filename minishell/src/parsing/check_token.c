@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:06 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/23 10:41:06 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 15:30:18 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,13 @@ bool	next_token(t_token **token)
 		else if (((*token)->type > 0 && (*token)->type < 5)
 			&& (!(*token)->next || (*token)->next->type != WORD))
 			return (true);
-		else if (((*token)->type == 5 || (*token)->type == 6)
-			&& ((*token)->next->type == 5 || (*token)->next->type == 6))
+		else if (((*token)->type == 5 && (*token)->next->type == 6))
 		{
 			(*token) = (*token)->next;
 			return (true);
 		}
-		else if (((*token)->type > 0 && (*token)->type < 7)
-			&& ((*token)->next->type > 0 && (*token)->next->type < 7))
+		else if (((*token)->type > 0 && (*token)->type < 5)
+			&& ((*token)->next->type > 0 && (*token)->next->type < 5))
 			return (true);
 		(*token) = (*token)->next;
 	}
