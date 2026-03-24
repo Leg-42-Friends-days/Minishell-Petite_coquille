@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expender.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/22 15:01:45 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/24 11:16:06 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1020,7 +1020,6 @@ void	double_quote(t_ast *ast, t_global *global, t_sub_token *sub, int *index)
 	if (!tmp)
 		return ;
 	tmp = app_expend(tmp, global, true);
-	tmp = remove_null(tmp);
 	if (!tmp)
 		return ;
 	add_str_to_cmd(ast, index, tmp);
@@ -1058,8 +1057,7 @@ void	normal_quote(t_ast *ast, t_global *global, t_sub_token *sub, int *index)
 	free(tmp);
 	if (!split)
 		return ;
-	add_split_words(ast, split, index);
-	free_split(split);
+	(add_split_words(ast, split, index), free_split(split));
 }
 
 int	count_split_word(char **split)
