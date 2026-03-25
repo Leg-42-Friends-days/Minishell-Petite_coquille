@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 13:29:02 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/25 14:08:18 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,16 @@ bool	not_exportable(char *str)
 		return (false);
 	while (key[i])
 	{
-		if ((key[i] && key[i] != '!') && (key[i] && key[i] != '@') && (key[i]
-				&& key[i] != '$') && (key[i] && key[i] != '%') && (key[i]
+		if (key[0] >= '0' && key[0] <= '9')
+			return (free(key), true);
+		else if ((key[i] && key[i] != '!') && (key[i] && key[i] != '@')
+			&& (key[i] && key[i] != '$') && (key[i] && key[i] != '%') && (key[i]
 				&& key[i] != '^') && (key[i] && key[i] != '*') && (key[i]
 				&& key[i] != '~') && (key[i] && key[i] != '[') && (key[i]
 				&& key[i] != ']') && (key[i] && key[i] != '/') && (key[i]
 				&& key[i] != '.') && (key[i] && key[i] != ',') && (key[i]
-				&& key[i] != '{') && (key[i] && key[i] != '}'))
+				&& key[i] != '{') && (key[i] && key[i] != '}') && (key[i])
+			&& (key[i] && key[i] != '#'))
 			i++;
 		else
 			return (free(key), true);
@@ -137,4 +140,3 @@ bool	key_exist(t_env *env, char *key, char *content)
 	env = lstfirst_env(env);
 	return (false);
 }
-
