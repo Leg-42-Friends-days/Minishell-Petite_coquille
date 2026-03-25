@@ -1,0 +1,21 @@
+total 208
+drwxr-xr-x 7 ibrouin- 2025_paris   4096 Mar 25 13:57 .
+drwxr-xr-x 4 ibrouin- 2025_paris     35 Feb 13 14:47 ..
+-rw-r--r-- 1 ibrouin- 2025_paris     27 Feb 10 14:53 .gitignore
+drwxr-xr-x 2 ibrouin- 2025_paris     32 Mar 25 13:58 Docs
+-rw-r--r-- 1 ibrouin- 2025_paris   2571 Mar 25 13:49 Makefile
+drwxr-xr-x 2 ibrouin- 2025_paris     73 Mar 16 11:22 _devtools
+-rw-r--r-- 1 ibrouin- 2025_paris      5 Mar 25 13:54 a
+-rw-r--r-- 1 ibrouin- 2025_paris     16 Mar 25 13:54 b
+-rw-r--r-- 1 ibrouin- 2025_paris     13 Mar 25 13:57 bonjour
+-rw-r--r-- 1 ibrouin- 2025_paris     16 Mar 25 13:54 c
+-rw-r--r-- 1 ibrouin- 2025_paris    108 Mar 22 16:21 haha
+-rw-r--r-- 1 ibrouin- 2025_paris     45 Mar 25 13:54 hola
+drwxr-xr-x 2 ibrouin- 2025_paris   4096 Mar 23 11:57 libft
+-rw-r--r-- 1 ibrouin- 2025_paris     63 Mar 21 16:17 lol
+-rwxrwxrwx 1 ibrouin- 2025_paris 148656 Mar 25 12:02 minishell
+drwxr-xr-x 7 ibrouin- 2025_paris     92 Mar 25 10:55 obj
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 25 13:54 pwd
+-rw-r--r-- 1 ibrouin- 2025_paris      4 Mar 25 13:54 ragou
+drwxr-xr-x 7 ibrouin- 2025_paris    111 Mar 25 13:54 src
+-rw-r--r-- 1 ibrouin- 2025_paris    108 Mar 22 16:21 testo

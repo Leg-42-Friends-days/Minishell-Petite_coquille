@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 13:51:50 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 15:12:11 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global)
 			{
 
 				redirection(ast, global);
+				restore_redirection(ast);
 				close_saved_fd(ast);
 				return;
 			}
@@ -74,7 +75,11 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global)
 			//print_tab(ast->cmd2);
 			if (is_bult_in(ast->cmd2) == 1)
 			{
-				redirection(ast, global);
+				if (redirection(ast, global) == 1)
+				{
+					restore_redirection(ast);
+					return ;
+				}
 				*error_code = exec_bult_in(ast->cmd2, env, error_code, global);
 				restore_redirection(ast);
 			}

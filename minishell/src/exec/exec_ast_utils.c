@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:22:04 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 13:50:54 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 15:07:55 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,12 @@ void	close_saved_fd(t_ast *ast)
 
 void	child_cmd(t_ast **ast, char **path, t_global *global)
 {
-	(void)global;
+	int	code;
+
 	init_child_signals();
-	redirection(*ast, global);
+	code = redirection(*ast, global);
 	close_saved_fd(*ast);
-	if (*(global->error_code) == 127)
+	if (code == 1)
 	{
 		free(*path);
 		ft_miniclear(&(global->head));

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 11:54:57 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 15:30:17 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,32 +94,43 @@ void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global)
 	}
 }
 
-void	redirection(t_ast *node, t_global *global)
+int	redirection(t_ast *node, t_global *global)
 {
 	int		fd;
-	t_redir	*current;	
+	t_redir	*current;
+	int		code;
 
+	code = 0;
 	current = node->redirs;
 	if (!current)
-		return ;
+		return (0);
 	current->stdin = dup(0);
 	current->stdout = dup(1);
 	while (current)
 	{
 		if (current->type == 1)
-			redir_stdin(current, global);
+			redir_stdin(current, global, &code);
+		if (code != 0)
+		return (1);
 		if (current->type == 2)
-			redir_stdout_trunc(current, global);
+			redir_stdout_trunc(current, global, &code);
+		if (code != 0)
+		return (1);
 		if (current->type == 3)
 		{
 			fd = current->fd;
 			dup2(fd, 0);
 			close(fd);
 		}
+		if (code != 0)
+		return (1);
 		if (current->type == 4)
-			redir_stdout_append(current, global);
+			redir_stdout_append(current, global, &code);
 		current = current->next;
 	}
+	if (code != 0)
+		return (1);
+	return (0);
 }
 
 void	restore_redirection(t_ast *node)
