@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:03:07 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/24 15:43:57 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/25 13:36:04 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	free_table(char **table)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (table[i])
@@ -34,7 +34,7 @@ void	free_env(t_env *env)
 	if (!env)
 		return ;
 	free_table(env->table);
-		while (env->next != NULL)
+	while (env->next != NULL)
 	{
 		tmp = env->next;
 		free(env->key);
@@ -55,4 +55,3 @@ void	free_pwd(t_pwd *pwd)
 		free(pwd->pwd);
 	free(pwd);
 }
-

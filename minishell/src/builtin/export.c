@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 12:02:52 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/25 13:29:02 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,19 +120,10 @@ bool	get_equal(char *str, int *error)
 	return (false);
 }
 
-// bool	key_add(t_env *env, char *key, char *content)
-// {
-
-// }
-
 bool	key_exist(t_env *env, char *key, char *content)
 {
 	while (env != NULL)
 	{
-		// if (key_add(env, key, content) == true)
-		// {
-		// 	return (true);
-		// }
 		if (ft_strncmp(env->key, key, -1) == 0)
 		{
 			free(env->content);
@@ -147,31 +138,3 @@ bool	key_exist(t_env *env, char *key, char *content)
 	return (false);
 }
 
-int	function_export(t_env *env, char **cmd, int *error)
-{
-	char	*key;
-	char	*content;
-	int		i;
-
-	i = 0;
-	while (cmd[i])
-	{
-		*error = 0;
-		if (get_equal(cmd[i], error) == 0)
-		{
-			i++;
-			continue ;
-		}
-		key = get_key(cmd[i]);
-		content = get_content(cmd[i]);
-		if (key_exist(env, key, content) == true)
-			i++;
-		else
-		{
-			env = lstadd_back_exp(env, key, content);
-			env = lstfirst_env(env);
-			i++;
-		}
-	}
-	return (*error);
-}

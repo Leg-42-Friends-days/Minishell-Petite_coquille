@@ -6,7 +6,7 @@
 #    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/03/25 10:47:30 by mickzhan         ###   ########.fr        #
+#    Updated: 2026/03/25 13:35:50 by mickzhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,9 @@ SRC =	main.c \
 		lexing/node_utils.c \
 		lexing/test.c \
 		builtin/env.c \
+		builtin/env2.c \
 		builtin/export.c \
+		builtin/export2.c \
 		builtin/pwd.c \
 		builtin/cd.c \
 		builtin/echo.c \

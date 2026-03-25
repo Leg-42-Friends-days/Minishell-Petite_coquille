@@ -1,32 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/06 14:31:27 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 13:36:10 by mickzhan         ###   ########.fr       */
+/*   Created: 2026/03/25 13:28:23 by mickzhan          #+#    #+#             */
+/*   Updated: 2026/03/25 13:29:08 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_pwd(char **cmd, t_env *env)
+int	function_export(t_env *env, char **cmd, int *error)
 {
-	char	*pwd;
+	char	*key;
+	char	*content;
+	int		i;
 
-	(void)cmd;
-	(void)env;
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
+	i = 0;
+	while (cmd[i])
 	{
-		perror("pwd");
-		return (1);
+		*error = 0;
+		if (get_equal(cmd[i], error) == 0)
+		{
+			i++;
+			continue ;
+		}
+		key = get_key(cmd[i]);
+		content = get_content(cmd[i]);
+		if (key_exist(env, key, content) == true)
+			i++;
+		else
+		{
+			env = lstadd_back_exp(env, key, content);
+			env = lstfirst_env(env);
+			i++;
+		}
 	}
-	write(1, pwd, ft_strlen(pwd));
-	write(1, "\n", 1);
-	free(pwd);
-
-	return (0);
+	return (*error);
 }
