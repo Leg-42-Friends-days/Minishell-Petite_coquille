@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 14:31:27 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/23 19:41:07 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 13:50:17 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	is_option(char **cmd)
 int	ft_pwd(char **cmd, t_env *env)
 {
 	char	*pwd;
-	
+
 	(void)cmd;
 	(void)env;
 	if (is_option(cmd) == 1)

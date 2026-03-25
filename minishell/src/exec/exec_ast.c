@@ -6,30 +6,30 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 11:57:01 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 13:51:12 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int is_directory(char *path)
+int	is_directory(char *path)
 {
-    struct stat st;
+	struct stat	st;
 
-    if (stat(path, &st) != 0)
-    {
-        perror("minishell");
+	if (stat(path, &st) != 0)
+	{
+		perror("minishell");
 		free(path);
-        return (127);
-    }
-    if (S_ISDIR(st.st_mode))
-    {
+		return (127);
+	}
+	if (S_ISDIR(st.st_mode))
+	{
 		write(1, "minishell: ", 11);
 		write(1, path, ft_strlen(path));
 		write(1, ": Is a directory\n", 17);
 		free(path);
-        return (126);
-    }
+		return (126);
+	}
 	return (0);
 }
 

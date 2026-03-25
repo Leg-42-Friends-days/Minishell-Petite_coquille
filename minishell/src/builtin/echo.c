@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:08 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/23 19:16:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 13:50:00 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	print_string(char *str)
 
 void	print_string_tab(char **cmd, t_env *env)
 {
-	int	i;
+	int		i;
 	char	*home;
 
 	i = 0;
@@ -35,9 +35,9 @@ void	print_string_tab(char **cmd, t_env *env)
 	while (cmd[i] != NULL)
 	{
 		if (i != 0)
-			write (1, " ", 1);
+			write(1, " ", 1);
 		if (ft_strncmp(cmd[i], "~", 2) == 0)
-			write (1, home, ft_strlen(home));
+			write(1, home, ft_strlen(home));
 		else
 			print_string(cmd[i]);
 		i++;
@@ -55,9 +55,9 @@ void	print_with_option(char **cmd, t_env *env)
 	while (cmd[i] != NULL)
 	{
 		if (i != 0)
-			write (1, " ", 1);
+			write(1, " ", 1);
 		if (ft_strncmp(cmd[i], "~", 2) == 0)
-			write (1, home, ft_strlen(home));
+			write(1, home, ft_strlen(home));
 		else
 			print_string(cmd[i]);
 		i++;
@@ -81,7 +81,7 @@ int	option_echo(char **cmd)
 			while (cmd[i][j] == 'n')
 				j++;
 			if (cmd[i][j] == '\0')
-				count ++;
+				count++;
 			else
 				break ;
 			j = 0;

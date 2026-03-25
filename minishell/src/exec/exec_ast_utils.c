@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:22:04 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 12:02:41 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 13:50:54 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	child_cmd(t_ast **ast, char **path, t_global *global)
 		free_parser(global->ast);
 		exit (1);
 	}
-	execve(*path, (*ast)->cmd2, NULL);
+	execve(*path, (*ast)->cmd2, global->env->table);
 	free(*path);
 	ft_miniclear(&(global->head));
 	free_parser(global->ast);

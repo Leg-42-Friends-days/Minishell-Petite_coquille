@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 10:55:07 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 13:53:05 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,9 @@ int	main(int ac, char **av, char **envp)
 	global->env = NULL;
 	global->ast = NULL;
 	global->env = env_content(global->env, envp);
+	global->env->table = initiate_table_env(global->env);
+	// print_env(global->env->table);
+	// free_table(global->env->table);
 	global->error_code = (int *)malloc(sizeof(int));
 	*global->error_code = 0;
 	// affichage_env(global->env);
@@ -83,7 +86,7 @@ int	main(int ac, char **av, char **envp)
 			if (global->env)
 				free_env(global->env);
 			free(global->error_code);
-			//if (global->ast)
+			// if (global->ast)
 			//	free_parser(global->ast);
 			/* if (*(global->what_free) == 1)
 			{
@@ -134,8 +137,8 @@ int	main(int ac, char **av, char **envp)
 			//mini_vars = NULL;
 			//free(global);
 		}
-		//printf("g_signal %d\n", g_signal);
-		//printf("error_code %d\n", (*global->error_code));
+		// printf("g_signal %d\n", g_signal);
+		// printf("error_code %d\n", (*global->error_code));
 		free(line);
 	}
 }

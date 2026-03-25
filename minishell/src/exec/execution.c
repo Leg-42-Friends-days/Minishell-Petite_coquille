@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 12:11:04 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 13:51:50 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	exec_bult_in(char **cmd, t_env *env, int *error_code, t_global *global)
 	if (ft_strncmp(cmd[0], "exit", 5) == 0)
 		exit_status = ft_exit(cmd, env, error_code, global);
 	if (ft_strncmp(cmd[0], "export", 7) == 0)
-		exit_status = function_export(env, cmd);
+		exit_status = function_export(env, cmd, error_code);
 	if (ft_strncmp(cmd[0], "env", 4) == 0)
 		exit_status = affichage_env(env);
 	if (ft_strncmp(cmd[0], "unset", 6) == 0)

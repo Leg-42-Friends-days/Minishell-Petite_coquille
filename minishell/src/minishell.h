@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/24 23:39:56 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 13:53:29 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@
 # define RESET "\033[0m"
 
 # include "../libft/libft.h"
-# include "lexing/lexer.h"
 # include "./builtin/builtin.h"
 # include "exec/execution.h"
 # include "expender/expander.h"
+# include "lexing/lexer.h"
 # include "parsing/parser.h"
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -70,9 +70,9 @@
 
 // EXPENSION
 
-extern int	g_signal;
+extern int				g_signal;
 
-typedef struct s_ast t_ast;
+typedef struct s_ast	t_ast;
 
 typedef struct s_global
 {
@@ -85,8 +85,8 @@ typedef struct s_global
 	int				*what_free;
 }				t_global;
 
-void		init_signals(void);
-void		init_child_signals(void);
-void		handler(int signum);
+void					init_signals(void);
+void					init_child_signals(void);
+void					handler(int signum);
 
 #endif

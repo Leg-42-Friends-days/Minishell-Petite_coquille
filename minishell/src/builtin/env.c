@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 18:19:17 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/20 15:11:00 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 13:35:31 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,57 +99,5 @@ int	find_letter(char *envp, char letter)
 	return (i);
 }
 
-char	*get_key(char *envp)
-{
-	int		i;
-	int		j;
-	char	*str;
 
-	i = find_letter(envp, '=');
-	if (i == 0)
-		return (NULL);
-	j = 0;
-	str = malloc(sizeof(char) * (i + 1));
-	if (!str)
-		return (NULL);
-	while (j < i)
-	{
-		str[j] = envp[j];
-		j++;
-	}
-	str[j] = '\0';
-	return (str);
-}
 
-t_env	*env_content(t_env *env, char **envp)
-{
-	char	*key;
-	char	*value;
-	int		i;
-
-	i = 0;
-	while (envp[i])
-	{
-		key = get_key(envp[i]);
-		value = ft_strdup(getenv(key));
-		env = lstadd_back_env(env, key, value);
-		i++;
-	}
-	env = lstfirst_env(env);
-	return (env);
-}
-
-int	affichage_env(t_env *env)
-{
-	while (env->next != NULL)
-	{
-		ft_printf(1, "%s", env->key);
-		ft_printf(1, "=");
-		ft_printf(1, "%s\n", env->content);
-		env = env->next;
-	}
-	ft_printf(1, "%s", env->key);
-	ft_printf(1, "=");
-	ft_printf(1, "%s\n", env->content);
-	return (0);
-}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:12:50 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/22 15:01:27 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 13:43:13 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ int		len_cmd(char **str);
 void	free_split(char **str);
 char	*remove_null(char *str);
 bool	check_dollars(t_sub_token *current_sub);
-void	expand_token(t_ast *ast, t_global *global, t_token *current_token, int *index);
+void	expand_token(t_ast *ast, t_global *global, t_token *current_token,
+			int *index);
 void	call_expand(t_ast *ast, t_global *global);
 int		wildcard_len_add(void);
 int		add_normal_len(char **split);
@@ -82,9 +83,11 @@ void	add_str_to_cmd(t_ast *ast, int *index, char *str);
 char	*check_if_space(char *str);
 char	*normal_value(t_sub_token *sub, t_global *global);
 void	add_split_words(t_ast *ast, char **split, int *index);
-void	double_quote(t_ast *ast, t_global *global, t_sub_token *sub, int *index);
+void	double_quote(t_ast *ast, t_global *global, t_sub_token *sub,
+			int *index);
 void	single_quote(t_ast *ast, t_sub_token *sub, int *index);
-void	normal_quote(t_ast *ast, t_global *global, t_sub_token *sub, int *index);
+void	normal_quote(t_ast *ast, t_global *global, t_sub_token *sub,
+			int *index);
 int		count_split_word(char **split);
 int		add_len(t_sub_token *sub, int words);
 

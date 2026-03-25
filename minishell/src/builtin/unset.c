@@ -12,6 +12,37 @@
 
 #include "../minishell.h"
 
+void	remove_first_or_last(t_env *tmp)
+{
+	if (tmp->previous)
+		tmp->previous->next = tmp->next;
+	if (tmp->next)
+		tmp->next->previous = tmp->previous;
+	free(tmp->key);
+	if (tmp->free_export == true)
+		free(tmp->content);
+	free(tmp);
+}
+
+void	remove_inside(t_env *tmp)
+{
+	t_env	*next;
+
+	next = tmp->next;
+	if (!next)
+		return ;
+	free(tmp->key);
+	if (tmp->free_export == true)
+		free(tmp->content);
+	tmp->key = next->key;
+	tmp->content = next->content;
+	tmp->free_export = next->free_export;
+	tmp->next = next->next;
+	if (tmp->next)
+		tmp->next->previous = tmp;
+	free(next);
+}
+
 bool	compare_unset(char *env, char *unset)
 {
 	int	i;
@@ -35,16 +66,10 @@ void	call_unset(t_env *env, char *str)
 	{
 		if (compare_unset(tmp->key, str) == true)
 		{
-			if (tmp->previous)
-				tmp->previous->next = tmp->next;
+			if (!tmp->previous)
+				remove_inside(tmp);
 			else
-				env = tmp->next;
-			if (tmp->next)
-				tmp->next->previous = tmp->previous;
-			free(tmp->key);
-			if (tmp->free_export == true)
-				free(tmp->content);
-			free(tmp);
+				remove_first_or_last(tmp);
 			return ;
 		}
 		tmp = tmp->next;
