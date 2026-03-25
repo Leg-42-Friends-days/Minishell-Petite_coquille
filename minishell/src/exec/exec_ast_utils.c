@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:22:04 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 15:07:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 15:56:42 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,19 @@ void	child_cmd(t_ast **ast, char **path, t_global *global)
 	free(*path);
 	ft_miniclear(&(global->head));
 	free_parser(global->ast);
+	if (global->env)
+		free_env(global->env);
+	free(global->error_code);
+	free(global->what_free);
+	free(global);
 	perror("minishell");
 	exit (127);
 }
 
 void	pipe_first_child(t_ast **ast, int *fd, t_env **env, t_global *global)
 {
+	int	error;
+	
 	close(fd[0]);
 	dup2(fd[1], 1);
 	close(fd[1]);
@@ -62,11 +69,19 @@ void	pipe_first_child(t_ast **ast, int *fd, t_env **env, t_global *global)
 	close_saved_fd(*ast);
 	ft_miniclear(&(global->head));
 	free_parser(global->ast);
-	exit(*global->error_code);
+	if (global->env)
+		free_env(global->env);
+	error = *(global->error_code);
+	free(global->error_code);
+	free(global->what_free);
+	free(global);
+	exit(error);
 }
 
 void	pipe_second_child(t_ast **ast, int *fd, t_env **env, t_global *global)
 {
+	int	error;
+
 	close(fd[1]);
 	dup2(fd[0], 0);
 	close(fd[0]);
@@ -74,5 +89,11 @@ void	pipe_second_child(t_ast **ast, int *fd, t_env **env, t_global *global)
 	close_saved_fd(*ast);
 	ft_miniclear(&(global->head));
 	free_parser(global->ast);
-	exit(*global->error_code);
+	if (global->env)
+		free_env(global->env);
+	error = *(global->error_code);
+	free(global->error_code);
+	free(global->what_free);
+	free(global);
+	exit(error);
 }

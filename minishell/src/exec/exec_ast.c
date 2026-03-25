@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 13:51:12 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 16:01:02 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,11 @@ void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g)
 {
 	pid_t	pid;
 	int		status;
+	int		error;
 
 	g_signal = 1;
 	status = 0;
+	error = 0;
 	*(g->what_free) = 1;
 	pid = fork();
 	if (pid == -1)
@@ -122,7 +124,13 @@ void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g)
 		execution_2(ast->left, env, error_code, g);
 		ft_miniclear(&(g->true_head));
 		free_parser(g->ast);
-		exit (*error_code);
+		if (g->env)
+		free_env(g->env);
+		error = *(g->error_code);
+		free(g->error_code);
+		free(g->what_free);
+		free(g);
+		exit (error);
 	}
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))

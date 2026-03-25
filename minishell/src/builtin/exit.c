@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 11:49:59 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/24 11:43:25 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 15:58:31 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	free_before_exit(t_global *global)
 	if (global->env)
 		free_env(global->env);
 	free(global->error_code);
+	free(global->what_free);
 	free(global);
 }
 
