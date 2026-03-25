@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:22:04 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/24 10:26:31 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 12:02:41 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ void	close_saved_fd(t_ast *ast)
 		return ;
 	while (current)
 	{
-		if (ast->redirs->stdin != -1)
-			close(ast->redirs->stdin);
-		if (ast->redirs->stdout != -1)
-			close(ast->redirs->stdout);
+		if (current->stdin != -1)
+			close(current->stdin);
+		if (current->stdout != -1)
+			close(current->stdout);
 		current = current->next;
 	}
 }
@@ -35,8 +35,15 @@ void	child_cmd(t_ast **ast, char **path, t_global *global)
 {
 	(void)global;
 	init_child_signals();
-	redirection(*ast);
+	redirection(*ast, global);
 	close_saved_fd(*ast);
+	if (*(global->error_code) == 127)
+	{
+		free(*path);
+		ft_miniclear(&(global->head));
+		free_parser(global->ast);
+		exit (1);
+	}
 	execve(*path, (*ast)->cmd2, NULL);
 	free(*path);
 	ft_miniclear(&(global->head));

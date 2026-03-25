@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 10:15:12 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 10:55:07 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,12 @@ int	main(int ac, char **av, char **envp)
 			free(global->error_code);
 			//if (global->ast)
 			//	free_parser(global->ast);
-			printf("%d\n", *(global->what_free));
-			if (*(global->what_free) == 1)
+			/* if (*(global->what_free) == 1)
 			{
 				printf("lolilol\n");
 				//free_parser(global->ast);
 				//ft_miniclear(&(global->true_head));
-			}
+			} */
 			free(global->what_free);
 			free(global);
 			rl_clear_history();
@@ -114,7 +113,6 @@ int	main(int ac, char **av, char **envp)
 			{
 				run_through_here_doc(global->ast, global->env, global);
 				execution(global);
-				printf("%d\n", *(global->what_free));
 				if (*(global->what_free) == 0)
 					global->true_head = global->head;
 				ft_miniclear(&(global->true_head));

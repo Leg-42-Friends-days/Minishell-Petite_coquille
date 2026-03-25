@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 00:28:19 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 12:11:04 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,12 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global)
 	{
 		if (ast->type == AST_CMD)
 		{
-			printf("folie");
 			expand_function(ast, global);
+			//print_tab(ast->cmd2);
 			if ((!ast->cmd2 || !ast->cmd2[0]) && ast->redirs)
 			{
-				*(global->what_free) = 1;
-				//global->true_head = global->mini_vars;
-				redirection(ast);
+
+				redirection(ast, global);
 				close_saved_fd(ast);
 				return;
 			}
@@ -75,7 +74,7 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global)
 			//print_tab(ast->cmd2);
 			if (is_bult_in(ast->cmd2) == 1)
 			{
-				redirection(ast);
+				redirection(ast, global);
 				*error_code = exec_bult_in(ast->cmd2, env, error_code, global);
 				restore_redirection(ast);
 			}
@@ -90,12 +89,10 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global)
 			exec_or(ast, env, error_code, global);
 		if (ast->type == AST_SUBSHELL)
 			exec_subshell(ast, env, error_code, global);
-		//if (ast->type == )
 	}
 }
 
 void	execution(t_global *global)
 {
-	//*(global->what_free) = 1;
 	execution_2(global->ast, global->env, global->error_code, global);
 }

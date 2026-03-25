@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 00:32:29 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 11:57:01 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,24 +109,18 @@ void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g)
 	int		status;
 
 	g_signal = 1;
-	if ((!ast->cmd2 || !ast->cmd2[0]))
-	{
-		*(g->what_free) = 1;
-		//global->true_head = global->mini_vars;
-		redirection(ast);
-		close_saved_fd(ast);
-		return;
-	}
+	status = 0;
+	*(g->what_free) = 1;
 	pid = fork();
 	if (pid == -1)
 		error_pid_pipe();
 	if (pid == 0)
 	{
 		expand_function(ast, g);
-		redirection(ast);
-		execution_2(ast->left, env, error_code, g);
+		redirection(ast, g);
 		close_saved_fd(ast);
-		ft_miniclear(&(g->head));
+		execution_2(ast->left, env, error_code, g);
+		ft_miniclear(&(g->true_head));
 		free_parser(g->ast);
 		exit (*error_code);
 	}

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 10:17:42 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 11:54:57 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global)
 	}
 }
 
-void	redirection(t_ast *node)
+void	redirection(t_ast *node, t_global *global)
 {
 	int		fd;
 	t_redir	*current;	
@@ -107,9 +107,9 @@ void	redirection(t_ast *node)
 	while (current)
 	{
 		if (current->type == 1)
-			redir_stdin(current);
+			redir_stdin(current, global);
 		if (current->type == 2)
-			redir_stdout_trunc(current);
+			redir_stdout_trunc(current, global);
 		if (current->type == 3)
 		{
 			fd = current->fd;
@@ -117,7 +117,7 @@ void	redirection(t_ast *node)
 			close(fd);
 		}
 		if (current->type == 4)
-			redir_stdout_append(current);
+			redir_stdout_append(current, global);
 		current = current->next;
 	}
 }

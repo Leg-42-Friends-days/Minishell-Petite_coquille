@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/22 17:12:21 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 11:56:35 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*find_cmd(t_env *env, char *cmd);
 char	*init_path(t_ast **ast, t_env *env);
 
 // REDIRECTION.c
-void	redirection(t_ast *node);
+void	redirection(t_ast *node, t_global *global);
 void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global);
 void	restore_redirection(t_ast *node);
 
@@ -81,9 +81,9 @@ void	error_pid_pipe(void);
 void	error_pipe(void);
 
 // REDIR_UTILS.c
-void	redir_stdin(t_redir *current);
-void	redir_stdout_trunc(t_redir *current);
-void	redir_stdout_append(t_redir *current);
+void	redir_stdin(t_redir *current, t_global *global);
+void	redir_stdout_trunc(t_redir *current, t_global *global);
+void	redir_stdout_append(t_redir *current, t_global *global);
 
 // EXEC_AST.c
 int		exec_cmd(t_ast *ast, t_env *env, t_global *global);
