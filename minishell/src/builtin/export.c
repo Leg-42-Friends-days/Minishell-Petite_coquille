@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 13:29:02 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/25 14:41:56 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,18 @@ char	*get_content(char *test)
 	return (str);
 }
 
+bool	list_of_error(char key)
+{
+	if ((key && key != '!') && (key && key != '@') && (key && key != '$')
+		&& (key && key != '%') && (key && key != '^') && (key && key != '*')
+		&& (key && key != '~') && (key && key != '[') && (key && key != ']')
+		&& (key && key != '/') && (key && key != '.') && (key && key != ',')
+		&& (key && key != '{') && (key && key != '}') && (key) && (key
+			&& key != '#') && (key && key != '?'))
+		return (true);
+	return (false);
+}
+
 bool	not_exportable(char *str)
 {
 	int		i;
@@ -76,13 +88,9 @@ bool	not_exportable(char *str)
 		return (false);
 	while (key[i])
 	{
-		if ((key[i] && key[i] != '!') && (key[i] && key[i] != '@') && (key[i]
-				&& key[i] != '$') && (key[i] && key[i] != '%') && (key[i]
-				&& key[i] != '^') && (key[i] && key[i] != '*') && (key[i]
-				&& key[i] != '~') && (key[i] && key[i] != '[') && (key[i]
-				&& key[i] != ']') && (key[i] && key[i] != '/') && (key[i]
-				&& key[i] != '.') && (key[i] && key[i] != ',') && (key[i]
-				&& key[i] != '{') && (key[i] && key[i] != '}'))
+		if (key[0] >= '0' && key[0] <= '9')
+			return (free(key), true);
+		else if (list_of_error(key[i] == true))
 			i++;
 		else
 			return (free(key), true);
@@ -119,22 +127,3 @@ bool	get_equal(char *str, int *error)
 	}
 	return (false);
 }
-
-bool	key_exist(t_env *env, char *key, char *content)
-{
-	while (env != NULL)
-	{
-		if (ft_strncmp(env->key, key, -1) == 0)
-		{
-			free(env->content);
-			env->content = ft_strdup(content);
-			free(content);
-			free(key);
-			return (true);
-		}
-		env = env->next;
-	}
-	env = lstfirst_env(env);
-	return (false);
-}
-
