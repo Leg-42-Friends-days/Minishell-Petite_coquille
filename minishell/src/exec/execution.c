@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 00:25:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 00:28:19 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global)
 	{
 		if (ast->type == AST_CMD)
 		{
+			printf("folie");
 			expand_function(ast, global);
 			if ((!ast->cmd2 || !ast->cmd2[0]) && ast->redirs)
 			{

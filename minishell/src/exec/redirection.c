@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/22 16:00:42 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/25 10:17:42 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	prepare_here_doc(t_redir *node, t_global *global)
 	pid_t	pid;
 	int		status;
 
+	status = 0;
 	if (pipe(fd) == -1)
 		error_pipe();
 	pid = fork();
@@ -59,6 +60,7 @@ int	prepare_here_doc(t_redir *node, t_global *global)
 	close(fd[1]);
 	waitpid(pid, &status, 0);
 	node->fd = fd[0];
+	close(fd[0]);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (0);
