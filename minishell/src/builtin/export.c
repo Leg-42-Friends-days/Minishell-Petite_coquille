@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/20 16:16:07 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/25 12:02:52 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,33 @@ char	*get_content(char *test)
 	return (str);
 }
 
-bool	get_equal(char *str)
+bool	not_exportable(char *str)
+{
+	int		i;
+	char	*key;
+
+	i = 0;
+	key = get_key(str);
+	if (!key)
+		return (false);
+	while (key[i])
+	{
+		if ((key[i] && key[i] != '!') && (key[i] && key[i] != '@') && (key[i]
+				&& key[i] != '$') && (key[i] && key[i] != '%') && (key[i]
+				&& key[i] != '^') && (key[i] && key[i] != '*') && (key[i]
+				&& key[i] != '~') && (key[i] && key[i] != '[') && (key[i]
+				&& key[i] != ']') && (key[i] && key[i] != '/') && (key[i]
+				&& key[i] != '.') && (key[i] && key[i] != ',') && (key[i]
+				&& key[i] != '{') && (key[i] && key[i] != '}'))
+			i++;
+		else
+			return (free(key), true);
+	}
+	free(key);
+	return (false);
+}
+
+bool	get_equal(char *str, int *error)
 {
 	int	i;
 
@@ -73,12 +99,22 @@ bool	get_equal(char *str)
 	if (str[i] == '=')
 	{
 		ft_printf(2, "export: `%s: not a valid identifier\n", str);
+		*error = 1;
+		return (false);
+	}
+	if (not_exportable(str) == true)
+	{
+		ft_printf(2, "export: `%s: not a valid identifier\n", str);
+		*error = 1;
 		return (false);
 	}
 	while (str[i])
 	{
 		if (str[i] == '=')
+		{
+			*error = 0;
 			return (true);
+		}
 		i++;
 	}
 	return (false);
@@ -111,7 +147,7 @@ bool	key_exist(t_env *env, char *key, char *content)
 	return (false);
 }
 
-int	function_export(t_env *env, char **cmd)
+int	function_export(t_env *env, char **cmd, int *error)
 {
 	char	*key;
 	char	*content;
@@ -120,7 +156,8 @@ int	function_export(t_env *env, char **cmd)
 	i = 0;
 	while (cmd[i])
 	{
-		if (get_equal(cmd[i]) == 0)
+		*error = 0;
+		if (get_equal(cmd[i], error) == 0)
 		{
 			i++;
 			continue ;
@@ -136,5 +173,5 @@ int	function_export(t_env *env, char **cmd)
 			i++;
 		}
 	}
-	return (0);
+	return (*error);
 }
