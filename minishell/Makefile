@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
+#    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/03/21 17:04:14 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/03/25 10:47:30 by mickzhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ SRC =	main.c \
 		builtin/exit.c \
 		builtin/unset.c \
 		builtin/free_builtin.c \
+		builtin/table_env.c \
 		parsing/check_token.c \
 		parsing/parsing.c \
 		parsing/ast_redirs.c \
