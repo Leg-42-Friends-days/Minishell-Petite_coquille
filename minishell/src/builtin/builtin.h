@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:16:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 13:34:50 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/25 13:46:50 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,9 @@ int					ft_exit(char **cmd, t_env *env, int *error_code);
 // ENV
 int					affichage_env(t_env *env);
 t_env				*env_content(t_env *env, char **envp);
-char	*strcat_env(char *s1, char *s2, int size);
-char	*envjoin(char *s1, char *s2);
-t_env	*lstadd_back_env(t_env *lst, char *key, char *value);
-
-
+char				*strcat_env(char *s1, char *s2, int size);
+char				*envjoin(char *s1, char *s2);
+t_env				*lstadd_back_env(t_env *lst, char *key, char *value);
 
 // EXPORT
 

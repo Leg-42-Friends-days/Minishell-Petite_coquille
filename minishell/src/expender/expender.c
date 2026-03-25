@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/24 11:16:06 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/25 13:42:59 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ bool	check_if_expendable(char *str)
 	while (str[i])
 	{
 		if (str[i] == '$' && str[i + 1] != ':' && str[i + 1] != '=' && str[i
-			+ 1] != '"' && str[i + 1] != '\'')
+				+ 1] != '"' && str[i + 1] != '\'')
 			return (true);
 		i++;
 	}
@@ -354,10 +354,9 @@ char	*strjoin_exp(char *s1, char *s2)
 		str[i + j] = s2[j];
 		j++;
 	}
-	str[i + j] = '\0';
 	if (s1)
 		free(s1);
-	return (str);
+	return (str[i + j] = '\0', str);
 }
 
 char	*call_join(char **str)
@@ -1089,7 +1088,8 @@ int	add_len(t_sub_token *sub, int word)
 	return (i);
 }
 
-void	expand_token(t_ast *ast, t_global *global, t_token *current_token, int *index)
+void	expand_token(t_ast *ast, t_global *global, t_token *current_token,
+		int *index)
 {
 	t_sub_token	*current_sub;
 
@@ -1251,7 +1251,8 @@ void	expand_function(t_ast *ast, t_global *global)
 		return ;
 	if (check_if_word(ast) == 1)
 	{
-		ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast, global) + 1));
+		ast->cmd2 = malloc(sizeof(char *) * (expand_len_token(ast, global)
+					+ 1));
 		if (!ast->cmd2)
 			return ;
 		call_expand(ast, global);
