@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 14:41:56 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/25 18:07:12 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ bool	not_exportable(char *str)
 	{
 		if (key[0] >= '0' && key[0] <= '9')
 			return (free(key), true);
-		else if (list_of_error(key[i] == true))
+		else if (list_of_error(key[i]) == true)
 			i++;
 		else
 			return (free(key), true);
@@ -108,12 +108,14 @@ bool	get_equal(char *str, int *error)
 	{
 		ft_printf(2, "export: `%s: not a valid identifier\n", str);
 		*error = 1;
+		printf("HERE\n");
 		return (false);
 	}
 	if (not_exportable(str) == true)
 	{
 		ft_printf(2, "export: `%s: not a valid identifier\n", str);
 		*error = 1;
+		printf("HERE1\n");
 		return (false);
 	}
 	while (str[i])
