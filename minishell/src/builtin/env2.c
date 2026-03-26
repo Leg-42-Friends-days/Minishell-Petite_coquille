@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 13:35:21 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 13:35:36 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/26 12:08:29 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*get_key(char *envp)
 	int		j;
 	char	*str;
 
+	if (!envp)
+		return (NULL);
 	i = find_letter(envp, '=');
 	if (i == 0)
 		return (NULL);

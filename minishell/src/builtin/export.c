@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 18:07:53 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/26 12:10:44 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,12 @@ bool	not_exportable(char *str)
 	char	*key;
 
 	i = 0;
-	key = get_key(str);
-	if (!key)
+	if (str[i] == '\0')
+	{
+		ft_printf(2, "Minishell: export: `': not a valid identifier\n");
 		return (false);
+	}
+	key = get_key(str);
 	while (key[i])
 	{
 		if (key[0] >= '0' && key[0] <= '9')
@@ -106,13 +109,13 @@ bool	get_equal(char *str, int *error)
 	i = 0;
 	if (str[i] == '=')
 	{
-		ft_printf(2, "export: `%s: not a valid identifier\n", str);
+		ft_printf(2, "Minishell: export: `%s: not a valid identifier\n", str);
 		*error = 1;
 		return (false);
 	}
 	if (not_exportable(str) == true)
 	{
-		ft_printf(2, "export: `%s: not a valid identifier\n", str);
+		ft_printf(2, "Minishell: export: `%s: not a valid identifier\n", str);
 		*error = 1;
 		return (false);
 	}
