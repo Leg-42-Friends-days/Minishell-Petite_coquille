@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 14:41:56 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/25 18:07:53 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ bool	not_exportable(char *str)
 	{
 		if (key[0] >= '0' && key[0] <= '9')
 			return (free(key), true);
-		else if (list_of_error(key[i] == true))
+		else if (list_of_error(key[i]) == true)
 			i++;
 		else
 			return (free(key), true);
