@@ -6,11 +6,28 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 15:30:17 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/26 10:12:38 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+int	free_all_in_child(t_global *global)
+{
+	int	error;
+
+	if (*(global->what_free) == 0)
+		global->true_head = global->head;
+	ft_miniclear(&(global->head));
+	free_parser(global->ast);
+	if (global->env)
+		free_env(global->env);
+	error = *(global->error_code);
+	free(global->error_code);
+	free(global->what_free);
+	free(global);
+	return (error);
+}
 
 void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 {
@@ -26,6 +43,7 @@ void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 		{
 			free(line);
 			close(fd[1]);
+			free_all_in_child(global);
 			exit (0);
 		}
 		if ((*node)->target->sub_token->quote == NONE)
@@ -56,6 +74,7 @@ int	prepare_here_doc(t_redir *node, t_global *global)
 		init_signals();
 		close(fd[0]);
 		fill_here_doc(fd, &node, global);
+		free_all_in_child(global);
 	}
 	close(fd[1]);
 	waitpid(pid, &status, 0);

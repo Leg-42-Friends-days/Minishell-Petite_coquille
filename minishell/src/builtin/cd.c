@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:44 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/24 10:05:45 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/26 10:49:25 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ int	ft_cd(char **cmd, t_env *env)
 	char	*target;
 	int		error_code;
 
+	error_code = 0;
 	oldpwd = getcwd(NULL, 0);
 	target = define_target(cmd, env, &error_code);
 	if (!target || target[0] == '\0')

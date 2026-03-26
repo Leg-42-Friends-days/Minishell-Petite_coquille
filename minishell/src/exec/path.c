@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 14:14:15 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/23 09:43:46 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/26 12:40:26 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,11 @@ char	*find_path(t_env *env)
 		return (NULL);
 	current = env;
 	path = "PATH";
-	while (current->key != NULL)
+	while (current != NULL)
 	{
 		if (!ft_strncmp(current->key, path, 4))
 			return (current->content);
-		if (current->next)
-			current = current->next;
+		current = current->next;
 	}
 	return (NULL);
 }

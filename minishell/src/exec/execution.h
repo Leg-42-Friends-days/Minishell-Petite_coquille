@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 15:00:43 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/26 10:08:14 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ char	*init_path(t_ast **ast, t_env *env);
 int		redirection(t_ast *node, t_global *global);
 void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global);
 void	restore_redirection(t_ast *node);
+int		free_all_in_child(t_global *global);
 
 // ERROR_EXEC.c
 void	error_pid(char **paths);
