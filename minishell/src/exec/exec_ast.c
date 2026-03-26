@@ -6,13 +6,13 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/26 12:22:14 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/26 18:48:36 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-int	is_directory(char *path)
+int	is_directory(char *path, int *directory)
 {
 	struct stat	st;
 
@@ -20,6 +20,7 @@ int	is_directory(char *path)
 	{
 		perror("minishell");
 		free(path);
+		*directory = 127;
 		return (127);
 	}
 	if (S_ISDIR(st.st_mode))
@@ -28,31 +29,32 @@ int	is_directory(char *path)
 		write(1, path, ft_strlen(path));
 		write(1, ": Is a directory\n", 17);
 		free(path);
+		*directory = 126;
 		return (126);
 	}
+	*directory = 0;
 	return (0);
 }
 
 int	exec_cmd(t_ast *ast, t_env *env, t_global *global)
 {
-	char	*path;
 	pid_t	pid;
 	int		status;
 
+	(void)env;
 	g_signal = 1;
 	status = 0;
-	path = init_path(&ast, env);
+	/* path = init_path(&ast, env);
 	if (!path)
 		return (127);
 	status = is_directory(path);
 	if (status != 0)
-		return (status);
+		return (status); */
 	pid = fork();
 	if (pid == -1)
-		error_pid(&path);
+		error_pid();
 	if (pid == 0)
-		child_cmd(&ast, &path, global);
-	free(path);
+		child_cmd(&ast, global);
 	waitpid(pid, &status, 0);
 	signal(SIGINT, handler);
 	if (WIFEXITED(status))
@@ -66,17 +68,18 @@ void	exec_pipe(t_ast *ast, t_env *env, int *error_code, t_global *global)
 	pid_t	pid[2];
 	int		status;
 
+	//*(global->what_free) = 1;
 	g_signal = 1;
 	if (pipe(fd) == -1)
 		error_pipe();
 	pid[0] = fork();
 	if (pid[0] == -1)
-		error_pid_pipe();
+		error_pid();
 	if (pid[0] == 0)
 		pipe_first_child(&ast, fd, &env, global);
 	pid[1] = fork();
 	if (pid[1] == -1)
-		error_pid_pipe();
+		error_pid();
 	if (pid[1] == 0)
 		pipe_second_child(&ast, fd, &env, global);
 	close(fd[0]);
@@ -112,10 +115,10 @@ void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g)
 	g_signal = 1;
 	status = 0;
 	error = 0;
-	*(g->what_free) = 1;
+	//*(g->what_free) = 1;
 	pid = fork();
 	if (pid == -1)
-		error_pid_pipe();
+		error_pid();
 	if (pid == 0)
 	{
 		expand_function(ast, g);

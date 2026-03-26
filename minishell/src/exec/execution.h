@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/26 10:08:14 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/26 18:12:18 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,10 @@ int		redirection(t_ast *node, t_global *global);
 void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global);
 void	restore_redirection(t_ast *node);
 int		free_all_in_child(t_global *global);
+int		free_all_pipe_subshell(t_global *global);
 
 // ERROR_EXEC.c
-void	error_pid(char **paths);
-void	error_pid_pipe(void);
+void	error_pid(void);
 void	error_pipe(void);
 
 // REDIR_UTILS.c
@@ -92,9 +92,10 @@ void	exec_pipe(t_ast *ast, t_env *env, int *error_code, t_global *global);
 void	exec_and(t_ast *ast, t_env *env, int *error_code, t_global *global);
 void	exec_or(t_ast *ast, t_env *env, int *error_code, t_global *global);
 void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g);
+int		is_directory(char *path, int *directory);
 
 // EXEC_AST_UTILS.c
-void	child_cmd(t_ast **ast, char **path, t_global *global);
+void	child_cmd(t_ast **ast, t_global *global);
 void	pipe_first_child(t_ast **ast, int *fd, t_env **env, t_global *global);
 void	pipe_second_child(t_ast **ast, int *fd, t_env **env, t_global *global);
 void	close_saved_fd(t_ast *ast);

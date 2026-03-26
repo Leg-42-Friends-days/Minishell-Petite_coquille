@@ -6,20 +6,13 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 13:45:55 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/21 15:30:36 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/26 18:11:39 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-void	error_pid(char **paths)
-{
-	free(*paths);
-	perror("fork failed");
-	exit (2);
-}
-
-void	error_pid_pipe(void)
+void	error_pid(void)
 {
 	perror("fork failed");
 	exit (2);

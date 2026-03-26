@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/26 12:22:09 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/26 18:56:25 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,10 @@ int	main(int ac, char **av, char **envp)
 		}
 		if (mini_vars)
 		{
+			if (mini_vars->type == INFILE || mini_vars->type == OUTFILE || mini_vars->type == HEREDOC || mini_vars->type == APPEND)
+			{
+				*(global->what_free) = 1;
+			}
 			global->head = mini_vars;
 			global->true_head = mini_vars;
 			//printmini(&mini_vars);
@@ -116,8 +120,9 @@ int	main(int ac, char **av, char **envp)
 			{
 				run_through_here_doc(global->ast, global->env, global);
 				execution(global);
-				if (*(global->what_free) == 0)
+				if (*(global->what_free) == 1)
 					global->true_head = global->head;
+				close_saved_fd(global->ast);
 				ft_miniclear(&(global->true_head));
 				free_parser(global->ast);
 				//free(global->what_free);
