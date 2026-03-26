@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/26 19:03:30 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/26 21:09:16 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	free_all_in_child(t_global *global)
 
 	if (*(global->what_free) == 1)
 		global->true_head = global->head;
-	ft_miniclear(&(global->head));
+	ft_miniclear(&(global->true_head));
 	free_parser(global->ast);
 	if (global->env)
 		free_env(global->env);
@@ -92,10 +92,13 @@ int	prepare_here_doc(t_redir *node, t_global *global)
 		close(fd[0]);
 		fill_here_doc(fd, &node, global);
 		free_all_in_child(global);
-		//exit(0);
+		exit(1);
 	}
 	close(fd[1]);
+	printf("%d\n", status);
 	waitpid(pid, &status, 0);
+	if (status > 0)
+		close(fd[0]);
 	node->fd = fd[0];
 	//close(fd[0]);
 	if (WIFEXITED(status))

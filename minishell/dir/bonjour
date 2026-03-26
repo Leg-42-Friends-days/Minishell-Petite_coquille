@@ -1,0 +1,35 @@
+total 228
+drwxr-xr-x 8 ibrouin- 2025_paris   4096 Mar 26 20:27 .
+drwxr-xr-x 4 ibrouin- 2025_paris     35 Mar 26 19:22 ..
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 19:09 $
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 20:27 a
+-rw-r--r-- 1 ibrouin- 2025_paris  12288 Mar 26 19:22 .a.swo
+-rw-r--r-- 1 ibrouin- 2025_paris  12288 Mar 26 19:15 .a.swp
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 20:27 b
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 19:08 bonjour hello
+-rw-r--r-- 1 ibrouin- 2025_paris      5 Mar 26 20:27 c
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 11:54 couc
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 11:54 couco
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 18:29 coucou
+-rw-r--r-- 1 ibrouin- 2025_paris    157 Mar 26 19:18 d
+drwxr-xr-x 2 ibrouin- 2025_paris     73 Mar 26 09:56 _devtools
+drwxr-xr-x 2 ibrouin- 2025_paris     21 Mar 26 20:27 dir
+drwxr-xr-x 2 ibrouin- 2025_paris     32 Mar 25 16:11 Docs
+-rw-r--r-- 1 ibrouin- 2025_paris     27 Feb 10 14:53 .gitignore
+-rw-r--r-- 1 ibrouin- 2025_paris     25 Mar 26 16:02 HIHI
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 15:12 ibrouin-
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 18:20 kikou
+drwxr-xr-x 2 ibrouin- 2025_paris   4096 Mar 26 17:21 libft
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 17:30 lol
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 17:08 lopl
+-rw-r--r-- 1 ibrouin- 2025_paris   2614 Mar 26 10:31 Makefile
+-rwxr-xr-x 1 ibrouin- 2025_paris 157360 Mar 26 19:14 minishell
+-rwxr-xr-x 1 ibrouin- 2025_paris      3 Mar 26 09:56 NOPERM
+drwxr-xr-x 7 ibrouin- 2025_paris     92 Mar 26 18:56 obj
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 19:05 PERM
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 15:10 PERMa
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 15:11 PERMo
+-rw-r--r-- 1 ibrouin- 2025_paris      0 Mar 26 12:22 pwd
+drwxr-xr-x 7 ibrouin- 2025_paris    139 Mar 26 17:34 src
+-rw-r--r-- 1 ibrouin- 2025_paris     62 Mar 26 10:02 test
+-rw-r--r-- 1 ibrouin- 2025_paris     36 Mar 26 17:06 TEST
