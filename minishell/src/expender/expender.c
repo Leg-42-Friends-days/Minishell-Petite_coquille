@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/26 12:31:26 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/26 15:37:14 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ bool	check_if_expendable(char *str)
 	while (str[i])
 	{
 		if (str[i] == '$' && str[i + 1] != ':' && str[i + 1] != '=' && str[i
-				+ 1] != '"' && str[i + 1] != '\'')
+			+ 1] != '"' && str[i + 1] != '\'')
 			return (true);
 		i++;
 	}
@@ -83,7 +83,8 @@ bool	check_condition_key(char *str, int i)
 		&& (str[i] != '*' && str[i]) && (str[i] && str[i] != ']') && (str[i]
 			&& str[i] != '[') && (str[i] && str[i] != '%') && (str[i]
 			&& str[i] != '{') && (str[i] && str[i] != '}') && (str[i]
-			&& str[i] != '!') && (str[i] && str[i] != '.'))
+			&& str[i] != '!') && (str[i] && str[i] != '.') && (str[i]
+			&& str[i] != '='))
 		return (true);
 	return (false);
 }
