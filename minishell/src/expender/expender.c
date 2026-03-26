@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 13:42:59 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/26 12:31:26 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ bool	check_condition_key(char *str, int i)
 		&& (str[i] != '*' && str[i]) && (str[i] && str[i] != ']') && (str[i]
 			&& str[i] != '[') && (str[i] && str[i] != '%') && (str[i]
 			&& str[i] != '{') && (str[i] && str[i] != '}') && (str[i]
-			&& str[i] != '!'))
+			&& str[i] != '!') && (str[i] && str[i] != '.'))
 		return (true);
 	return (false);
 }
