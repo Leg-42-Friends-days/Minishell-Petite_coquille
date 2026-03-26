@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 13:28:23 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 14:42:02 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/26 12:17:22 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	function_export(t_env *env, char **cmd, int *error)
 	i = 1;
 	while (cmd[i])
 	{
-		*error = 0;
 		if (get_equal(cmd[i], error) == 0)
 		{
 			i++;

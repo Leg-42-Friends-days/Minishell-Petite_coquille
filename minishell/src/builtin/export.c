@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/26 12:10:44 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/26 12:15:02 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,23 +109,20 @@ bool	get_equal(char *str, int *error)
 	i = 0;
 	if (str[i] == '=')
 	{
-		ft_printf(2, "Minishell: export: `%s: not a valid identifier\n", str);
+		ft_printf(2, "Minishell: export: `%s': not a valid identifier\n", str);
 		*error = 1;
 		return (false);
 	}
 	if (not_exportable(str) == true)
 	{
-		ft_printf(2, "Minishell: export: `%s: not a valid identifier\n", str);
+		ft_printf(2, "Minishell: export: `%s': not a valid identifier\n", str);
 		*error = 1;
 		return (false);
 	}
 	while (str[i])
 	{
 		if (str[i] == '=')
-		{
-			*error = 0;
 			return (true);
-		}
 		i++;
 	}
 	return (false);
