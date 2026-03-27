@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/27 15:27:17 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/27 17:35:15 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,13 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	(void)ac;
 	(void)envp;
+	if (!envp || !envp[0])
+		return (1);
+	if (!isatty(1))
+	{
+		printf("is tty");
+		return (0);
+	}
 	mini_vars = NULL;
 	global = (t_global *)malloc(sizeof(t_global));
 	global->what_free = (int *)malloc(sizeof(int));
