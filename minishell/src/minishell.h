@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 13:53:29 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/27 09:45:50 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct s_global
 	t_token			*head;
 	t_token			*true_head;
 	int				*what_free;
+	int				*here_doc_error;
 }				t_global;
 
 void					init_signals(void);

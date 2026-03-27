@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/26 21:09:16 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/27 12:02:55 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,10 @@ void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 	{
 		line = readline("> ");
 		if (!line)
+		{
+			close(fd[1]);
 			break ;
+		}
 		if ((ft_strncmp(line, (*node)->target->sub_token->var,
 					(ft_strlen((*node)->target->sub_token->var) + 1)) == 0))
 		{
@@ -66,7 +69,10 @@ void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 		if ((*node)->target->sub_token->quote == NONE)
 			line = app_expend(line, global, 0);
 		if (!line)
+		{
+			close(fd[1]);
 			break ;
+		}
 		write(fd[1], line, ft_strlen(line));
 		write(fd[1], "\n", 1);
 		free(line);
@@ -95,7 +101,6 @@ int	prepare_here_doc(t_redir *node, t_global *global)
 		exit(1);
 	}
 	close(fd[1]);
-	printf("%d\n", status);
 	waitpid(pid, &status, 0);
 	if (status > 0)
 		close(fd[0]);
@@ -122,7 +127,8 @@ void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global)
 				while (redir)
 				{
 					if (redir->type == HEREDOC)
-						prepare_here_doc(redir, global);
+						if (prepare_here_doc(redir, global) == 1)
+							*(global->here_doc_error) = 1;
 					redir = redir->next;
 				}
 			}
@@ -148,14 +154,6 @@ int	redirection(t_ast *node, t_global *global)
 	current->stdout = dup(1);
 	while (current)
 	{
-		if (current->type == 1)
-			redir_stdin(current, global, &code);
-		if (code != 0)
-		return (1);
-		if (current->type == 2)
-			redir_stdout_trunc(current, global, &code);
-		if (code != 0)
-		return (1);
 		if (current->type == 3)
 		{
 			fd = current->fd;
@@ -163,7 +161,15 @@ int	redirection(t_ast *node, t_global *global)
 			close(fd);
 		}
 		if (code != 0)
-		return (1);
+			return (1);
+		if (current->type == 1)
+			redir_stdin(current, global, &code);
+		if (code != 0)
+			return (1);
+		if (current->type == 2)
+			redir_stdout_trunc(current, global, &code);
+		if (code != 0)
+			return (1);
 		if (current->type == 4)
 			redir_stdout_append(current, global, &code);
 		current = current->next;
@@ -192,7 +198,7 @@ void	restore_redirection(t_ast *node)
 			dup2(current->stdout, 1);
 			close(current->stdout);
 		}
-		if (current->fd != 0)
+		if (current->fd > 2)
 			close(current->fd);
 		current = current->next;
 	}

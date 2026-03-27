@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/26 18:48:36 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/27 11:43:48 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	exec_cmd(t_ast *ast, t_env *env, t_global *global)
 	if (pid == 0)
 		child_cmd(&ast, global);
 	waitpid(pid, &status, 0);
+	close_saved_fd(ast);
 	signal(SIGINT, handler);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));

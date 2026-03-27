@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/26 18:56:25 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/27 11:59:32 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int	main(int ac, char **av, char **envp)
 	// free_table(global->env->table);
 	global->error_code = (int *)malloc(sizeof(int));
 	*global->error_code = 0;
+	global->here_doc_error = (int *)malloc(sizeof(int));
+	*global->here_doc_error = 0;
 	// affichage_env(global->env);
 	g_signal = 0;
 	init_signals();
@@ -95,6 +97,7 @@ int	main(int ac, char **av, char **envp)
 				//ft_miniclear(&(global->true_head));
 			} */
 			free(global->what_free);
+			free(global->here_doc_error);
 			free(global);
 			rl_clear_history();
 			return (0);
@@ -119,7 +122,8 @@ int	main(int ac, char **av, char **envp)
 			if (!parser(&mini_vars, global))
 			{
 				run_through_here_doc(global->ast, global->env, global);
-				execution(global);
+				if (*(global->here_doc_error) == 0)
+					execution(global);
 				if (*(global->what_free) == 1)
 					global->true_head = global->head;
 				close_saved_fd(global->ast);
