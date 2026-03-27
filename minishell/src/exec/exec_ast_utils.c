@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_ast_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:22:04 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 15:56:42 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/27 13:17:24 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	child_cmd(t_ast **ast, char **path, t_global *global)
 void	pipe_first_child(t_ast **ast, int *fd, t_env **env, t_global *global)
 {
 	int	error;
-	
+
 	close(fd[0]);
 	dup2(fd[1], 1);
 	close(fd[1]);
