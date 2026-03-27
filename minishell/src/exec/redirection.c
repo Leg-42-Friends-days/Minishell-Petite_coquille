@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/27 12:02:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/27 14:11:40 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	free_all_in_child(t_global *global)
 	error = *(global->error_code);
 	free(global->error_code);
 	free(global->what_free);
+	free(global->here_doc_error);
 	free(global);
 	return (error);
 }
@@ -42,6 +43,7 @@ int	free_all_pipe_subshell(t_global *global)
 	error = *(global->error_code);
 	free(global->error_code);
 	free(global->what_free);
+	free(global->here_doc_error);
 	free(global);
 	return (error);
 }
@@ -104,6 +106,8 @@ int	prepare_here_doc(t_redir *node, t_global *global)
 	waitpid(pid, &status, 0);
 	if (status > 0)
 		close(fd[0]);
+	if (node->fd > 2)
+		close(node->fd);
 	node->fd = fd[0];
 	//close(fd[0]);
 	if (WIFEXITED(status))

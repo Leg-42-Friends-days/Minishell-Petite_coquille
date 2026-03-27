@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/27 11:43:48 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/27 13:54:35 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,13 @@ int	exec_cmd(t_ast *ast, t_env *env, t_global *global)
 	(void)env;
 	g_signal = 1;
 	status = 0;
-	/* path = init_path(&ast, env);
-	if (!path)
-		return (127);
-	status = is_directory(path);
-	if (status != 0)
-		return (status); */
 	pid = fork();
 	if (pid == -1)
 		error_pid();
 	if (pid == 0)
 		child_cmd(&ast, global);
 	waitpid(pid, &status, 0);
-	close_saved_fd(ast);
+	close_saved_fd(global->ast);
 	signal(SIGINT, handler);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
@@ -71,6 +65,7 @@ void	exec_pipe(t_ast *ast, t_env *env, int *error_code, t_global *global)
 
 	//*(global->what_free) = 1;
 	g_signal = 1;
+	close_saved_fd(global->ast);
 	if (pipe(fd) == -1)
 		error_pipe();
 	pid[0] = fork();
@@ -78,6 +73,7 @@ void	exec_pipe(t_ast *ast, t_env *env, int *error_code, t_global *global)
 		error_pid();
 	if (pid[0] == 0)
 		pipe_first_child(&ast, fd, &env, global);
+	close_saved_fd(global->ast);
 	pid[1] = fork();
 	if (pid[1] == -1)
 		error_pid();
@@ -86,7 +82,9 @@ void	exec_pipe(t_ast *ast, t_env *env, int *error_code, t_global *global)
 	close(fd[0]);
 	close(fd[1]);
 	waitpid(pid[0], NULL, 0);
+	close_saved_fd(ast);
 	waitpid(pid[1], &status, 0);
+	close_saved_fd(ast);
 	if (WIFEXITED(status))
 		*error_code = (WEXITSTATUS(status));
 }
@@ -124,7 +122,7 @@ void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g)
 	{
 		expand_function(ast, g);
 		redirection(ast, g);
-		close_saved_fd(ast);
+		close_saved_fd(g->ast);
 		execution_2(ast->left, env, error_code, g);
 		ft_miniclear(&(g->true_head));
 		free_parser(g->ast);
