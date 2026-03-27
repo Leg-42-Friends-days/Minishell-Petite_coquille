@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/27 14:11:40 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/27 17:34:55 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,14 @@ int	prepare_here_doc(t_redir *node, t_global *global)
 	waitpid(pid, &status, 0);
 	if (status > 0)
 		close(fd[0]);
-	if (node->fd > 2)
+	if (node->fd != 0)
+	{
+		write(2,"lol", 3);
 		close(node->fd);
+	}
 	node->fd = fd[0];
-	//close(fd[0]);
+	//close_saved_fd(global->ast);
+	//close(node->fd);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (0);
@@ -142,11 +146,12 @@ void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global)
 		if (current->right)
 			run_through_here_doc(current->right, env, global);
 	}
+	close_saved_fd(global->ast);
 }
 
 int	redirection(t_ast *node, t_global *global)
 {
-	int		fd;
+	//int		fd;
 	t_redir	*current;
 	int		code;
 
@@ -160,9 +165,9 @@ int	redirection(t_ast *node, t_global *global)
 	{
 		if (current->type == 3)
 		{
-			fd = current->fd;
-			dup2(fd, 0); 
-			close(fd);
+			//fd = current->fd;
+			dup2(current->fd, 0); 
+			close(current->fd);
 		}
 		if (code != 0)
 			return (1);
