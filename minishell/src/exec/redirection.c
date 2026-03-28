@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/27 17:34:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/28 13:54:20 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	free_all_in_child(t_global *global)
 {
 	int	error;
 
-	if (*(global->what_free) == 1)
+	if (*(global->what_free) > 0)
 		global->true_head = global->head;
 	ft_miniclear(&(global->true_head));
 	free_parser(global->ast);
@@ -34,7 +34,7 @@ int	free_all_pipe_subshell(t_global *global)
 {
 	int	error;
 
-	if (*(global->what_free) == 1)
+	if (*(global->what_free) > 0)
 		global->true_head = global->head;
 	ft_miniclear(&(global->true_head));
 	free_parser(global->ast);
@@ -106,11 +106,11 @@ int	prepare_here_doc(t_redir *node, t_global *global)
 	waitpid(pid, &status, 0);
 	if (status > 0)
 		close(fd[0]);
-	if (node->fd != 0)
-	{
-		write(2,"lol", 3);
-		close(node->fd);
-	}
+	//if (node->fd != 0)
+	//{
+	//	write(2,"lol", 3);
+	//	close(node->fd);
+	//}
 	node->fd = fd[0];
 	//close_saved_fd(global->ast);
 	//close(node->fd);
@@ -146,7 +146,6 @@ void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global)
 		if (current->right)
 			run_through_here_doc(current->right, env, global);
 	}
-	close_saved_fd(global->ast);
 }
 
 int	redirection(t_ast *node, t_global *global)

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/27 17:24:13 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/28 13:53:15 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,9 +122,9 @@ int	main(int ac, char **av, char **envp)
 			if (!parser(&mini_vars, global))
 			{
 				run_through_here_doc(global->ast, global->env, global);
-				//if (*(global->here_doc_error) == 0)
-					//execution(global);
-				if (*(global->what_free) == 1)
+				if (*(global->here_doc_error) == 0)
+					execution(global);
+				if (*(global->what_free) > 0)
 					global->true_head = global->head;
 				close_saved_fd(global->ast);
 				ft_miniclear(&(global->true_head));

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 14:32:52 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/26 18:44:30 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/28 13:54:35 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,18 @@ int	redir_before_word(t_ast **node, t_token **token, t_global *global)
 			return (1);
 		while (is_redir(*token))
 		{
-			global->head = *token;
+			if (*(global->what_free) == 1)
+				global->head = *token;
 			if ((token_list_redir(token, *node, global)) == 1)
 				return (1);
 		}
 		if (*token)
 			(*node)->cmd_token = *token;
-		global->head = *token;
+		if (*(global->what_free) == 1)
+		{
+			*(global->what_free) = *(global->what_free) + 1;
+			global->head = *token;
+		}
 		return (2);
 	}
 	return (0);

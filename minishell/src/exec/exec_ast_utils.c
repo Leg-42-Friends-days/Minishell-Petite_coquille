@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:22:04 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/27 13:52:04 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/28 13:54:09 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ void	close_saved_fd(t_ast *ast)
 	if (!ast)
 		return ;
 	current = ast->redirs;
-	if (!current)
-		return ;
 	while (current)
 	{
 		if (current->stdin != -1)
@@ -37,7 +35,7 @@ void	close_saved_fd(t_ast *ast)
 
 void	free_before_execute(t_global *global, int error_code)
 {
-	if (*(global->what_free) == 1)
+	if (*(global->what_free) > 0)
 		global->true_head = global->head;
 	ft_miniclear(&(global->true_head));
 	free_parser(global->ast);
@@ -68,7 +66,6 @@ void	child_cmd(t_ast **ast, t_global *global)
 	if (is_directory(path, &directory) != 0)
 		free_before_execute(global, directory);
 	execve(path, (*ast)->cmd2, global->env->table);
-	close_saved_fd(global->ast);
 	free(path);
 	free_all_in_child(global);
 	perror("minishell");
@@ -83,8 +80,8 @@ void	pipe_first_child(t_ast **ast, int *fd, t_env **env, t_global *global)
 	close(fd[0]);
 	dup2(fd[1], 1);
 	close(fd[1]);
-	close_saved_fd(global->ast);
 	execution_2((*ast)->left, *env, global->error_code, global);
+	close_saved_fd(global->ast);
 	error = free_all_pipe_subshell(global);
 	exit(error);
 }
@@ -97,8 +94,8 @@ void	pipe_second_child(t_ast **ast, int *fd, t_env **env, t_global *global)
 	close(fd[1]);
 	dup2(fd[0], 0);
 	close(fd[0]);
-	close_saved_fd(global->ast);
 	execution_2((*ast)->right, *env, global->error_code, global);
+	close_saved_fd(global->ast);
 	error = free_all_pipe_subshell(global);
 	exit(error);
 }
