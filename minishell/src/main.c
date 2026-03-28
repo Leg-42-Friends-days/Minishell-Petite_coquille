@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/28 13:53:15 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/28 16:02:58 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		write(1, "\n", 1);
 		if (g_signal == 0)
 		{
+			write(1, "\n", 1);
 			rl_on_new_line();
 			rl_replace_line("", 0);
 			rl_redisplay();
@@ -55,6 +55,13 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	(void)ac;
 	(void)envp;
+	if (!envp || !envp[0])
+		return (1);
+	if (!isatty(1))
+	{
+		printf("is tty");
+		return (0);
+	}
 	mini_vars = NULL;
 	global = (t_global *)malloc(sizeof(t_global));
 	global->what_free = (int *)malloc(sizeof(int));

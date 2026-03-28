@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/28 13:14:49 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/28 16:02:39 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	exec_cmd(t_ast *ast, t_env *env, t_global *global)
 {
 	pid_t	pid;
 	int		status;
+	int		sig;
 
 	(void)env;
 	g_signal = 1;
@@ -51,6 +52,14 @@ int	exec_cmd(t_ast *ast, t_env *env, t_global *global)
 		child_cmd(&ast, global);
 	waitpid(pid, &status, 0);
 	signal(SIGINT, handler);
+	if (WIFSIGNALED(status))
+	{
+		sig = WTERMSIG(status);
+		if (sig == SIGINT)
+			write(1, "\n", 1);
+		if (sig == SIGQUIT)
+			ft_printf(1, "Quit (core dumped)\n");
+	}
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (0);
@@ -122,12 +131,12 @@ void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g)
 		ft_miniclear(&(g->true_head));
 		free_parser(g->ast);
 		if (g->env)
-		free_env(g->env);
+			free_env(g->env);
 		error = *(g->error_code);
 		free(g->error_code);
 		free(g->what_free);
 		free(g);
-		exit (error);
+		exit(error);
 	}
 	waitpid(pid, &status, 0);
 	close_saved_fd(g->ast);

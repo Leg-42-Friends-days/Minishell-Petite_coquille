@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 13:42:59 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/26 15:37:14 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ bool	check_if_expendable(char *str)
 	while (str[i])
 	{
 		if (str[i] == '$' && str[i + 1] != ':' && str[i + 1] != '=' && str[i
-				+ 1] != '"' && str[i + 1] != '\'')
+			+ 1] != '"' && str[i + 1] != '\'')
 			return (true);
 		i++;
 	}
@@ -83,7 +83,8 @@ bool	check_condition_key(char *str, int i)
 		&& (str[i] != '*' && str[i]) && (str[i] && str[i] != ']') && (str[i]
 			&& str[i] != '[') && (str[i] && str[i] != '%') && (str[i]
 			&& str[i] != '{') && (str[i] && str[i] != '}') && (str[i]
-			&& str[i] != '!'))
+			&& str[i] != '!') && (str[i] && str[i] != '.') && (str[i]
+			&& str[i] != '='))
 		return (true);
 	return (false);
 }
@@ -1160,13 +1161,31 @@ int	add_normal_len(char **split)
 	return (len);
 }
 
+int	add_split_len(t_sub_token *sub, char *str)
+{
+	char	**split;
+	int		len;
+	int		word;
+
+	len = 0;
+	split = ft_split(str, ' ');
+	if (!split)
+		return (0);
+	len += add_normal_len(split);
+	word = count_split_word(split);
+	if (word > 1 && sub->prev && (sub->prev->quote == DOUBLE
+			|| sub->prev->quote == SINGLE))
+		len++;
+	free_split(split);
+	return (len);
+}
+
 int	check_if_add(t_sub_token *sub, t_global *global)
 {
 	char	*str;
-	char	**split;
-	int		i;
+	int		len;
 
-	i = 0;
+	len = 0;
 	if (sub->quote != NORMAL)
 		return (0);
 	str = ft_strdup(sub->var);
@@ -1176,14 +1195,10 @@ int	check_if_add(t_sub_token *sub, t_global *global)
 	if (!str || str[0] == '\0')
 		return (free(str), 0);
 	if (ft_strchr(str, ' '))
-	{
-		split = ft_split(str, ' ');
-		i += add_normal_len(split);
-		free_split(split);
-	}
+		len += add_split_len(sub, str);
 	else if (check_if_wildcard(str) == false)
-		i += wildcard_len_add();
-	return (free(str), i);
+		len += wildcard_len_add();
+	return (free(str), len);
 }
 
 int	expand_len_token(t_ast *ast, t_global *global)

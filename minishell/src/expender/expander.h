@@ -90,5 +90,6 @@ void	normal_quote(t_ast *ast, t_global *global, t_sub_token *sub,
 			int *index);
 int		count_split_word(char **split);
 int		add_len(t_sub_token *sub, int words);
+int	add_split_len(t_sub_token *sub, char *str);
 
 #endif
