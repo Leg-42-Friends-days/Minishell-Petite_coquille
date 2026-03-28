@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:22:04 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/28 13:54:09 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/28 14:56:53 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	close_saved_fd(t_ast *ast)
 			close(current->stdin);
 		if (current->stdout != -1)
 			close(current->stdout);
-		if (current->fd > 2)
+		if (current->fd != -1)
 			close(current->fd);
 		current = current->next;
 	}

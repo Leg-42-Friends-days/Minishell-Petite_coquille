@@ -6,11 +6,31 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/28 13:54:20 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/28 15:15:41 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+void	close_previous_heredocs(t_redir *node)
+{
+	t_redir	*current;
+
+	if (!node)
+		return ;
+	current = node;
+	while(current)
+	{
+		if (current->type == HEREDOC && current->fd != -1)
+		{
+			close(current->fd);
+			current->fd = -1;
+		}
+		current = current->next;
+	}
+	//close_previous_heredocs(ast->right);
+	//close_previous_heredocs(ast->left);
+}
 
 int	free_all_in_child(t_global *global)
 {
@@ -52,6 +72,7 @@ void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 {
 	char	*line;
 
+	close_saved_fd(global->ast);
 	while (1)
 	{
 		line = readline("> ");
@@ -106,6 +127,7 @@ int	prepare_here_doc(t_redir *node, t_global *global)
 	waitpid(pid, &status, 0);
 	if (status > 0)
 		close(fd[0]);
+	close_previous_heredocs(node);
 	//if (node->fd != 0)
 	//{
 	//	write(2,"lol", 3);
@@ -150,7 +172,7 @@ void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global)
 
 int	redirection(t_ast *node, t_global *global)
 {
-	//int		fd;
+	int		fd;
 	t_redir	*current;
 	int		code;
 
@@ -164,9 +186,9 @@ int	redirection(t_ast *node, t_global *global)
 	{
 		if (current->type == 3)
 		{
-			//fd = current->fd;
-			dup2(current->fd, 0); 
-			close(current->fd);
+			fd = current->fd;
+			dup2(fd, 0); 
+			close(fd);
 		}
 		if (code != 0)
 			return (1);

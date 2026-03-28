@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 14:04:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/26 15:52:49 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/28 14:56:36 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	redir_node(t_redir **redir, t_token **token, t_global *global)
 	node->next = NULL;
 	node->stdin = -1;
 	node->stdout = -1;
-	node->fd = 0;
+	node->fd = -1;
 	if (!redir || !(*redir))
 	{
 		(*redir) = node;
