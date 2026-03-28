@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/28 16:02:39 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/28 20:22:52 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g)
 		error = *(g->error_code);
 		free(g->error_code);
 		free(g->what_free);
+		free(g->here_doc_error);
 		free(g);
 		exit(error);
 	}
