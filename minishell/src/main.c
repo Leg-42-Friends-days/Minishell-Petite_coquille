@@ -55,13 +55,8 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	(void)ac;
 	(void)envp;
-	if (!envp || !envp[0])
-		return (1);
 	if (!isatty(1))
-	{
-		printf("is tty");
-		return (0);
-	}
+		return (1);
 	mini_vars = NULL;
 	global = (t_global *)malloc(sizeof(t_global));
 	global->what_free = (int *)malloc(sizeof(int));
@@ -69,7 +64,10 @@ int	main(int ac, char **av, char **envp)
 	global->true_head = NULL;
 	global->env = NULL;
 	global->ast = NULL;
-	global->env = env_content(global->env, envp);
+	if (!envp || !envp[0])
+		global->env = mini_env(global->env);
+	else
+		global->env = env_content(global->env, envp);
 	global->env->table = initiate_table_env(global->env);
 	// print_env(global->env->table);
 	// free_table(global->env->table);

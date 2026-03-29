@@ -64,6 +64,7 @@ t_env				*env_content(t_env *env, char **envp);
 char				*strcat_env(char *s1, char *s2, int size);
 char				*envjoin(char *s1, char *s2);
 t_env				*lstadd_back_env(t_env *lst, char *key, char *value);
+t_env *mini_env(t_env *env);
 
 // EXPORT
 

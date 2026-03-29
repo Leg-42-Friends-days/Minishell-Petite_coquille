@@ -68,3 +68,19 @@ int	affichage_env(t_env *env)
 	ft_printf(1, "%s\n", env->content);
 	return (0);
 }
+
+
+t_env *mini_env(t_env *env)
+{
+	char	*pwd;
+
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		pwd = ft_strdup("");
+	env = lstadd_back_env(env, ft_strdup("PWD"), pwd);
+	env = lstfirst_env(env);
+	env = lstadd_back_env(env, ft_strdup("SHLVL"), ft_strdup("1"));
+	// env = lstfirst_env(env);
+	// env = lstadd_back_env(env, ft_strdup("OLDPWD"), ft_strdup(""));
+	return (lstfirst_env(env));
+}
