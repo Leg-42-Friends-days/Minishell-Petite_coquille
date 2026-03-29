@@ -80,6 +80,7 @@ t_env *mini_env(t_env *env)
 	env = lstadd_back_env(env, ft_strdup("PWD"), pwd);
 	env = lstfirst_env(env);
 	env = lstadd_back_env(env, ft_strdup("SHLVL"), ft_strdup("1"));
+	env = lstadd_back_env(env, ft_strdup("_"), ft_strdup("/usr/bin/env"));
 	// env = lstfirst_env(env);
 	// env = lstadd_back_env(env, ft_strdup("OLDPWD"), ft_strdup(""));
 	return (lstfirst_env(env));
