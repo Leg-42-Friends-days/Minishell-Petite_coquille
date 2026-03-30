@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/28 16:02:58 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 13:17:35 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
@@ -55,8 +54,6 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	(void)ac;
 	(void)envp;
-	if (!isatty(1))
-		return (1);
 	mini_vars = NULL;
 	global = (t_global *)malloc(sizeof(t_global));
 	global->what_free = (int *)malloc(sizeof(int));
@@ -78,85 +75,88 @@ int	main(int ac, char **av, char **envp)
 	// affichage_env(global->env);
 	g_signal = 0;
 	init_signals();
-	while (true)
+	if (isatty(0))
 	{
-		g_signal = 0;
-		line = readline("Minishell > ");
-		if (line)
+		while (true)
 		{
-			mini_vars = lexing(&mini_vars, line);
-		}
-		if (!line)
-		{
-			write(1, "exit\n", 5);
-			//free(global->what_free);
-			if (global->env)
-				free_env(global->env);
-			free(global->error_code);
-			// if (global->ast)
-			//	free_parser(global->ast);
-			/* if (*(global->what_free) == 1)
-			{
-				printf("lolilol\n");
-				//free_parser(global->ast);
-				//ft_miniclear(&(global->true_head));
-			} */
-			free(global->what_free);
-			free(global->here_doc_error);
-			free(global);
-			rl_clear_history();
-			return (0);
-		}
-		if (*line)
-			add_history(line);
-		// printf("%d\n", g_signal);
-		if (g_signal != 0)
-		{
-			*global->error_code = 130;
 			g_signal = 0;
-		}
-		if (mini_vars)
-		{
-			if (mini_vars->type == INFILE || mini_vars->type == OUTFILE || mini_vars->type == HEREDOC || mini_vars->type == APPEND)
+			line = readline("Minishell > ");
+			if (line)
 			{
-				*(global->what_free) = 1;
+				mini_vars = lexing(&mini_vars, line);
 			}
-			global->head = mini_vars;
-			global->true_head = mini_vars;
-			//printmini(&mini_vars);
-			if (!parser(&mini_vars, global))
+			if (!line)
 			{
-				run_through_here_doc(global->ast, global->env, global);
-				if (*(global->here_doc_error) == 0)
-					execution(global);
-				if (*(global->what_free) > 0)
-					global->true_head = global->head;
-				close_saved_fd(global->ast);
-				ft_miniclear(&(global->true_head));
-				free_parser(global->ast);
-				//free(global->what_free);
+				write(1, "exit\n", 5);
+				// free(global->what_free);
+				if (global->env)
+					free_env(global->env);
+				free(global->error_code);
+				// if (global->ast)
+				//	free_parser(global->ast);
+				/* if (*(global->what_free) == 1)
+				{
+					printf("lolilol\n");
+					//free_parser(global->ast);
+					//ft_miniclear(&(global->true_head));
+				} */
+				free(global->what_free);
+				free(global->here_doc_error);
+				free(global);
+				rl_clear_history();
+				return (0);
+			}
+			if (*line)
+				add_history(line);
+			// printf("%d\n", g_signal);
+			if (g_signal != 0)
+			{
+				*global->error_code = 130;
+				g_signal = 0;
+			}
+			if (mini_vars)
+			{
+				if (mini_vars->type == INFILE || mini_vars->type == OUTFILE
+					|| mini_vars->type == HEREDOC || mini_vars->type == APPEND)
+				{
+					*(global->what_free) = 1;
+				}
+				global->head = mini_vars;
+				global->true_head = mini_vars;
+				// printmini(&mini_vars);
+				if (!parser(&mini_vars, global))
+				{
+					run_through_here_doc(global->ast, global->env, global);
+					if (*(global->here_doc_error) == 0)
+						execution(global);
+					if (*(global->what_free) > 0)
+						global->true_head = global->head;
+					close_saved_fd(global->ast);
+					ft_miniclear(&(global->true_head));
+					free_parser(global->ast);
+					// free(global->what_free);
+					mini_vars = NULL;
+				}
 				mini_vars = NULL;
+				// ft_miniclear(&(global->head));
+				// printmini(&mini_vars);
+				// free_parser(global->ast);
+				// run_through_here_doc(global->ast, global->env, global);
+				// expand_function(global);
+				// print_tab(global->ast->cmd2);
+				// execution(global);
+				// printmini(&(global->head));
+				// ft_miniclear(&(global->head));
+				// free_parser(global->ast);
+				// mini_vars = NULL;
+				// free(global);
 			}
-			mini_vars = NULL;
-			//ft_miniclear(&(global->head));
-			//printmini(&mini_vars);
-			//free_parser(global->ast);
-			//run_through_here_doc(global->ast, global->env, global);
-			//expand_function(global);
-			//print_tab(global->ast->cmd2);
-			//execution(global);
-			//printmini(&(global->head));
-			//ft_miniclear(&(global->head));
-			//free_parser(global->ast);
-			//mini_vars = NULL;
-			//free(global);
+			// printf("g_signal %d\n", g_signal);
+			// printf("error_code %d\n", (*global->error_code));
+			free(line);
 		}
-		// printf("g_signal %d\n", g_signal);
-		// printf("error_code %d\n", (*global->error_code));
-		free(line);
 	}
 }
-
 
 // Test KILL
 // int	main(void)
