@@ -6,23 +6,11 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 11:49:59 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/27 13:19:23 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 11:59:56 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	free_before_exit(t_global *global)
-{
-	ft_miniclear(&(global->head));
-	free_parser(global->ast);
-	if (global->env)
-		free_env(global->env);
-	free(global->error_code);
-	free(global->what_free);
-	free(global->here_doc_error);
-	free(global);
-}
 
 int	check_ft_atol(const char *str)
 {
@@ -104,14 +92,8 @@ int	is_not_numeric(char *cmd)
 		return (1);
 }
 
-int	ft_exit(char **cmd, t_env *env, int *error_code, t_global *global)
+void	check_first_param(t_global *global, int code, char **cmd)
 {
-	int	code;
-
-	code = *error_code;
-	(void)env;
-	if (g_signal != 1)
-		printf("exit\n");
 	if (!cmd[1])
 	{
 		free_before_exit(global);
@@ -128,6 +110,17 @@ int	ft_exit(char **cmd, t_env *env, int *error_code, t_global *global)
 			exit(2);
 		}
 	}
+}
+
+int	ft_exit(char **cmd, t_env *env, int *error_code, t_global *global)
+{
+	int	code;
+
+	code = *error_code;
+	(void)env;
+	if (g_signal != 1)
+		printf("exit\n");
+	check_first_param(global, code, cmd);
 	if (cmd[2])
 	{
 		write(2, "minishell: exit: too many arguments\n", 36);

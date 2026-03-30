@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:16:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 13:49:31 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 11:59:06 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,15 @@ char				*get_key(char *envp);
 int					find_letter(char *envp, char letter);
 t_env				*lstfirst_env(t_env *lst);
 
-void				free_pwd(t_pwd *pwd);
 void				free_env(t_env *env);
 
 char				**initiate_table_env(t_env *env);
 char				*ft_envdup(t_env *env);
 int					len_table_env(t_env *env);
+
+// FREE_BUILTIN
+void				free_pwd(t_pwd *pwd);
+void				free_before_exit(t_global *global);
 
 // ECHO
 int					ft_echo(char **cmd, t_env *env);

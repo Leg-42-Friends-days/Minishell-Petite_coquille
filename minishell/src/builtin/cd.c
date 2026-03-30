@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:44 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/26 10:49:25 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 12:09:03 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	invalid_option(char **cmd)
 	return (r);
 }
 
-char	*target_HOME(t_env *env, int *error_code, char *target)
+char	*target_home(t_env *env, int *error_code, char *target)
 {
 	target = ft_getenv(env, "HOME");
 	if (!target)
@@ -77,6 +77,13 @@ char	*target_HOME(t_env *env, int *error_code, char *target)
 	return (target);
 }
 
+char 	*print_invalid_option(int *error_code)
+{
+	write(2, "cd: --: invalid option\n", 23);
+	*error_code = 2;
+	return (NULL);
+}
+
 char	*define_target(char **cmd, t_env *env, int *error_code)
 {
 	char	*target;
@@ -87,17 +94,13 @@ char	*define_target(char **cmd, t_env *env, int *error_code)
 	if (cmd[1])
 	{
 		if (!ft_strncmp(cmd[1], "-", 2))
-			return(ft_getenv(env, "OLDPWD"));
+			return (ft_getenv(env, "OLDPWD"));
 		if (invalid_option(cmd) == 2 && cmd[2])
-			return(cmd[2]);
+			return (cmd[2]);
 		if (invalid_option(cmd) == 2 && !cmd[2])
-			return(target_HOME(env, error_code, target));
+			return(target_home(env, error_code, target));
 		if (invalid_option(cmd) == 1)
-		{
-			write(2, "cd: --: invalid option\n", 23);
-			*error_code = 2;
-			return (NULL);
-		}
+			return (print_invalid_option(error_code));
 		else if (cmd[2])
 		{
 			write(2, "cd : too many arguments\n", 24);
@@ -133,6 +136,27 @@ void	save_pwd(char *newpwd, t_env *env)
 	free(newpwd);
 }
 
+int	print_no_such_file(char *target)
+{
+	write(2, "minishell: cd: ", 15);
+	write(2, target, ft_strlen(target));
+	write(2, ": ", 2);
+	write(2, "No such file or directory", 25);
+	write(2, "\n", 1);
+	return (1);
+}
+
+int	print_error_target(char **cmd, char *oldpwd)
+{
+	write(2, "minishell: cd: ", 15);
+	write(2, cmd[1], ft_strlen(cmd[1]));
+	write(2, ": ", 2);
+	write(2, strerror(errno), strlen(strerror(errno)));
+	write(2, "\n", 1);
+	free(oldpwd);
+	return (1);
+}
+
 int	ft_cd(char **cmd, t_env *env)
 {
 	char	*oldpwd;
@@ -148,32 +172,15 @@ int	ft_cd(char **cmd, t_env *env)
 		return (error_code);
 	}
 	if (!oldpwd && error_code != 42)
-	{
-		write(2, "minishell: cd: ", 15);
-		write(2, target, ft_strlen(target));
-		write(2, ": ", 2);
-		write(2, "No such file or directory", 25);
-		write(2, "\n", 1);
-		return (1);
-	}
+		return (print_no_such_file(target));
 	if (chdir(target) < 0)
-	{
-		write(2, "minishell: cd: ", 15);
-		write(2, cmd[1], ft_strlen(cmd[1]));
-		write(2, ": ", 2);
-		write(2, strerror(errno), strlen(strerror(errno)));
-		write(2, "\n", 1);
-		free(oldpwd);
-		return (1);
-	}
+		return (print_error_target(cmd, oldpwd));
 	if (cmd[1] && !ft_strncmp(cmd[1], "-", 2))
 	{
 		write(1, target, ft_strlen(target));
 		write(1, "\n", 1);
 	}
 	save_pwd(getcwd(NULL, 0), env);
-	/* printf("old : %s\n", ft_getenv(env, "OLDPWD"));
-	printf("new : %s\n", ft_getenv(env, "PWD")); */
 	free(oldpwd);
 	return (0);
 }

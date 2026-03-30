@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 14:04:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/28 14:56:36 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 10:37:18 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,10 @@ int	error_no_target(t_global *global)
 	return (1);
 }
 
-int	redir_node(t_redir **redir, t_token **token, t_global *global)
+void	init_redir(t_redir *node, t_token **token)
 {
-	t_redir	*node;
 	t_token	*file;
-	t_redir	*current;
 
-	if (!(*token)->next)
-		return (error_no_target(global));
-	node = malloc(sizeof(t_redir));
-	if (!node)
-		return (1);
 	node->type = (*token)->type;
 	file = (*token)->next;
 	node->target = file;
@@ -37,6 +30,19 @@ int	redir_node(t_redir **redir, t_token **token, t_global *global)
 	node->stdin = -1;
 	node->stdout = -1;
 	node->fd = -1;
+}
+
+int	redir_node(t_redir **redir, t_token **token, t_global *global)
+{
+	t_redir	*node;
+	t_redir	*current;
+
+	if (!(*token)->next)
+		return (error_no_target(global));
+	node = malloc(sizeof(t_redir));
+	if (!node)
+		return (1);
+	init_redir(node, token);
 	if (!redir || !(*redir))
 	{
 		(*redir) = node;

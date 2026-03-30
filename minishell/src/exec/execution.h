@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/26 18:12:18 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 11:47:19 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void	error_pipe(void);
 // REDIR_UTILS.c
 void	redir_stdin(t_redir *current, t_global *global, int *code);
 void	redir_stdout_trunc(t_redir *current, t_global *global, int *code);
+void	redir_here_doc(t_redir *current, t_global *global, int *code);
 void	redir_stdout_append(t_redir *current, t_global *global, int *code);
 
 // EXEC_AST.c

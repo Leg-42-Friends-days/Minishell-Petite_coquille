@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:33 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/24 15:42:54 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 10:30:57 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,6 @@ t_ast	*free_malloc_error(t_ast *node, int *error);
 int		redir_before_word(t_ast **node, t_token **token, t_global *global);
 int		redir_after_word(t_ast **node, t_token **token, t_global *global);
 int		subshell_redirs(t_ast *node, t_token **token, t_global *global);
-int		parse_subshell(t_ast **node, t_token **token, t_global *global, int *error);
+int		parse_subshell(t_ast **node, t_token **token, t_global *g, int *error);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/28 15:15:41 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 11:47:37 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	close_previous_heredocs(t_redir *node)
 	if (!node)
 		return ;
 	current = node;
-	while(current)
+	while (current)
 	{
 		if (current->type == HEREDOC && current->fd != -1)
 		{
@@ -28,8 +28,6 @@ void	close_previous_heredocs(t_redir *node)
 		}
 		current = current->next;
 	}
-	//close_previous_heredocs(ast->right);
-	//close_previous_heredocs(ast->left);
 }
 
 int	free_all_in_child(t_global *global)
@@ -68,6 +66,14 @@ int	free_all_pipe_subshell(t_global *global)
 	return (error);
 }
 
+void	if_limiter(char *line, t_global *global, int *fd)
+{
+	free(line);
+	close(fd[1]);
+	free_all_in_child(global);
+	exit (0);
+}
+
 void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 {
 	char	*line;
@@ -83,12 +89,7 @@ void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 		}
 		if ((ft_strncmp(line, (*node)->target->sub_token->var,
 					(ft_strlen((*node)->target->sub_token->var) + 1)) == 0))
-		{
-			free(line);
-			close(fd[1]);
-			free_all_in_child(global);
-			exit (0);
-		}
+			if_limiter(line, global, fd);
 		if ((*node)->target->sub_token->quote == NONE)
 			line = app_expend(line, global, 0);
 		if (!line)
@@ -100,6 +101,16 @@ void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 		write(fd[1], "\n", 1);
 		free(line);
 	}
+}
+
+void	child_here_doc(int *fd, t_redir *node, t_global *global)
+{
+	g_signal = 0;
+	init_signals();
+	close(fd[0]);
+	fill_here_doc(fd, &node, global);
+	free_all_in_child(global);
+	exit(1);
 }
 
 int	prepare_here_doc(t_redir *node, t_global *global)
@@ -116,26 +127,14 @@ int	prepare_here_doc(t_redir *node, t_global *global)
 		error_pid();
 	if (pid == 0)
 	{
-		g_signal = 0;
-		init_signals();
-		close(fd[0]);
-		fill_here_doc(fd, &node, global);
-		free_all_in_child(global);
-		exit(1);
+		child_here_doc(fd, node, global);
 	}
 	close(fd[1]);
 	waitpid(pid, &status, 0);
 	if (status > 0)
 		close(fd[0]);
 	close_previous_heredocs(node);
-	//if (node->fd != 0)
-	//{
-	//	write(2,"lol", 3);
-	//	close(node->fd);
-	//}
 	node->fd = fd[0];
-	//close_saved_fd(global->ast);
-	//close(node->fd);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (0);
@@ -172,7 +171,6 @@ void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global)
 
 int	redirection(t_ast *node, t_global *global)
 {
-	int		fd;
 	t_redir	*current;
 	int		code;
 
@@ -184,23 +182,13 @@ int	redirection(t_ast *node, t_global *global)
 	current->stdout = dup(1);
 	while (current)
 	{
-		if (current->type == 3)
-		{
-			fd = current->fd;
-			dup2(fd, 0); 
-			close(fd);
-		}
-		if (code != 0)
-			return (1);
-		if (current->type == 1)
+		if (current->type == INFILE)
 			redir_stdin(current, global, &code);
-		if (code != 0)
-			return (1);
-		if (current->type == 2)
+		else if (current->type == OUTFILE)
 			redir_stdout_trunc(current, global, &code);
-		if (code != 0)
-			return (1);
-		if (current->type == 4)
+		else if (current->type == HEREDOC)
+			redir_here_doc(current, global, &code);
+		else if (current->type == APPEND)
 			redir_stdout_append(current, global, &code);
 		current = current->next;
 	}
