@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:44 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/30 12:09:03 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 15:32:20 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,11 @@ char	*ft_getenv(t_env *env, char *key)
 	if (!env)
 		return (NULL);
 	current = env;
-	while (current->key != NULL)
+	while (current != NULL)
 	{
 		if (!ft_strncmp(current->key, key, (ft_strlen(key) + 1)))
 			return (current->content);
-		if (current->next)
-			current = current->next;
+		current = current->next;
 	}
 	return (NULL);
 }
@@ -36,12 +35,11 @@ t_env	*ft_getenv_node(t_env *env, char *key)
 	if (!env)
 		return (NULL);
 	current = env;
-	while (current->key != NULL)
+	while (current != NULL)
 	{
 		if (!ft_strncmp(current->key, key, (ft_strlen(key) + 1)))
 			return (current);
-		if (current->next)
-			current = current->next;
+		current = current->next;
 	}
 	return (NULL);
 }
@@ -69,7 +67,7 @@ char	*target_home(t_env *env, int *error_code, char *target)
 	target = ft_getenv(env, "HOME");
 	if (!target)
 	{
-		write(2, "cd: HOME nos set\n", 17);
+		write(2, "cd: HOME not set\n", 17);
 		*error_code = 1;
 		return (NULL);
 	}
@@ -90,7 +88,7 @@ char	*define_target(char **cmd, t_env *env, int *error_code)
 
 	target = NULL;
 	if (!cmd[1])
-		return(target_HOME(env, error_code, target));
+		return(target_home(env, error_code, target));
 	if (cmd[1])
 	{
 		if (!ft_strncmp(cmd[1], "-", 2))
