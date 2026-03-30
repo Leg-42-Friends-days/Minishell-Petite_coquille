@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 14:32:52 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/28 13:54:35 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 10:30:53 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	subshell_redirs(t_ast *node, t_token **token, t_global *global)
 	return (0);
 }
 
-int	parse_subshell(t_ast **node, t_token **token, t_global *global, int *error)
+int	parse_subshell(t_ast **node, t_token **token, t_global *g, int *error)
 {
 	if (*token && (*token)->type == L_PAR)
 	{
@@ -56,7 +56,7 @@ int	parse_subshell(t_ast **node, t_token **token, t_global *global, int *error)
 		if (!*node)
 			return (1);
 		*token = (*token)->next;
-		(*node)->left = parse_or_and(token, global, error);
+		(*node)->left = parse_or_and(token, g, error);
 		if (!(*node)->left)
 			return (1);
 		(*node)->right = NULL;
@@ -67,7 +67,7 @@ int	parse_subshell(t_ast **node, t_token **token, t_global *global, int *error)
 			write(2, "minishell: syntax error: unclosed parenthesis\n", 46);
 			return (1);
 		}
-		if (subshell_redirs(*node, token, global) == 1)
+		if (subshell_redirs(*node, token, g) == 1)
 			return (1);
 		return (2);
 	}

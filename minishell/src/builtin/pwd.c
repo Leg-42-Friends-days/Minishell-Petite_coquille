@@ -6,12 +6,11 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 14:31:27 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 13:50:17 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 11:52:08 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 int	is_option(char **cmd)
 {
@@ -20,7 +19,7 @@ int	is_option(char **cmd)
 
 	i = 1;
 	j = 0;
-	if(cmd[i] != NULL)
+	if (cmd[i] != NULL)
 	{
 		if (cmd[i][j] == '-')
 		{

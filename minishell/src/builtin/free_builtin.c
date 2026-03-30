@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:03:07 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 13:36:04 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/30 12:00:25 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,16 @@ void	free_pwd(t_pwd *pwd)
 	if (pwd->pwd)
 		free(pwd->pwd);
 	free(pwd);
+}
+
+void	free_before_exit(t_global *global)
+{
+	ft_miniclear(&(global->head));
+	free_parser(global->ast);
+	if (global->env)
+		free_env(global->env);
+	free(global->error_code);
+	free(global->what_free);
+	free(global->here_doc_error);
+	free(global);
 }

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:22:04 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/28 16:02:23 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 10:39:38 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,11 @@ void	free_before_execute(t_global *global, int error_code)
 
 void	child_cmd(t_ast **ast, t_global *global)
 {
-	int		code = 0;
+	int		code;
 	char	*path;
 	int		directory;
 
+	code = 0;
 	directory = 0;
 	init_child_signals();
 	code = redirection(*ast, global);

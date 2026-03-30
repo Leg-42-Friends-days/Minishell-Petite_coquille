@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/28 20:22:52 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 14:23:04 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void	exec_pipe(t_ast *ast, t_env *env, int *error_code, t_global *global)
 	pid_t	pid[2];
 	int		status;
 
-	//*(global->what_free) = 1;
 	g_signal = 1;
 	if (pipe(fd) == -1)
 		error_pipe();
@@ -109,16 +108,32 @@ void	exec_or(t_ast *ast, t_env *env, int *error_code, t_global *global)
 		execution_2(ast->right, env, error_code, global);
 }
 
+void	free_subshell(t_global *global)
+{
+	int	error;
+
+	error = 0;
+	if (*(global->what_free) > 0)
+		global->true_head = global->head;
+	ft_miniclear(&(global->true_head));
+	free_parser(global->ast);
+	if (global->env)
+		free_env(global->env);
+	error = *(global->error_code);
+	free(global->error_code);
+	free(global->what_free);
+	free(global->here_doc_error);
+	free(global);
+	exit(error);
+}
+
 void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g)
 {
 	pid_t	pid;
 	int		status;
-	int		error;
 
 	g_signal = 1;
 	status = 0;
-	error = 0;
-	//*(g->what_free) = 1;
 	pid = fork();
 	if (pid == -1)
 		error_pid();
@@ -128,16 +143,7 @@ void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g)
 		redirection(ast, g);
 		close_saved_fd(g->ast);
 		execution_2(ast->left, env, error_code, g);
-		ft_miniclear(&(g->true_head));
-		free_parser(g->ast);
-		if (g->env)
-			free_env(g->env);
-		error = *(g->error_code);
-		free(g->error_code);
-		free(g->what_free);
-		free(g->here_doc_error);
-		free(g);
-		exit(error);
+		free_subshell(g);
 	}
 	waitpid(pid, &status, 0);
 	close_saved_fd(g->ast);

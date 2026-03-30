@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:19:12 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/25 15:03:56 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 11:48:34 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	redir_stdin(t_redir *current, t_global *global, int *code)
 
 void	redir_stdout_trunc(t_redir *current, t_global *global, int *code)
 {
-	int	fd;
+	int		fd;
 	char	*file;
 
 	file = current->target->sub_token->var;
@@ -54,9 +54,27 @@ void	redir_stdout_trunc(t_redir *current, t_global *global, int *code)
 	close(fd);
 }
 
-void	redir_stdout_append(t_redir *current, t_global *global, int *code)
+void	redir_here_doc(t_redir *current, t_global *global, int *code)
 {
 	int	fd;
+
+	fd = -1;
+	fd = current->fd;
+	if (fd < 0)
+	{
+		*(global->error_code) = 1;
+		*code = 1;
+		write(2, "minishell: heredoc: ", 20);
+		perror("");
+		return ;
+	}
+	dup2(fd, 0);
+	close(fd);
+}
+
+void	redir_stdout_append(t_redir *current, t_global *global, int *code)
+{
+	int		fd;
 	char	*file;
 
 	file = current->target->sub_token->var;

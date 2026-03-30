@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/28 15:14:39 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/30 11:31:43 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,37 +53,41 @@ int	exec_bult_in(char **cmd, t_env *env, int *error_code, t_global *global)
 	return (exit_status);
 }
 
+void	prepare_cmd(t_ast *ast, t_env *env, int *error_code, t_global *global)
+{
+	expand_function(ast, global);
+	//print_tab(ast->cmd2);
+	if ((!ast->cmd2 || !ast->cmd2[0]) && ast->redirs)
+	{
+		*(global->error_code) = 0;
+		redirection(ast, global);
+		restore_redirection(ast);
+		//close_saved_fd(ast);
+		return ;
+	}
+	else if ((!ast->cmd2 || !ast->cmd2[0]) && !ast->redirs)
+		return ;
+	//print_tab(ast->cmd2);
+	if (is_bult_in(ast->cmd2) == 1)
+	{
+		if (redirection(ast, global) == 1)
+		{
+			restore_redirection(ast);
+			return ;
+		}
+		*error_code = exec_bult_in(ast->cmd2, env, error_code, global);
+		restore_redirection(ast);
+	}
+	else
+		*error_code = exec_cmd(ast, env, global);
+}
+
 void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global)
 {
 	if (ast != NULL)
 	{
 		if (ast->type == AST_CMD)
-		{
-			expand_function(ast, global);
-			//print_tab(ast->cmd2);
-			if ((!ast->cmd2 || !ast->cmd2[0]) && ast->redirs)
-			{
-				redirection(ast, global);
-				restore_redirection(ast);
-				//close_saved_fd(ast);
-				return;
-			}
-			else if ((!ast->cmd2 || !ast->cmd2[0]) && !ast->redirs)
-				return ;
-			//print_tab(ast->cmd2);
-			if (is_bult_in(ast->cmd2) == 1)
-			{
-				if (redirection(ast, global) == 1)
-				{
-					restore_redirection(ast);
-					return ;
-				}
-				*error_code = exec_bult_in(ast->cmd2, env, error_code, global);
-				restore_redirection(ast);
-			}
-			else
-				*error_code = exec_cmd(ast, env, global);
-		}
+			prepare_cmd(ast, env, error_code, global);
 		if (ast->type == AST_PIPE)
 			exec_pipe(ast, env, error_code, global);
 		if (ast->type == AST_AND)
