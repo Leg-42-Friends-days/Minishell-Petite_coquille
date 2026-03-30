@@ -64,8 +64,6 @@ char	*right_path(char **path, char *cmd)
 	char	*cmdd;
 	char	*final_path;
 
-	if (!path || !cmd)
-		return (NULL);
 	if (cmd[0] == '/' || cmd[0] == '.')
 	{
 		if (access(cmd, X_OK) == 0)
@@ -87,6 +85,8 @@ char	*find_cmd(t_env *env, char *cmd)
 	char	**tab_path;
 	char	*final_path;
 
+	if (!cmd || cmd[0] == '\0')
+		return (NULL);
 	path = find_path(env);
 	tab_path = ft_split(path, ':');
 	if (!tab_path)
