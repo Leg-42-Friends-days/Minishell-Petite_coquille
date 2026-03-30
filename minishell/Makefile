@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
+#    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/03/26 10:31:04 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/03/30 13:05:36 by mickzhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,7 +85,7 @@ val:
 	valgrind -s \
   --leak-check=full \
   --show-leak-kinds=all \
-  --suppressions=/home/ibrouin-/Documents/Minishell/minishell/_devtools/readline.supp \
+  --suppressions=./_devtools/readline.supp \
   --trace-children=yes \
   --track-fds=yes \
   ./minishell
