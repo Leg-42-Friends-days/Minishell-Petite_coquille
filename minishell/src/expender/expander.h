@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:12:50 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 13:43:13 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/31 17:43:49 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,9 @@ void	normal_quote(t_ast *ast, t_global *global, t_sub_token *sub,
 			int *index);
 int		count_split_word(char **split);
 int		add_len(t_sub_token *sub, int words);
-int	add_split_len(t_sub_token *sub, char *str);
+int		add_split_len(t_sub_token *sub, char *str);
 char	*expand_redir(t_sub_token *sub, t_global *global);
 bool	append_redir(char **result, t_sub_token *sub, t_global *global);
 char	*redir_target(t_sub_token *sub, t_global *global);
-
 
 #endif

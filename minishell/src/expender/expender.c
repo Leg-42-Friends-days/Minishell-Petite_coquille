@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/31 15:00:39 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/31 17:46:27 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ bool	check_if_expendable(char *str)
 	while (str[i])
 	{
 		if (str[i] == '$' && str[i + 1] != ':' && str[i + 1] != '=' && str[i
-			+ 1] != '"' && str[i + 1] != '\'')
+				+ 1] != '"' && str[i + 1] != '\'')
 			return (true);
 		i++;
 	}
@@ -217,7 +217,7 @@ void	free_new_string(char *key, char *content)
 bool	check_dollar(char *str, int i)
 {
 	if (str[i] == '$' && !(str[i + 1] == ' ' || str[i + 1] == '\0') && str[i
-		+ 1] != '"' && str[i + 1] != '/')
+			+ 1] != '"' && str[i + 1] != '/')
 		return (true);
 	return (false);
 }
@@ -596,8 +596,6 @@ bool	start_compare(char *str, char *entry)
 			return (true);
 		i++;
 	}
-	// printf("START COMPARE TRUE : %s\n", entry);
-	// printf("START COMPARE TRUE : %s\n", str);
 	return (false);
 }
 
@@ -633,9 +631,6 @@ bool	check_side(char *str, char *entry)
 		return (free(start), free(end), false);
 	if (ft_strlen(start) + ft_strlen(end) > ft_strlen(entry))
 		return (free(start), free(end), false);
-	// printf("START : [%s]\n", start);
-	// printf("ENTRY : [%s]\n", entry);
-	// printf("END : [%s]\n", end);
 	if (start_compare(start, entry) == false && end_compare(end,
 			entry) == false)
 		return (free(start), free(end), true);
@@ -1261,7 +1256,6 @@ char	*redir_target(t_sub_token *sub, t_global *global)
 		return (NULL);
 	while (sub)
 	{
-		// printf("sub : %s\n", sub->var);
 		if (check_dollars(sub))
 		{
 			sub = sub->next;
@@ -1287,7 +1281,6 @@ void	check_redirection(t_ast *ast, t_global *global)
 		if (re->target && re->target->sub_token && re->target->sub_token->var)
 		{
 			content = redir_target(re->target->sub_token, global);
-			// printf("content : %s\n", content);
 			if (content)
 			{
 				free(re->target->sub_token->var);
