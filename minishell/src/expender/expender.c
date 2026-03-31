@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/26 15:37:14 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/31 15:00:39 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1261,7 +1261,7 @@ char	*redir_target(t_sub_token *sub, t_global *global)
 		return (NULL);
 	while (sub)
 	{
-		printf("sub : %s\n", sub->var);
+		// printf("sub : %s\n", sub->var);
 		if (check_dollars(sub))
 		{
 			sub = sub->next;
@@ -1287,7 +1287,7 @@ void	check_redirection(t_ast *ast, t_global *global)
 		if (re->target && re->target->sub_token && re->target->sub_token->var)
 		{
 			content = redir_target(re->target->sub_token, global);
-			printf("content : %s\n", content);
+			// printf("content : %s\n", content);
 			if (content)
 			{
 				free(re->target->sub_token->var);

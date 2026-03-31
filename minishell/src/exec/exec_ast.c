@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/30 14:23:04 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 15:18:00 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,21 @@ int	is_directory(char *path, int *directory)
 	return (0);
 }
 
+int	signal_value(int sig)
+{
+	if (sig == SIGINT)
+	{
+		write(1, "\n", 1);
+		return (130);
+	}
+	if (sig == SIGQUIT)
+	{
+		ft_printf(1, "Quit (core dumped)\n");
+		return (131);
+	}
+	return (0);
+}
+
 int	exec_cmd(t_ast *ast, t_env *env, t_global *global)
 {
 	pid_t	pid;
@@ -55,10 +70,7 @@ int	exec_cmd(t_ast *ast, t_env *env, t_global *global)
 	if (WIFSIGNALED(status))
 	{
 		sig = WTERMSIG(status);
-		if (sig == SIGINT)
-			write(1, "\n", 1);
-		if (sig == SIGQUIT)
-			ft_printf(1, "Quit (core dumped)\n");
+		return (signal_value(sig));
 	}
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
