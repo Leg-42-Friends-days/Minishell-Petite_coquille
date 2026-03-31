@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/31 15:23:59 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/31 19:42:38 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	*init_path(t_ast **ast, t_env *env, int *error);
 int		redirection(t_ast *node, t_global *global);
 void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global);
 void	restore_redirection(t_ast *node);
-int		free_all_in_child(t_global *global);
+int		free_all_in_child(t_global *global, char **table);
 int		free_all_pipe_subshell(t_global *global);
 
 // ERROR_EXEC.c

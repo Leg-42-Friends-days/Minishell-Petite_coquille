@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/31 11:50:18 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 19:43:51 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	close_previous_heredocs(t_redir *node)
 	}
 }
 
-int	free_all_in_child(t_global *global)
+int	free_all_in_child(t_global *global, char **table)
 {
 	int	error;
 
@@ -40,6 +40,8 @@ int	free_all_in_child(t_global *global)
 	free_parser(global->ast);
 	if (global->env)
 		free_env(global->env);
+	if (table)
+		free_table(table);
 	error = *(global->error_code);
 	free(global->error_code);
 	free(global->what_free);
@@ -70,7 +72,7 @@ void	if_limiter(char *line, t_global *global, int *fd)
 {
 	free(line);
 	close(fd[1]);
-	free_all_in_child(global);
+	free_all_in_child(global, NULL);
 	exit (0);
 }
 
@@ -146,7 +148,7 @@ void	child_here_doc(int *fd, t_redir *node, t_global *global)
 	init_signals();
 	close(fd[0]);
 	fill_here_doc(fd, &node, global);
-	free_all_in_child(global);
+	free_all_in_child(global, NULL);
 	exit(1);
 }
 

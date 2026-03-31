@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/31 15:18:00 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/31 19:44:24 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ int	is_directory(char *path, int *directory)
 	}
 	if (S_ISDIR(st.st_mode))
 	{
-		write(1, "minishell: ", 11);
-		write(1, path, ft_strlen(path));
-		write(1, ": Is a directory\n", 17);
+		write(2, "minishell: ", 11);
+		write(2, path, ft_strlen(path));
+		write(2, ": Is a directory\n", 17);
 		free(path);
 		*directory = 126;
 		return (126);

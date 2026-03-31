@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:03:07 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/30 12:00:25 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 19:41:32 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	free_env(t_env *env)
 
 	if (!env)
 		return ;
-	free_table(env->table);
 	while (env->next != NULL)
 	{
 		tmp = env->next;

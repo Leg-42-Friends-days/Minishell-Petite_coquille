@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:16:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/30 11:59:06 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 19:43:04 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ typedef struct s_env
 	bool			free_export;
 	struct s_env	*next;
 	struct s_env	*previous;
-	char			**table;
 }					t_env;
 
 typedef struct s_pwd
@@ -38,6 +37,7 @@ char				*get_key(char *envp);
 int					find_letter(char *envp, char letter);
 t_env				*lstfirst_env(t_env *lst);
 
+void				free_table(char **table);
 void				free_env(t_env *env);
 
 char				**initiate_table_env(t_env *env);

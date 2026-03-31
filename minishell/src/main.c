@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/31 18:34:57 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 19:30:45 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ int	main(int ac, char **av, char **envp)
 		global->env = mini_env(global->env);
 	else
 		global->env = env_content(global->env, envp);
-	global->env->table = initiate_table_env(global->env);
 	// print_env(global->env->table);
 	// free_table(global->env->table);
 	global->error_code = (int *)malloc(sizeof(int));
