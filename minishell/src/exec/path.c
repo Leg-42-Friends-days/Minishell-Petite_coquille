@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 14:14:15 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/31 10:09:30 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 18:33:25 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,29 @@ char	*browse(char **path, char *cmdd)
 	return (NULL);
 }
 
+int	is_directory_first(char *path, int *error)
+{
+	struct stat	st;
+
+	if (stat(path, &st) != 0)
+	{
+		perror("minishell");
+		*error = 127;
+		//return (127);
+	}
+	if (S_ISDIR(st.st_mode))
+	{
+		write(1, "minishell: ", 11);
+		write(1, path, ft_strlen(path));
+		write(1, ": Is a directory\n", 17);
+		//free(path);
+		*error = 126;
+		//return (126);
+	}
+	*error = 0;
+	return (0);
+}
+
 char	*right_path(char **path, char *cmd, int *error)
 {
 	char	*cmdd;
@@ -68,7 +91,9 @@ char	*right_path(char **path, char *cmd, int *error)
 	{
 		if (access(cmd, F_OK) == 0)
 		{
-			if (access(cmd, X_OK == 0))
+			if (is_directory(cmd, error))
+				return (NULL);
+			if (access(cmd, X_OK) == 0)
 				return (ft_strdup(cmd));
 			*error = 2;
 			return (NULL);
@@ -123,6 +148,9 @@ char	*init_path(t_ast **ast, t_env *env, int *error)
 			write(2, ": Permission denied\n", 20);
 			*error = 126;
 		}
+		if (*error == 3)
+			is ()
+
 		return (NULL);
 	}
 	return (path);
