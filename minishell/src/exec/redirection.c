@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/30 11:47:37 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 11:50:18 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,42 @@ void	if_limiter(char *line, t_global *global, int *fd)
 	exit (0);
 }
 
+void	join_sub_token_limiter(t_sub_token **current, char **result, char **first)
+{
+	*result = ft_strjoin(*first, (*current)->next->var);
+	if (*first)
+		free(*first);
+	*first = *result;
+	if ((*current)->next->quote != NONE)
+		(*current)->quote = (*current)->next->quote;
+}
+
+void	join_limiter(t_redir *node)
+{
+	char		*result;
+	char		*first;
+	t_sub_token	*current;
+	t_sub_token	*next;
+
+	result = NULL;
+	first = NULL;
+	next = NULL;
+	current = node->target->sub_token;
+	first = node->target->sub_token->var;
+	while (current)
+	{
+		if (current->next)
+		{
+			if (current->next->var)
+				join_sub_token_limiter(&current, &result, &first);
+		}
+		next = current->next;
+		current = next;
+	}
+	if (result)
+		node->target->sub_token->var = result;
+}
+
 void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 {
 	char	*line;
@@ -105,6 +141,7 @@ void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 
 void	child_here_doc(int *fd, t_redir *node, t_global *global)
 {
+	join_limiter(node);
 	g_signal = 0;
 	init_signals();
 	close(fd[0]);

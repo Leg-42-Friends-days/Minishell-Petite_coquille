@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 14:33:35 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/30 10:27:19 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 11:15:52 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,29 @@ t_ast	*ast_node(int type)
 	return (node);
 }
 
+void	free_sub_redir(t_redir *current)
+{
+	t_sub_token	*tmpp;
+	t_sub_token	*sub_redir;
+
+	tmpp = NULL;
+	sub_redir = current->target->sub_token;
+	while(sub_redir)
+	{
+		free(sub_redir->var);
+		tmpp = sub_redir->next;
+		free(sub_redir);
+		sub_redir = tmpp;
+	}
+}
+
 void	free_parser(t_ast *ast)
 {
-	t_redir	*current;
-	t_redir	*tmp;
+	t_redir		*current;
+	t_redir		*tmp;
 
 	current = NULL;
+	tmp = NULL;
 	if (!ast)
 		return ;
 	if (ast->left)
@@ -45,8 +62,7 @@ void	free_parser(t_ast *ast)
 		current = ast->redirs;
 	while (current)
 	{
-		free(current->target->sub_token->var);
-		free(current->target->sub_token);
+		free_sub_redir(current);
 		free(current->target);
 		tmp = current->next;
 		free(current);
