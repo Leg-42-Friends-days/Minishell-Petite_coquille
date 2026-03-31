@@ -6,7 +6,7 @@
 #    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/03/30 13:05:36 by mickzhan         ###   ########.fr        #
+#    Updated: 2026/03/31 18:31:28 by mickzhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,22 @@ SRC =	main.c \
 		parsing/ast_node_utils.c \
 		parsing/ast_cmd_utils.c \
 		expender/expender.c \
+		expender/expand_redirection.c \
+		expender/expand_cmd_len.c \
+		expender/expand_cmd_len2.c \
+		expender/expand_fonction.c \
+		expender/expand_fonction2.c \
+		expender/expand_utils.c \
+		expender/expand_utils2.c \
+		expender/expand_utils3.c \
+		expender/expand_utils4.c \
+		expender/expand_wild.c \
+		expender/expand_utils_wild.c \
+		expender/expand_utils_wild2.c \
+		expender/expand_utils_wild3.c \
+		expender/expand_utils_wild4.c \
+		expender/expand_free.c \
+		expender/expander_checker.c \
 		exec/execution.c \
 		exec/path.c \
 		exec/redirection.c \
