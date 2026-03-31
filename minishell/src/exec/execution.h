@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/30 11:47:19 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 10:09:18 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,9 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global);
 
 // PATH.c
 char	*find_path(t_env *env);
-char	*right_path(char **path, char *cmd);
-char	*find_cmd(t_env *env, char *cmd);
-char	*init_path(t_ast **ast, t_env *env);
+char	*right_path(char **path, char *cmd, int *error);
+char	*find_cmd(t_env *env, char *cmd, int *error);
+char	*init_path(t_ast **ast, t_env *env, int *error);
 
 // REDIRECTION.c
 int		redirection(t_ast *node, t_global *global);

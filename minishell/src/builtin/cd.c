@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:44 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/30 12:09:03 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 09:24:53 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	*define_target(char **cmd, t_env *env, int *error_code)
 
 	target = NULL;
 	if (!cmd[1])
-		return(target_HOME(env, error_code, target));
+		return(target_home(env, error_code, target));
 	if (cmd[1])
 	{
 		if (!ft_strncmp(cmd[1], "-", 2))

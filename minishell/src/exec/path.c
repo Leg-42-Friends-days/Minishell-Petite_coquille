@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 14:14:15 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/30 10:40:32 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 10:09:30 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*browse(char **path, char *cmdd)
 	return (NULL);
 }
 
-char	*right_path(char **path, char *cmd)
+char	*right_path(char **path, char *cmd, int *error)
 {
 	char	*cmdd;
 	char	*final_path;
@@ -68,8 +68,14 @@ char	*right_path(char **path, char *cmd)
 		return (NULL);
 	if (cmd[0] == '/' || cmd[0] == '.')
 	{
-		if (access(cmd, X_OK) == 0)
-			return (ft_strdup(cmd));
+		if (access(cmd, F_OK) == 0)
+		{
+			if (access(cmd, X_OK == 0))
+				return (ft_strdup(cmd));
+			*error = 2;
+			return (NULL);
+		}
+		*error = 1;
 		return (NULL);
 	}
 	cmdd = ft_strjoin("/", cmd);
@@ -81,31 +87,42 @@ char	*right_path(char **path, char *cmd)
 	return (final_path);
 }
 
-char	*find_cmd(t_env *env, char *cmd)
+char	*find_cmd(t_env *env, char *cmd, int *error)
 {
 	char	*path;
 	char	**tab_path;
 	char	*final_path;
 
 	path = find_path(env);
+	if (!path)
+		*error = 1;
 	tab_path = ft_split(path, ':');
 	if (!tab_path)
 		return (NULL);
-	final_path = right_path(tab_path, cmd);
+	final_path = right_path(tab_path, cmd, error);
 	free_cmd2(tab_path);
 	return (final_path);
 }
 
-char	*init_path(t_ast **ast, t_env *env)
+char	*init_path(t_ast **ast, t_env *env, int *error)
 {
 	char	*path;
 
-	path = find_cmd(env, (*ast)->cmd2[0]);
+	*error = 127;
+	path = find_cmd(env, (*ast)->cmd2[0], error);
 	if (!path)
 	{
 		write(2, "minishell: ", 11);
 		write(2, (*ast)->cmd2[0], ft_strlen((*ast)->cmd2[0]));
-		write(2, ": command not found\n", 21);
+		if (*error == 0)
+			write(2, ": command not found\n", 21);
+		if (*error == 1)
+			write(2, ": No such file or directory\n", 28);
+		if (*error == 2)
+		{
+			write(2, ": Permission denied\n", 20);
+			*error = 126;
+		}
 		return (NULL);
 	}
 	return (path);
