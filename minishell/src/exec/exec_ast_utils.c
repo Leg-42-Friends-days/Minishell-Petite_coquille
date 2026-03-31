@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:22:04 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/31 10:09:47 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 11:57:35 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	child_cmd(t_ast **ast, t_global *global)
 
 	code = 0;
 	directory = 0;
+	error = 127;
 	init_child_signals();
 	code = redirection(*ast, global);
 	close_saved_fd(global->ast);

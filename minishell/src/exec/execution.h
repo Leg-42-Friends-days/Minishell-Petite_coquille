@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/31 10:09:18 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 15:23:59 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	exec_and(t_ast *ast, t_env *env, int *error_code, t_global *global);
 void	exec_or(t_ast *ast, t_env *env, int *error_code, t_global *global);
 void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g);
 int		is_directory(char *path, int *directory);
+int		signal_value(int sig);
 
 // EXEC_AST_UTILS.c
 void	child_cmd(t_ast **ast, t_global *global);

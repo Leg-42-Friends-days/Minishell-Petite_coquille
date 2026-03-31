@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 14:14:15 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/31 18:33:25 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 18:34:39 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,24 +129,25 @@ char	*find_cmd(t_env *env, char *cmd, int *error)
 	return (final_path);
 }
 
-char	*init_path(t_ast **ast, t_env *env, int *error)
+char	*init_path(t_ast **ast, t_env *env, int *error_code)
 {
 	char	*path;
+	int		error;
 
-	*error = 127;
-	path = find_cmd(env, (*ast)->cmd2[0], error);
+	error = 0;
+	path = find_cmd(env, (*ast)->cmd2[0], &error);
 	if (!path)
 	{
 		write(2, "minishell: ", 11);
 		write(2, (*ast)->cmd2[0], ft_strlen((*ast)->cmd2[0]));
-		if (*error == 0)
+		if (error == 0)
 			write(2, ": command not found\n", 21);
-		if (*error == 1)
+		if (error == 1)
 			write(2, ": No such file or directory\n", 28);
-		if (*error == 2)
+		if (error == 2)
 		{
 			write(2, ": Permission denied\n", 20);
-			*error = 126;
+			*error_code = 126;
 		}
 		if (*error == 3)
 			is ()
