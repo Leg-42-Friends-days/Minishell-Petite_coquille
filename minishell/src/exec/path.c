@@ -64,8 +64,6 @@ char	*right_path(char **path, char *cmd, int *error)
 	char	*cmdd;
 	char	*final_path;
 
-	if (!path || !cmd)
-		return (NULL);
 	if (cmd[0] == '/' || cmd[0] == '.')
 	{
 		if (access(cmd, F_OK) == 0)
@@ -93,6 +91,8 @@ char	*find_cmd(t_env *env, char *cmd, int *error)
 	char	**tab_path;
 	char	*final_path;
 
+	if (!cmd || cmd[0] == '\0')
+		return (NULL);
 	path = find_path(env);
 	if (!path)
 		*error = 1;

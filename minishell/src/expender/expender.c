@@ -1223,34 +1223,77 @@ int	expand_len_token(t_ast *ast, t_global *global)
 	return (i);
 }
 
+char	*expand_redir(t_sub_token *sub, t_global *global)
+{
+	char	*part;
+
+	part = ft_strdup(sub->var);
+	if (!part)
+		return (NULL);
+	if (sub->quote != SINGLE && check_if_expendable(part) == true)
+		part = app_expend(part, global, sub->quote == DOUBLE);
+	return (part);
+}
+
+bool	append_redir(char **content, t_sub_token *sub, t_global *global)
+{
+	char	*part;
+	char	*str;
+
+	part = expand_redir(sub, global);
+	if (!part)
+		return (false);
+	str = ft_strjoin(*content, part);
+	free(*content);
+	free(part);
+	if (!str)
+		return (false);
+	*content = str;
+	return (true);
+}
+
+char	*redir_target(t_sub_token *sub, t_global *global)
+{
+	char	*content;
+
+	content = ft_strdup("");
+	if (!content)
+		return (NULL);
+	while (sub)
+	{
+		printf("sub : %s\n", sub->var);
+		if (check_dollars(sub))
+		{
+			sub = sub->next;
+			continue ;
+		}
+		if (append_redir(&content, sub, global) == 0)
+			return (free(content), NULL);
+		sub = sub->next;
+	}
+	return (content);
+}
+
 void	check_redirection(t_ast *ast, t_global *global)
 {
-	t_ast	*tmp;
-	t_redir	*re;
-	t_quote	quote;
+	t_redir		*re;
+	char		*content;
 
-	tmp = ast;
-	if (!tmp || !tmp->redirs)
+	if (!ast || !ast->redirs)
 		return ;
-	re = tmp->redirs;
+	re = ast->redirs;
 	while (re != NULL)
 	{
 		if (re->target && re->target->sub_token && re->target->sub_token->var)
 		{
-			quote = re->target->sub_token->quote;
-			if (check_if_expendable(re->target->sub_token->var) == 1
-				&& quote == DOUBLE)
-				re->target->sub_token->var = app_expend(re->target->sub_token->var,
-						global, true);
-			else if (check_if_expendable(re->target->sub_token->var) == 1
-				&& quote == NORMAL)
-				re->target->sub_token->var = app_expend(re->target->sub_token->var,
-						global, false);
+			content = redir_target(re->target->sub_token, global);
+			printf("content : %s\n", content);
+			if (content)
+			{
+				free(re->target->sub_token->var);
+				re->target->sub_token->var = content;
+			}
 		}
-		// printf("VALEUR DE TMP : %s\n", tmp->cmd_token->sub_token->var);
-		// printf("VALEUR TREDIR : %s\n", re->target->sub_token->var);
-		// i = expand_wildcard(tmp->cmd_token->sub_token->var, tmp, &i);
-		// printf("Valeur de i : %d\n", i);
 		re = re->next;
 	}
 }

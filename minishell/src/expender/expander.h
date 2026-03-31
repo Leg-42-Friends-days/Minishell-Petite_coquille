@@ -91,5 +91,9 @@ void	normal_quote(t_ast *ast, t_global *global, t_sub_token *sub,
 int		count_split_word(char **split);
 int		add_len(t_sub_token *sub, int words);
 int	add_split_len(t_sub_token *sub, char *str);
+char	*expand_redir(t_sub_token *sub, t_global *global);
+bool	append_redir(char **result, t_sub_token *sub, t_global *global);
+char	*redir_target(t_sub_token *sub, t_global *global);
+
 
 #endif

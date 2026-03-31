@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 13:35:21 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/26 12:08:29 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/30 14:23:57 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ int	affichage_env(t_env *env)
 	return (0);
 }
 
-
-t_env *mini_env(t_env *env)
+t_env	*mini_env(t_env *env)
 {
 	char	*pwd;
 

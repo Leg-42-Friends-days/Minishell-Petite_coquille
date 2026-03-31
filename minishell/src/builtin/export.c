@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 15:20:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/26 15:30:55 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/30 16:00:22 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ bool	list_of_error(char key)
 		&& (key && key != '~') && (key && key != '[') && (key && key != ']')
 		&& (key && key != '/') && (key && key != '.') && (key && key != ',')
 		&& (key && key != '{') && (key && key != '}') && (key) && (key
-			&& key != '#') && (key && key != '?') && (key && key != '+'))
+			&& key != '#') && (key && key != '?') && (key && key != '+') && (key
+			&& key != '-') && (key && key != '\\'))
 		return (true);
 	return (false);
 }
@@ -84,10 +85,7 @@ bool	not_exportable(char *str)
 
 	i = 0;
 	if (str[i] == '\0')
-	{
-		ft_printf(2, "Minishell: export: `': not a valid identifier\n");
-		return (false);
-	}
+		return (true);
 	key = get_key(str);
 	while (key[i])
 	{
