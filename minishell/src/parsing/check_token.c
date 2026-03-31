@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:06 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/30 10:28:51 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/03/31 17:52:42 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,21 @@ bool	next_token(t_token **token)
 		else if ((((*token)->type == 6) || ((*token)->type == 5))
 			&& ((*token)->next->type > 0 && (*token)->next->type < 5))
 			return (false);
-		else if (((*token)->type > 0 && (*token)->type < 5)
-			&& (!(*token)->next || (*token)->next->type != WORD))
-			return (true);
 		else if (((*token)->type == 0 && (*token)->next->type == 5)
-			|| ((*token)->type == 5 && (*token)->next->type == 6))
+			|| ((*token)->type == 5 && (*token)->next->type == 6)
+			|| (((*token)->type > 0 && (*token)->type < 5)
+			&& ((*token)->next->type != WORD)))
 		{
+			printf("%s\n", (*token)->sub_token->var);
 			(*token) = (*token)->next;
 			return (true);
 		}
+		/* else if (((*token)->type > 0 && (*token)->type < 5)
+			&& (!(*token)->next || (*token)->next->type != WORD))
+			return (true);
 		else if (((*token)->type > 0 && (*token)->type < 5)
 			&& ((*token)->next->type > 0 && (*token)->next->type < 5))
-			return (true);
+			return (true); */
 		(*token) = (*token)->next;
 	}
 	return (false);
@@ -55,8 +58,12 @@ bool	next_token(t_token **token)
 
 bool	check_token(t_token **token)
 {
-	if ((*token)->type > 6 || next_token(token) == 1
-		|| lst_last_token(token) == 1)
+	if ((*token)->type > 6 || next_token(token) == 1)
+	{
+		printf("%s\n", (*token)->sub_token->var);
+		return (true);
+	}
+	if (lst_last_token(token) == 1)
 		return (true);
 	return (false);
 }

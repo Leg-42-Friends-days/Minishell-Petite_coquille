@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/30 13:17:35 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/03/31 17:48:27 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int	main(int ac, char **av, char **envp)
 				}
 				global->head = mini_vars;
 				global->true_head = mini_vars;
-				// printmini(&mini_vars);
+				printmini(&mini_vars);
 				if (!parser(&mini_vars, global))
 				{
 					run_through_here_doc(global->ast, global->env, global);
