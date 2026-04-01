@@ -3,41 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/25 14:34:45 by ibrouin-          #+#    #+#             */
-/*   Updated: 2025/11/25 19:29:53 by ibrouin-         ###   ########.fr       */
+/*   Created: 2025/11/17 17:34:01 by mickzhan          #+#    #+#             */
+/*   Updated: 2026/01/23 10:07:39 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-void	ft_putchar(char c, int *count)
+int	len_int(int nb)
 {
-	write(1, &c, 1);
-	*count = *count + 1;
-}
+	int	i;
 
-static void	ft_write(int n, int *count)
-{
-	if (n >= 10)
-		ft_write(n / 10, count);
-	ft_putchar((n % 10) + '0', count);
-}
-
-void	ft_putnbr(int n, int *count)
-{
-	if (n == -2147483648)
+	i = 1;
+	if (nb < 0)
 	{
-		write(1, "-2147483648", 11);
-		*count = *count + 11;
-		return ;
+		nb *= -1;
+		i++;
 	}
-	if (n < 0)
+	while (nb >= 10)
+	{
+		i++;
+		nb /= 10;
+	}
+	return (i);
+}
+
+int	ft_putnbr(int nb, int fd)
+{
+	int	len;
+
+	len = len_int(nb);
+	if (nb == -2147483648)
+	{
+		write(fd, "-2147483648", 11);
+		return (11);
+	}
+	if (nb < 0)
 	{
 		write(1, "-", 1);
-		*count = *count + 1;
-		n = n / -1;
+		nb *= -1;
 	}
-	ft_write(n, count);
+	if (nb >= 10)
+		ft_putnbr(nb / 10, fd);
+	ft_putchar(nb % 10 + '0', fd);
+	return (len);
 }
+
+// int main()
+// {
+// 	ft_putnbr(-23);
+// 	printf("\n%d", -23);
+// }

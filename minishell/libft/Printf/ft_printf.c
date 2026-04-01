@@ -3,82 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/25 11:26:52 by ibrouin-          #+#    #+#             */
-/*   Updated: 2025/11/27 14:42:22 by ibrouin-         ###   ########.fr       */
+/*   Created: 2025/11/17 14:28:44 by mickzhan          #+#    #+#             */
+/*   Updated: 2026/01/23 10:12:04 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-static void	ft_type(char c, va_list test, int *count)
+int	affichage(char format, int fd, va_list *ap)
 {
-	if (c == 'd' || c == 'i')
-		ft_putnbr(va_arg(test, int), count);
-	if (c == 'u')
-		ft_putnbru(va_arg(test, unsigned int), count);
-	if (c == 's')
-		ft_putstr(va_arg(test, char *), count);
-	if (c == '%')
-		ft_putchar('%', count);
-	if (c == 'c')
-		ft_putchar(va_arg(test, int), count);
-	if (c == 'X')
-		ft_upperhexa(va_arg(test, unsigned int), count);
-	if (c == 'x')
-		ft_lowerhexa(va_arg(test, unsigned int), count);
-	if (c == 'p')
-		ft_pointer(va_arg(test, void *), count);
+	if (format == 'c')
+		return (ft_putchar(va_arg(*ap, int), fd));
+	else if (format == 's')
+		return (ft_putstr(va_arg(*ap, char *), fd));
+	else if (format == 'p')
+		return (ft_pointer(va_arg(*ap, void *), fd));
+	else if (format == 'd' || format == 'i')
+		return (ft_putnbr(va_arg(*ap, int), fd));
+	else if (format == 'u')
+		return (ft_unsigned_putnbr(va_arg(*ap, unsigned int), fd));
+	else if (format == 'x')
+		return (ft_baselower16(va_arg(*ap, unsigned int), fd));
+	else if (format == 'X')
+		return (ft_baseupper16(va_arg(*ap, unsigned int), fd));
+	else
+	{
+		write(fd, &format, 1);
+		return (1);
+	}
 }
 
-int	ft_printf(const char *s, ...)
+int	ft_printf(int fd, const char *format, ...)
 {
-	int		count;
+	va_list	ap;
 	int		i;
-	va_list	test;
+	int		count;
 
+	va_start(ap, format);
 	i = 0;
 	count = 0;
-	if (s == NULL)
+	if (!format)
 		return (-1);
-	va_start(test, s);
-	while (s[i] != '\0')
+	while (format[i])
 	{
-		if (s[i] != '%')
-		{
-			write(1, &s[i], 1);
-			count ++;
-		}
-		else
+		if (format[i] == '%')
 		{
 			i++;
-			ft_type(s[i], test, &count);
+			count += affichage(format[i], fd, &ap);
 		}
+		else
+			count += ft_putchar(format[i], fd);
 		i++;
 	}
-	va_end(test);
+	va_end(ap);
 	return (count);
 }
-/* #include "ft_printf.h"
 
-int	main(void)
-{
-	char	*t;
-	char	d;
-	int		cmpt;
-	int		vrai;
-
-	t = NULL;
-	d = 'a';
-	cmpt = 0;
-	vrai = 0;
-	printf("mon resultat\n");
-	cmpt = ft_printf("haha %d trop drole %s mdr %%  %c\n", INT_MIN, t, d);
-	printf("%d\n", cmpt);
-	printf("la vraie fonction\n");
-	vrai = printf("haha %d trop drole %s mdr %%  %c\n", INT_MIN, t, d);
-	printf("%d\n", vrai);
-	vrai = ft_printf(0);
-	ft_printf("%d", vrai);
-} */
+// int	main(void)
+// {
+// 	ft_printf("%c %c %c", 'C', 'M', 'H');
+// 	printf(0);
+// }

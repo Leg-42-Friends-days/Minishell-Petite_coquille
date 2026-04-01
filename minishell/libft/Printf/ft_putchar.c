@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbru.c                                       :+:      :+:    :+:   */
+/*   ft_putchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/25 14:34:45 by ibrouin-          #+#    #+#             */
-/*   Updated: 2025/11/25 19:06:40 by ibrouin-         ###   ########.fr       */
+/*   Created: 2025/11/17 17:28:42 by mickzhan          #+#    #+#             */
+/*   Updated: 2026/01/23 09:49:55 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-void	ft_putnbru(unsigned int n, int *count)
+int	ft_putchar(char c, int fd)
 {
-	if (n >= 10)
-		ft_putnbru(n / 10, count);
-	ft_putchar((n % 10) + '0', count);
+	write(fd, &c, 1);
+	return (1);
 }

@@ -1,26 +1,59 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pointer.c                                       :+:      :+:    :+:   */
+/*   ft_baselower16.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/18 16:40:37 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/01/23 10:09:53 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/18 14:42:38 by mickzhan          #+#    #+#             */
+/*   Updated: 2026/01/23 09:52:51 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-unsigned int	pointer_converter(unsigned long nb, int fd)
+unsigned int	ft_div_intlen(unsigned long nb)
 {
-	unsigned long	len;
-	unsigned long	i;
-	unsigned long	*tmp;
+	unsigned int	i;
+
+	i = 1;
+	while (nb >= 16)
+	{
+		nb /= 16;
+		i++;
+	}
+	return (i);
+}
+
+void	base_write16(unsigned int nb, int fd)
+{
+	if (nb == 0)
+		ft_putchar(nb + '0', fd);
+	if (nb >= 1 && nb <= 9)
+		ft_putchar(nb + '0', fd);
+	if (nb == 10)
+		write(fd, "a", 1);
+	if (nb == 11)
+		write(fd, "b", 1);
+	if (nb == 12)
+		write(fd, "c", 1);
+	if (nb == 13)
+		write(fd, "d", 1);
+	if (nb == 14)
+		write(fd, "e", 1);
+	if (nb == 15)
+		write(fd, "f", 1);
+}
+
+unsigned int	ft_baselower16(unsigned int nb, int fd)
+{
+	unsigned int	len;
+	unsigned int	i;
+	unsigned int	*tmp;
 
 	i = 0;
 	len = ft_div_intlen(nb);
-	tmp = malloc(sizeof(long) * len);
+	tmp = malloc(sizeof(int) * len);
 	if (!tmp)
 		return (0);
 	while (i < len)
@@ -39,29 +72,7 @@ unsigned int	pointer_converter(unsigned long nb, int fd)
 	return (len);
 }
 
-int	ft_pointer(void *p, int fd)
-{
-	unsigned long	conv;
-	int				count;
-
-	count = 2;
-	conv = (unsigned long)p;
-	if (!p)
-	{
-		write(fd, "(nil)", 5);
-		return (5);
-	}
-	write(fd, "0x", 2);
-	count += pointer_converter(conv, fd);
-	return (count);
-}
-
 // int	main(void)
 // {
-//     int nb = 1;
-//     int *p = &nb;
-//     printf("%p\n", p);
-//     // printf("%p\n", p);
-//     // printf("%d", *(int *)p);
-// 	ft_pointer(p);
+// 	ft_baselower16(2131421421);
 // }
