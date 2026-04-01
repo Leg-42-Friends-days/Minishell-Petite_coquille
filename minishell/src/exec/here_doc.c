@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 11:45:00 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 11:58:27 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 20:39:14 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ void	close_previous_heredocs(t_redir *node)
 	}
 }
 
+void	hand(int signum)
+{
+	if (signum == SIGINT)
+		g_signal = 130;
+}
+
 void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 {
 	char	*line;
@@ -42,6 +48,13 @@ void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 		{
 			close(fd[1]);
 			break ;
+		}
+		if (g_signal == 130)
+		{
+			close(fd[1]);
+			free_all_in_child(global, NULL);
+			g_signal = 0;
+			exit(1);			
 		}
 		if ((ft_strncmp(line, (*node)->target->sub_token->var,
 					(ft_strlen((*node)->target->sub_token->var) + 1)) == 0))
@@ -63,12 +76,13 @@ void	child_here_doc(int *fd, t_redir *node, t_global *global)
 {
 	join_limiter(node);
 	g_signal = 0;
-	init_signals();
 	close(fd[0]);
+	signal(SIGINT, hand);
 	fill_here_doc(fd, &node, global);
 	free_all_in_child(global, NULL);
 	exit(1);
 }
+
 
 int	prepare_here_doc(t_redir *node, t_global *global)
 {
@@ -77,6 +91,7 @@ int	prepare_here_doc(t_redir *node, t_global *global)
 	int		status;
 
 	status = 0;
+	init_child_signal_ig();
 	if (pipe(fd) == -1)
 		error_pipe();
 	pid = fork();
@@ -92,6 +107,7 @@ int	prepare_here_doc(t_redir *node, t_global *global)
 		close(fd[0]);
 	close_previous_heredocs(node);
 	node->fd = fd[0];
+	init_signals();
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (0);
