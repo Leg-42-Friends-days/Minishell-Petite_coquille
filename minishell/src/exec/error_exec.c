@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 13:45:55 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 13:57:48 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 14:28:58 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	error_pipe(void)
 int	free_all_in_child(t_global *global, char **table)
 {
 	int	error;
-	
+
 	if (global->what_free > 0)
 		global->true_head = global->head;
 	ft_miniclear(&(global->true_head));
