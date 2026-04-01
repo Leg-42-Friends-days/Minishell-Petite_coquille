@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:06 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 11:36:34 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 14:58:49 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ bool	next_token(t_token **token)
 				|| (((*token)->type > 0 && (*token)->type < 5)
 					&& (*token)->next->type == PIPE)))
 		{
-			printf("%s\n", (*token)->sub_token->var);
 			(*token) = (*token)->next;
 			return (true);
 		}

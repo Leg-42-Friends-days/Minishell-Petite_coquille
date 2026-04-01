@@ -1,0 +1,13 @@
+total 208
+drwxr-xr-x 7 ibrouin- 2025_paris    147 Apr  1 20:19 .
+drwxr-xr-x 4 ibrouin- 2025_paris     35 Mar 26 19:22 ..
+-rw-r--r-- 1 ibrouin- 2025_paris     13 Apr  1 20:17 bonjour
+drwxr-xr-x 2 ibrouin- 2025_paris     73 Apr  1 14:45 _devtools
+drwxr-xr-x 2 ibrouin- 2025_paris     21 Apr  1 20:19 Docs
+-rw-r--r-- 1 ibrouin- 2025_paris     27 Feb 10 14:53 .gitignore
+-rw-r--r-- 1 ibrouin- 2025_paris      8 Apr  1 20:19 hey
+drwxr-xr-x 2 ibrouin- 2025_paris   4096 Apr  1 15:58 libft
+-rw-r--r-- 1 ibrouin- 2025_paris   3205 Apr  1 15:58 Makefile
+-rwxrwxrwx 1 ibrouin- 2025_paris 186048 Apr  1 15:58 minishell
+drwxr-xr-x 7 ibrouin- 2025_paris    109 Apr  1 15:58 obj
+drwxr-xr-x 7 ibrouin- 2025_paris    128 Apr  1 14:51 src
