@@ -6,7 +6,7 @@
 #    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/04/01 14:22:48 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/04/01 14:46:55 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,22 @@ SRC =	main.c \
 		parsing/ast_node_utils.c \
 		parsing/ast_cmd_utils.c \
 		expender/expender.c \
+		expender/expand_redirection.c \
+		expender/expand_cmd_len.c \
+		expender/expand_cmd_len2.c \
+		expender/expand_fonction.c \
+		expender/expand_fonction2.c \
+		expender/expand_utils.c \
+		expender/expand_utils2.c \
+		expender/expand_utils3.c \
+		expender/expand_utils4.c \
+		expender/expand_wild.c \
+		expender/expand_utils_wild.c \
+		expender/expand_utils_wild2.c \
+		expender/expand_utils_wild3.c \
+		expender/expand_utils_wild4.c \
+		expender/expand_free.c \
+		expender/expander_checker.c \
 		exec/execution.c \
 		exec/path.c \
 		exec/path_utils.c \
