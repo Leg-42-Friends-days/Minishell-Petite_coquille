@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 14:04:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/30 10:37:18 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 10:17:55 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	error_no_target(t_global *global)
 {
 	write(2, "minishell: syntax error near unexpected token `newline'\n", 56);
-	*global->error_code = 2;
+	global->error_code = 2;
 	return (1);
 }
 

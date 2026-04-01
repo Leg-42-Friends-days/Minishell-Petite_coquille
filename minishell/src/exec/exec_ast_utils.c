@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:22:04 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/31 19:44:53 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 10:47:22 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,12 @@ void	close_saved_fd(t_ast *ast)
 
 void	free_before_execute(t_global *global, int error_code)
 {
-	if (*(global->what_free) > 0)
+	if (global->what_free > 0)
 		global->true_head = global->head;
 	ft_miniclear(&(global->true_head));
 	free_parser(global->ast);
 	if (global->env)
 		free_env(global->env);
-	free(global->error_code);
-	free(global->what_free);
-	free(global->here_doc_error);
 	free(global);
 	exit (error_code);
 }
@@ -52,13 +49,11 @@ void	child_cmd(t_ast **ast, t_global *global)
 {
 	int		code;
 	char	*path;
-	int		directory;
 	int		error;
 	char	**table;
 
 	table = initiate_table_env(global->env);
 	code = 0;
-	directory = 0;
 	error = 127;
 	init_child_signals();
 	code = redirection(*ast, global);
@@ -68,8 +63,9 @@ void	child_cmd(t_ast **ast, t_global *global)
 	path = init_path(ast, global->env, &error);
 	if (!path)
 		free_before_execute(global, error);
-	if (is_directory(path, &directory) != 0)
-		free_before_execute(global, directory);
+	code = 0;
+	if (is_directory(path, &code) != 0)
+		free_before_execute(global, code);
 	execve(path, (*ast)->cmd2, table);
 	free(path);
 	free_all_in_child(global, table);
@@ -85,7 +81,7 @@ void	pipe_first_child(t_ast **ast, int *fd, t_env **env, t_global *global)
 	close(fd[0]);
 	dup2(fd[1], 1);
 	close(fd[1]);
-	execution_2((*ast)->left, *env, global->error_code, global);
+	execution_2((*ast)->left, *env, &global->error_code, global);
 	close_saved_fd(global->ast);
 	error = free_all_pipe_subshell(global);
 	exit(error);
@@ -99,7 +95,7 @@ void	pipe_second_child(t_ast **ast, int *fd, t_env **env, t_global *global)
 	close(fd[1]);
 	dup2(fd[0], 0);
 	close(fd[0]);
-	execution_2((*ast)->right, *env, global->error_code, global);
+	execution_2((*ast)->right, *env, &global->error_code, global);
 	close_saved_fd(global->ast);
 	error = free_all_pipe_subshell(global);
 	exit(error);

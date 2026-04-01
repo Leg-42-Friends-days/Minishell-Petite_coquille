@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expender.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 16:29:35 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/31 15:00:39 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/04/01 10:17:48 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ int	new_string_len(char *new_str, int i, t_global *global)
 	if (!key)
 		return (0);
 	if (new_str[i + 1] == '?')
-		content = code_str(new_str + i + 1, *(global->error_code));
+		content = code_str(new_str + i + 1, global->error_code);
 	else
 		content = check_string(key, global->env);
 	if (content)
@@ -255,7 +255,7 @@ char	*new_string2(char *new_str, int i, t_global *global)
 	if (!key)
 		return (free(new_str), NULL);
 	if (new_str[i + 1] == '?')
-		content = code_str(new_str + i + 1, *(global->error_code));
+		content = code_str(new_str + i + 1, global->error_code);
 	else
 		content = check_string(key, global->env);
 	tmp = check_new_string(new_str, key, content);

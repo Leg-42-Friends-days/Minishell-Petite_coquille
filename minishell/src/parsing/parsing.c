@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/31 18:12:55 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 10:18:06 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	parser(t_token **token, t_global *global)
 		else
 			write(2, current->sub_token->var, ft_strlen(current->sub_token->var));
 		write(2, "'\n", 2);
-		*global->error_code = 2;
+		global->error_code = 2;
 		ft_miniclear(&(global->head));
 		return (1);
 	}

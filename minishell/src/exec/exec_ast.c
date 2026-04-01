@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/31 19:44:24 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 10:33:00 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,16 +125,13 @@ void	free_subshell(t_global *global)
 	int	error;
 
 	error = 0;
-	if (*(global->what_free) > 0)
+	if (global->what_free > 0)
 		global->true_head = global->head;
 	ft_miniclear(&(global->true_head));
 	free_parser(global->ast);
 	if (global->env)
 		free_env(global->env);
-	error = *(global->error_code);
-	free(global->error_code);
-	free(global->what_free);
-	free(global->here_doc_error);
+	error = global->error_code;
 	free(global);
 	exit(error);
 }
