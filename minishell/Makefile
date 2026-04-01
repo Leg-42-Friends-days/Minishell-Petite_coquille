@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
+#    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/03/30 13:05:36 by mickzhan         ###   ########.fr        #
+#    Updated: 2026/04/01 11:19:45 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra -I./includes -I./libft -g3
 SRC_DIR = src/
 SRC =	main.c \
+		signals.c \
 		lexing/add_nodes.c \
 		lexing/lexing_2.c \
 		lexing/lexing.c \
