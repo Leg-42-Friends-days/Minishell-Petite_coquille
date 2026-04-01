@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/04/01 11:25:08 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 14:41:31 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,6 @@ int	main(int ac, char **av, char **envp)
 	init_signals();
 	if (isatty(0))
 		return (loop(global, mini_vars));
+	else
+		write(2, "minishell: non-interactive mode is not supported\n", 49);
 }
