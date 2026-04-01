@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 14:33:35 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/31 11:15:52 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 11:26:03 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	free_sub_redir(t_redir *current)
 
 	tmpp = NULL;
 	sub_redir = current->target->sub_token;
-	while(sub_redir)
+	while (sub_redir)
 	{
 		free(sub_redir->var);
 		tmpp = sub_redir->next;

@@ -6,50 +6,11 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 10:33:00 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 11:56:47 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
-
-int	is_directory(char *path, int *directory)
-{
-	struct stat	st;
-
-	if (stat(path, &st) != 0)
-	{
-		perror("minishell");
-		free(path);
-		*directory = 127;
-		return (127);
-	}
-	if (S_ISDIR(st.st_mode))
-	{
-		write(2, "minishell: ", 11);
-		write(2, path, ft_strlen(path));
-		write(2, ": Is a directory\n", 17);
-		free(path);
-		*directory = 126;
-		return (126);
-	}
-	*directory = 0;
-	return (0);
-}
-
-int	signal_value(int sig)
-{
-	if (sig == SIGINT)
-	{
-		write(1, "\n", 1);
-		return (130);
-	}
-	if (sig == SIGQUIT)
-	{
-		ft_printf(1, "Quit (core dumped)\n");
-		return (131);
-	}
-	return (0);
-}
 
 int	exec_cmd(t_ast *ast, t_env *env, t_global *global)
 {
@@ -118,22 +79,6 @@ void	exec_or(t_ast *ast, t_env *env, int *error_code, t_global *global)
 	execution_2(ast->left, env, error_code, global);
 	if (*error_code != 0)
 		execution_2(ast->right, env, error_code, global);
-}
-
-void	free_subshell(t_global *global)
-{
-	int	error;
-
-	error = 0;
-	if (global->what_free > 0)
-		global->true_head = global->head;
-	ft_miniclear(&(global->true_head));
-	free_parser(global->ast);
-	if (global->env)
-		free_env(global->env);
-	error = global->error_code;
-	free(global);
-	exit(error);
 }
 
 void	exec_subshell(t_ast *ast, t_env *env, int *error_code, t_global *g)

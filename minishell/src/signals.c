@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 11:18:36 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 11:19:04 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 11:25:35 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	handler(int signum)
 		}
 	}
 }
+
 void	init_signals(void)
 {
 	signal(SIGQUIT, SIG_IGN);

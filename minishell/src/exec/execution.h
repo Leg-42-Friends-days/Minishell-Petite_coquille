@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/31 19:42:38 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 12:00:31 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,16 +70,34 @@ char	*right_path(char **path, char *cmd, int *error);
 char	*find_cmd(t_env *env, char *cmd, int *error);
 char	*init_path(t_ast **ast, t_env *env, int *error);
 
+// PATH_UTILS.c
+int		is_directory_first(char *cmd, int *error);
+char	*is_directory_error(int *error, int *error_code, t_ast **ast);
+
 // REDIRECTION.c
 int		redirection(t_ast *node, t_global *global);
-void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global);
 void	restore_redirection(t_ast *node);
-int		free_all_in_child(t_global *global, char **table);
-int		free_all_pipe_subshell(t_global *global);
+void	join_limiter(t_redir *node);
+void	join_sub_token_limiter(t_sub_token **c, char **result, char **first);
+void	if_limiter(char *line, t_global *global, int *fd);
+
+// HERE_DOC.c
+void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global);
+int		prepare_here_doc(t_redir *node, t_global *global);
+void	child_here_doc(int *fd, t_redir *node, t_global *global);
+void	fill_here_doc(int *fd, t_redir **node, t_global *global);
+void	close_previous_heredocs(t_redir *node);
 
 // ERROR_EXEC.c
 void	error_pid(void);
 void	error_pipe(void);
+int		free_all_in_child(t_global *global, char **table);
+int		free_all_pipe_subshell(t_global *global);
+void	free_subshell(t_global *global);
+
+//ERROR_FREE.c
+void	close_saved_fd(t_ast *ast);
+void	free_before_execute(t_global *global, int error_code);
 
 // REDIR_UTILS.c
 void	redir_stdin(t_redir *current, t_global *global, int *code);
@@ -100,6 +118,7 @@ int		signal_value(int sig);
 void	child_cmd(t_ast **ast, t_global *global);
 void	pipe_first_child(t_ast **ast, int *fd, t_env **env, t_global *global);
 void	pipe_second_child(t_ast **ast, int *fd, t_env **env, t_global *global);
-void	close_saved_fd(t_ast *ast);
+int		is_directory(char *path, int *directory);
+int		signal_value(int sig);
 
 #endif

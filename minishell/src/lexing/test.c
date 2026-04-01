@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 15:35:43 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/21 15:46:04 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 11:38:45 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*ft_malloc(size_t size)
 	static int	count = 0;
 
 	count++;
-	if (count == 5) // fait échouer le 5e malloc
+	if (count == 5)
 	{
 		return (NULL);
 	}
@@ -36,7 +36,7 @@ void	print_tab(char **tabl)
 		i++;
 	}
 }
-
+/* 
 void	print_ast(t_ast *ast)
 {
 	if (ast != NULL)
@@ -75,4 +75,4 @@ void	print_ast(t_ast *ast)
 			print_ast(ast->right);
 		printf("\n");
 	}
-}
+} */

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 10:31:19 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 11:57:13 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	prepare_cmd(t_ast *ast, t_env *env, int *error_code, t_global *global)
 		global->error_code = 0;
 		redirection(ast, global);
 		restore_redirection(ast);
-		//close_saved_fd(ast);
 		return ;
 	}
 	else if ((!ast->cmd2 || !ast->cmd2[0]) && !ast->redirs)

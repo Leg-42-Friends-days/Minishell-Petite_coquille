@@ -6,7 +6,7 @@
 #    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/04/01 11:19:45 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/04/01 12:00:58 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,11 +45,14 @@ SRC =	main.c \
 		expender/expender.c \
 		exec/execution.c \
 		exec/path.c \
+		exec/path_utils.c \
 		exec/redirection.c \
 		exec/error_exec.c \
 		exec/redir_utils.c \
 		exec/exec_ast.c \
-		exec/exec_ast_utils.c
+		exec/exec_ast_utils.c \
+		exec/here_doc.c \
+		exec/error_free.c
 		
 OBJ_DIR = obj/
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))

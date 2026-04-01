@@ -6,43 +6,49 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:22:04 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 10:47:22 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 11:55:35 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-void	close_saved_fd(t_ast *ast)
+int	is_directory(char *path, int *directory)
 {
-	t_redir	*current;
+	struct stat	st;
 
-	if (!ast)
-		return ;
-	current = ast->redirs;
-	while (current)
+	if (stat(path, &st) != 0)
 	{
-		if (current->stdin != -1)
-			close(current->stdin);
-		if (current->stdout != -1)
-			close(current->stdout);
-		if (current->fd != -1)
-			close(current->fd);
-		current = current->next;
+		perror("minishell");
+		free(path);
+		*directory = 127;
+		return (127);
 	}
-	close_saved_fd(ast->left);
-	close_saved_fd(ast->right);
+	if (S_ISDIR(st.st_mode))
+	{
+		write(2, "minishell: ", 11);
+		write(2, path, ft_strlen(path));
+		write(2, ": Is a directory\n", 17);
+		free(path);
+		*directory = 126;
+		return (126);
+	}
+	*directory = 0;
+	return (0);
 }
 
-void	free_before_execute(t_global *global, int error_code)
+int	signal_value(int sig)
 {
-	if (global->what_free > 0)
-		global->true_head = global->head;
-	ft_miniclear(&(global->true_head));
-	free_parser(global->ast);
-	if (global->env)
-		free_env(global->env);
-	free(global);
-	exit (error_code);
+	if (sig == SIGINT)
+	{
+		write(1, "\n", 1);
+		return (130);
+	}
+	if (sig == SIGQUIT)
+	{
+		ft_printf(1, "Quit (core dumped)\n");
+		return (131);
+	}
+	return (0);
 }
 
 void	child_cmd(t_ast **ast, t_global *global)

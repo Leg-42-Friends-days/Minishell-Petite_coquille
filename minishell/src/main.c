@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/04/01 11:19:54 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 11:25:08 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	loop(t_global *global, t_token *mini_vars)
 		if (line)
 			mini_vars = lexing(&mini_vars, line);
 		if (!line)
-			return(control_d(global));
+			return (control_d(global));
 		if (*line)
 			add_history(line);
 		if (g_signal != 0)

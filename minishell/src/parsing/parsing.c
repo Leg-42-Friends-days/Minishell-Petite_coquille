@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/04/01 10:18:06 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 11:38:00 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,22 @@ t_ast	*parse_or_and(t_token **token, t_global *global, int *error)
 	return (left);
 }
 
+int	pre_verif(t_token **token, t_token *current, t_global *global)
+{
+	write(2, "Minishell : syntax error near unexpected '", 42);
+	if (((*token)->sub_token && (*token)->sub_token->next
+			&& (*token)->sub_token->next->var[0])
+		&& ((*token)->type > 0 && (*token)->type < 5)
+		&& ((*token)->sub_token->next->var[0] == '|'))
+		write(2, "|", 1);
+	else
+		write(2, current->sub_token->var, ft_strlen(current->sub_token->var));
+	write(2, "'\n", 2);
+	global->error_code = 2;
+	ft_miniclear(&(global->head));
+	return (1);
+}
+
 int	parser(t_token **token, t_global *global)
 {
 	t_token	*current;
@@ -92,19 +108,7 @@ int	parser(t_token **token, t_global *global)
 		return (0);
 	current = (*token);
 	if (check_token((&current)) == 1)
-	{
-		write(2, "Minishell : syntax error near unexpected '", 42);
-		if (((*token)->sub_token && (*token)->sub_token->next && (*token)->sub_token->next->var[0])
-			&& ((*token)->type > 0 && (*token)->type < 5)
-			&& ((*token)->sub_token->next->var[0] == '|'))
-			write(2, "|", 1);
-		else
-			write(2, current->sub_token->var, ft_strlen(current->sub_token->var));
-		write(2, "'\n", 2);
-		global->error_code = 2;
-		ft_miniclear(&(global->head));
-		return (1);
-	}
+		return (pre_verif(token, current, global));
 	global->ast = parse_or_and(token, global, &error);
 	if (error != 0)
 	{
