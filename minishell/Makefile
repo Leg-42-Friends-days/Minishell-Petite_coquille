@@ -6,7 +6,7 @@
 #    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/04/01 12:00:58 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/04/01 14:22:48 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ SRC =	main.c \
 		builtin/export2.c \
 		builtin/pwd.c \
 		builtin/cd.c \
+		builtin/cd_2.c \
 		builtin/echo.c \
 		builtin/exit.c \
 		builtin/unset.c \

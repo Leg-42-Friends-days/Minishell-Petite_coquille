@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:16:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/31 19:43:04 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 14:23:45 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,55 +33,60 @@ typedef struct s_pwd
 }					t_pwd;
 
 // FONCTION DE L'ENVIRONNEMENT
-char				*get_key(char *envp);
-int					find_letter(char *envp, char letter);
-t_env				*lstfirst_env(t_env *lst);
+char	*get_key(char *envp);
+int		find_letter(char *envp, char letter);
+t_env	*lstfirst_env(t_env *lst);
 
-void				free_table(char **table);
-void				free_env(t_env *env);
+void	free_table(char **table);
+void	free_env(t_env *env);
 
-char				**initiate_table_env(t_env *env);
-char				*ft_envdup(t_env *env);
-int					len_table_env(t_env *env);
+char	**initiate_table_env(t_env *env);
+char	*ft_envdup(t_env *env);
+int		len_table_env(t_env *env);
 
 // FREE_BUILTIN
-void				free_pwd(t_pwd *pwd);
-void				free_before_exit(t_global *global);
+void	free_pwd(t_pwd *pwd);
+void	free_before_exit(t_global *global);
 
 // ECHO
-int					ft_echo(char **cmd, t_env *env);
+int		ft_echo(char **cmd, t_env *env);
 
 // CD
-int					ft_cd(char **cmd, t_env *env);
-char				*ft_getenv(t_env *env, char *key);
+int		ft_cd(char **cmd, t_env *env);
+char	*ft_getenv(t_env *env, char *key);
+char	*define_target(char **cmd, t_env *env, int *error_code);
+t_env	*ft_getenv_node(t_env *env, char *key);
+int		invalid_option(char **cmd);
+char	*target_home(t_env *env, int *error_code, char *target);
+char	*print_invalid_option(int *error_code);
 
 // PWD
-int					ft_pwd(char **cmd, t_env *env);
+int		ft_pwd(char **cmd, t_env *env);
 
 // EXIT
-int					ft_exit(char **cmd, t_env *env, int *error_code, t_global *global);
+int		ft_exit(char **cmd, t_env *env, int *error_code, t_global *global);
 
 // ENV
-int					affichage_env(t_env *env);
-t_env				*env_content(t_env *env, char **envp);
-char				*strcat_env(char *s1, char *s2, int size);
-char				*envjoin(char *s1, char *s2);
-t_env				*lstadd_back_env(t_env *lst, char *key, char *value);
-t_env *mini_env(t_env *env);
+int		affichage_env(t_env *env);
+t_env	*env_content(t_env *env, char **envp);
+char	*strcat_env(char *s1, char *s2, int size);
+char	*envjoin(char *s1, char *s2);
+t_env	*lstadd_back_env(t_env *lst, char *key, char *value);
+t_env	*mini_env(t_env *env);
 
 // EXPORT
 
-bool				get_equal(char *str, int *error);
-bool				not_exportable(char *str);
-char				*get_content(char *test);
-bool				key_exist(t_env *env, char *key, char *content);
-t_env				*lstadd_back_exp(t_env *lst, char *key, char *value);
-int					function_export(t_env *env, char **cmd, int *error);
+bool	get_equal(char *str, int *error);
+bool	not_exportable(char *str);
+char	*get_content(char *test);
+bool	key_exist(t_env *env, char *key, char *content);
+t_env	*lstadd_back_exp(t_env *lst, char *key, char *value);
+int		function_export(t_env *env, char **cmd, int *error);
 
 // UNSET
 
-void				remove_first_or_last(t_env *tmp);
-void				remove_inside(t_env *tmp);
-int					function_unset(t_env *env, char **unset);
+void	remove_first_or_last(t_env *tmp);
+void	remove_inside(t_env *tmp);
+int		function_unset(t_env *env, char **unset);
 
 #endif

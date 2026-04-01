@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:22:04 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 11:55:35 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 14:14:41 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void	child_cmd(t_ast **ast, t_global *global)
 	int		error;
 	char	**table;
 
-	table = initiate_table_env(global->env);
 	code = 0;
 	error = 127;
 	init_child_signals();
@@ -72,6 +71,7 @@ void	child_cmd(t_ast **ast, t_global *global)
 	code = 0;
 	if (is_directory(path, &code) != 0)
 		free_before_execute(global, code);
+	table = initiate_table_env(global->env);
 	execve(path, (*ast)->cmd2, table);
 	free(path);
 	free_all_in_child(global, table);

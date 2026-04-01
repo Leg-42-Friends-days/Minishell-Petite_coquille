@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 14:14:15 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 11:59:53 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 14:15:05 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ char	*init_path(t_ast **ast, t_env *env, int *error_code)
 		write(2, "minishell: ", 11);
 		write(2, (*ast)->cmd2[0], ft_strlen((*ast)->cmd2[0]));
 		if (error == 0)
-			write(2, ": command not found\n", 21);
+			write(2, ": command not found\n", 20);
 		if (error == 1)
 			write(2, ": No such file or directory\n", 28);
 		if (error == 2)
