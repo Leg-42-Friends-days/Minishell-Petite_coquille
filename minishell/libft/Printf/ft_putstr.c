@@ -3,35 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/17 17:34:57 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/01/23 09:50:14 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/25 14:42:44 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/25 19:30:24 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-int	ft_putstr(char *str, int fd)
+void	ft_putstr(char *s, int *count)
 {
 	int	i;
 
-	i = 0;
-	if (!str)
+	if (!s)
 	{
-		write(fd, "(null)", 6);
-		return (6);
+		write(1, "(null)", 6);
+		*count = *count + 6;
+		return ;
 	}
-	while (str[i])
+	i = 0;
+	while (s[i] != '\0')
 	{
-		write(fd, &str[i], 1);
+		write(1, &s[i], 1);
+		*count = *count + 1;
 		i++;
 	}
-	return (i);
 }
-
-// int main()
-// {
-// 	ft_putstr("");
-// 	printf("%s", NULL);
-// }

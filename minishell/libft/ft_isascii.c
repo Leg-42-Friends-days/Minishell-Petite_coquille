@@ -3,23 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:06:20 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/05 09:56:33 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/06 11:32:56 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/06 13:15:04 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include "libft.h"
 
 int	ft_isascii(int c)
 {
-	if (!(c >= 0 && c <= 127))
-		return (0);
-	return (1);
+	if (c >= 0 && c <= 127)
+		return (1);
+	return (0);
 }
+/* 
+#include <ctype.h>
+#include <stdio.h>
 
-/*int main()
+int	ft_isascii(int c);
+
+int	main(void)
 {
-	printf("%d", ft_isascii("aw"));
-}*/
+	int	nb;
+
+	nb = 128;
+	printf("%d", ft_isascii(nb));
+	printf("\nla vraie foncion %d", isascii(nb));
+}
+ */

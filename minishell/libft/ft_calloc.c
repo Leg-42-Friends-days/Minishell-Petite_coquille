@@ -3,56 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/05 14:16:59 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/12/10 16:21:35 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/10 11:24:24 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/10 12:11:28 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_calloc(size_t nitems, size_t size)
+static void	*ft_memoset(void *s, int c, size_t n)
 {
+	char	*str;
 	size_t	i;
-	void	*allocation;
-	char	*space;
 
 	i = 0;
-	allocation = malloc(nitems * size);
-	if (!allocation)
-		return (NULL);
-	space = (char *)allocation;
-	while (space[i])
+	str = (char *)s;
+	while (i < n)
 	{
-		space[i] = 0;
+		str[i] = c;
 		i++;
 	}
-	return ((void *)allocation);
+	s = str;
+	return (s);
 }
-// int main()
-// {
-// 	int nitems = 16;
-// 	int size = 1;
-// 	int i = 0;
-// 	char hello[] = "Hello, World i am good";
-// 	char boite;
-// 	char *str;
 
-// 	str = ft_calloc(nitems, size);
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*rslt;
 
-// 	while (i < nitems)
-// 	{
-// 		printf("%d", str[i]);
-// 		i++;
-// 	}
-// 	printf("\n");
-// 	i = 0;
-// 	while (i < nitems)
-// 	{
-// 		str[i] = hello[i];
-// 		i++;
-// 	}
-// 	printf("%s", str);
-// 	return (0);
-// }
+	if (nmemb == 0 || size == 0)
+	{
+		return (malloc(0));
+	}
+	if (nmemb > SIZE_MAX / size)
+		return (NULL);
+	rslt = malloc(nmemb * size);
+	if (!rslt)
+		return (NULL);
+	ft_memoset(rslt, 0, (nmemb * size));
+	return (rslt);
+}
+/* 
+#include <stdlib.h>
+#include <stddef.h>
+#include <stdio.h>
+
+void	*ft_calloc(size_t nmemb, size_t size);
+
+int	main(void)
+{
+	char	*ptr;
+	int	nmemb;
+	int	i;
+
+	nmemb = 4;
+	ptr = ft_calloc(nmemb, 1);
+	i = 0;
+	while (i < nmemb)
+	{
+		printf("%d", (char)ptr[i]);
+		i++;
+	}
+} */

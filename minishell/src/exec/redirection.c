@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 11:57:56 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 22:24:48 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	if_limiter(char *line, t_global *global, int *fd)
 {
+	get_next_line(-1);
 	free(line);
 	close(fd[1]);
 	free_all_in_child(global, NULL);

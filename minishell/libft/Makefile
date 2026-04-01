@@ -3,98 +3,50 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
+#    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/12/05 13:00:35 by mickzhan          #+#    #+#              #
-#    Updated: 2025/12/05 13:00:36 by mickzhan         ###   ########.fr        #
+#    Created: 2026/01/14 13:24:00 by ibrouin-          #+#    #+#              #
+#    Updated: 2026/01/14 14:45:56 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
+CFLAGS = -Wall -Wextra -Werror -I ./
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
-AR = ar rcs
-SRC = \
-	ft_atoi.c \
-	ft_bzero.c \
-	ft_calloc.c \
-	ft_isalnum.c \
-	ft_isalpha.c \
-	ft_isascii.c \
-	ft_isdigit.c \
-	ft_isprint.c \
-	ft_itoa.c \
-	ft_memchr.c \
-	ft_memcpy.c \
-	ft_memmove.c \
-	ft_memset.c \
-	ft_strchr.c \
-	ft_strdup.c \
-	ft_strjoin.c \
-	ft_strlcat.c \
-	ft_strlcpy.c \
-	ft_strlen.c \
-	ft_strncmp.c \
-	ft_strnstr.c \
-	ft_strrchr.c \
-	ft_strtrim.c \
-	ft_substr.c \
-	ft_tolower.c \
-	ft_toupper.c \
-	ft_split.c \
-	ft_strmapi.c \
-	ft_striteri.c \
-	ft_putchar_fd.c \
-	ft_putendl_fd.c \
-	ft_putnbr_fd.c \
-	ft_memcmp.c \
-	ft_putstr_fd.c \
-	ft_printf.c \
-	ft_baselower16.c \
-	ft_baseupper16.c \
-	ft_pointer.c \
-	ft_putchar.c \
-	ft_putnbr.c \
-	ft_putstr.c \
-	ft_unsigned_putnbr.c \
-	get_next_line.c \
-	get_next_line_utils.c \
-	ft_lstnew_bonus.c \
-	ft_lstadd_front_bonus.c \
-	ft_lstsize_bonus.c \
-	ft_lstlast_bonus.c \
-	ft_lstadd_back_bonus.c \
-	ft_lstdelone_bonus.c \
-	ft_lstclear_bonus.c \
-	ft_lstiter_bonus.c \
-	ft_lstmap_bonus.c \
 
-OBJ = $(SRC:.c=.o)
+PRINTF_SRC = Printf/ft_lowerhexa Printf/ft_pointer Printf/ft_printf Printf/ft_putnbr Printf/ft_putnbru Printf/ft_putstr Printf/ft_upperhexa
+
+OBJ_PRINTF = $(addsuffix .o, $(PRINTF_SRC))
+
+SRC_FILES = ft_atoi ft_bzero ft_calloc ft_isalnum ft_isalpha ft_isascii ft_isdigit ft_isprint ft_itoa ft_memchr ft_memcpy ft_memmove ft_memcmp ft_memset ft_putchar_fd ft_putendl_fd ft_putnbr_fd ft_putstr_fd ft_split ft_strchr ft_strdup ft_striteri ft_strjoin ft_strlcat ft_strlcpy ft_strlen ft_strmapi ft_strncmp ft_strnstr ft_strrchr ft_strtrim ft_substr ft_tolower ft_toupper GNL/get_next_line GNL/get_next_line_utils
+
+OBJ_FILES = $(addsuffix .o, $(SRC_FILES))
+
+BONUS_SRC = ft_lstnew_bonus ft_lstadd_front_bonus ft_lstsize_bonus ft_lstlast_bonus ft_lstadd_back_bonus ft_lstdelone_bonus ft_lstclear_bonus ft_lstiter_bonus ft_lstmap_bonus
+
+BONUS_OBJ = $(addsuffix .o, $(BONUS_SRC))
+
+ARNAME = ar rcs $(NAME)
 
 all: $(NAME)
 
+$(NAME): $(OBJ_FILES) $(OBJ_PRINTF)
+	$(ARNAME) $(OBJ_FILES) $(OBJ_PRINTF)
+
 %.o: %.c
-	@$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(OBJ)
-	$(AR) $(NAME) $(OBJ)
-	@echo "$(NAME) ready !"
-
+ALL_OBJS = $(OBJ_FILES) $(OBJ_PRINTF) $(BONUS_OBJ)
 
 clean:
-	@rm -rf $(OBJ) $(OBJ_BONUS)
-	@echo "$(NAME): object file deleted"
-
+	rm -f $(OBJ_FILES) $(OBJ_PRINTF) $(BONUS_OBJ)
 
 fclean: clean
-	@rm -f $(NAME)
-	@echo "$(NAME): object file & library deleted"
+	rm -f $(NAME)
 
 re: fclean all
 
-	
-test:
-	@$(CC) $(CFLAGS) main.c -L. -lft -o .test_libft
-	@echo "$(NAME): Tester built"
+bonus: $(ALL_OBJS)
+	$(ARNAME) $(ALL_OBJS)
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus

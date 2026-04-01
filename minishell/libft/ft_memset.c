@@ -3,78 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:07:21 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/07 10:55:00 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/06 14:12:33 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/07 11:21:09 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memset(void *pointer, int value, size_t count)
+void	*ft_memset(void *s, int c, size_t n)
 {
-	char	*char_memset;
+	char	*str;
 	size_t	i;
 
-	if (count == 0)
-		return (pointer);
-	char_memset = (char *)pointer;
 	i = 0;
-	while (i < count)
+	str = (char *)s;
+	while (i < n)
 	{
-		char_memset[i] = value;
+		str[i] = c;
 		i++;
 	}
-	return (pointer);
+	s = str;
+	return (s);
 }
+/* 
+#include <string.h>
+#include <stdio.h>
+#include <stddef.h>
 
-// int main()
-// {
-//     char src[] = "Hello, Salut ca va?";
-//     char src1[] = "Hello, Salut ca va?";
+void	*ft_memset(void *s, int c, size_t n);
 
-//     int int_value[] = {-10, 5, 7, 12, 3};
-//     int int_value2[] = {10, 5, -7, 12, 3};
+int	main(void)
+{
+	char	str[] = "bonjour a toi";
 
-//     int value = 65;
-//     int size = 3;
-//     int i = 0;
-
-//     memset(src, value, size);
-//     ft_memset(src1, value, size);
-
-// 	while (i < 5)
-//     {
-//         printf("%d ", int_value[i]);
-//         i++;
-//     }
-// 	printf("\n");
-// 	i = 0;
-// 	while (i < 5)
-//     {
-//         printf("%d ", int_value2[i]);
-//         i++;
-//     }
-// 	i = 0;
-// 	printf("\n");
-//     memset(int_value2, value, sizeof(int) * size);
-//     ft_memset(int_value, value, sizeof(int) * size);
-
-//     printf("%s\n", src);
-//     printf("%s\n", src + 7);
-//     printf("%s\n", src1);
-//     printf("%s\n", src1 + 7);
-//     while (i < 5)
-//     {
-//         printf("%d ", int_value[i]);
-//         i++;
-//     }
-//     i = 0;
-//     printf("\n");
-//     while (i < 5)
-//     {
-//         printf("%d ", int_value2[i]);
-//         i++;
-//     }
-// }
+	printf("avant : %s", str);
+	ft_memset((str + 1), 65, (sizeof(char) * 3));
+	//memset((str + 1), 65, (sizeof(char) * 3));
+	printf("\napres ma fonction : %s", str);
+	//printf("\n vraie fonction : %s", str);
+} */

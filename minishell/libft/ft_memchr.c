@@ -3,43 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:06:54 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/05 18:23:05 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/10 11:04:37 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/10 11:05:31 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memchr(const void *memoryBlock, int searchedChar, size_t size)
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	size_t			i;
-	unsigned char	*str;
+	size_t				i;
+	const unsigned char	*str;
 
+	str = (const unsigned char *)s;
 	i = 0;
-	str = (unsigned char *)memoryBlock;
-	while (i < size)
+	while (i < n)
 	{
-		if (str[i] == ((unsigned char) searchedChar))
-			return (&str[i]);
+		if (str[i] == (unsigned char)c)
+			return ((void *)&str[i]);
 		i++;
 	}
-	return (NULL);
+	return (0);
 }
+/* 
+#include <string.h>
+#include <stdio.h>
+#include <stddef.h>
 
-// int main()
-// {
-//     char *str = "Hello, World";
-//     int array[6] = {8, 4, 6, 1, 7};
-//     int number = 'o';
-//     int size = 13;
+void	*ft_memchr(const void *s, int c, size_t n);
 
-//     printf("%s\n", (char *)ft_memchr(str, number + 258, size));
-//     printf("%s\n", (char *)memchr(str, number + 258, size));
+int	main(void)
+{
+	char	s[] = "bonjour a toi";
 
-//     number = 1;
-
-//     printf("%s\n", (char *)ft_memchr(array, number, size));
-//     printf("%s\n", (char *)memchr(array, number, size));
-// }
+	printf("%s", (char *)ft_memchr(s, 'a', 9));
+} */

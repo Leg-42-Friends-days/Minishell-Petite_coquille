@@ -3,39 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/12 10:00:02 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/14 20:14:18 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/12 20:35:52 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/12 20:46:21 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-// void	f(unsigned int i, char *ch)
-// {
-// 	ch += i;
-// }
-
 void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 {
 	int	i;
-	int	len;
 
 	i = 0;
-	len = ft_strlen(s);
-	while (i < len)
+	while (s[i] != '\0')
 	{
-		f(i, &s[i]);
+		(*f)(i, &s[i]);
 		i++;
 	}
-	s[i] = '\0';
+}
+/* 
+#include <stdio.h>
+
+void	ft_striteri(char *s, void (*f)(unsigned int, char *));
+
+void	ft_change(unsigned int index, char *s)
+{
+	(void)index;
+	*s = *s + 1;
 }
 
-// int main()
-// {
-//     char str[] = "HELLO, WORLD";
-//     ft_striteri(str, f);
+int	main(void)
+{
+	char	s[] = "coucou toi";
 
-//     printf("%s", str);
-// }
+	printf("avant : %s\n", s);
+	ft_striteri(s, ft_change);
+	printf("apres : %s\n", s);
+} */

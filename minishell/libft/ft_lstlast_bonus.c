@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   ft_lstlast_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/13 11:05:48 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/14 14:02:37 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/14 17:31:36 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/14 17:31:38 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,34 @@
 
 t_list	*ft_lstlast(t_list *lst)
 {
-	t_list	*cursor;
+	t_list	*ptr;
 
-	cursor = lst;
-	while (cursor != NULL)
+	if (!lst)
+		return (NULL);
+	ptr = lst;
+	while (ptr != NULL)
 	{
-		if (cursor->next == NULL)
-			return (cursor);
-		cursor = cursor->next;
+		if (ptr->next == NULL)
+			return (ptr);
+		else
+			ptr = ptr->next;
 	}
-	return (cursor);
+	return (NULL);
 }
+/* 
+#include <stdio.h>
 
-// int main()
-// {
-// 	t_list *n1 = malloc(sizeof(t_list));
-// 	t_list *n2 = malloc(sizeof(t_list));
-// 	t_list *n3 = malloc(sizeof(t_list));
+int	main(void)
+{
+	t_list	*head;
+	t_list	*current;
 
-// 	n1->content = (void *)314;
-// 	n2->content = (void *)214;
-// 	n3->content = (void *)172;
-// 	n1->next = n2;
-// 	n2->next = n3;
-// 	n3->next = NULL;
-
-// 	printf("%d", (int *)ft_lstlast(n1)->content);
-// }
-
-// typedef struct s_list
-// {
-// 	void			*content;
-// 	struct s_list	*next;
-// }					t_list;
+	head = malloc(sizeof(t_list));
+	current = malloc(sizeof(t_list));
+	head->next = current;
+	current =  malloc(sizeof(t_list));
+	head->next->next = current;
+	printf("dernier ptr : %p\n", current);
+	printf("fonction %p", ft_lstlast(head));
+}
+ */

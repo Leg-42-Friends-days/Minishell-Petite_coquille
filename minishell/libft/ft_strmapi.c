@@ -3,43 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/12 17:49:22 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/14 20:13:46 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/12 20:15:28 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/12 20:34:37 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-// char	fonction_test(unsigned int i, char ch)
-// {
-// 	return (ch + i);
-// }
-
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	int		i;
 	int		len;
+	int		i;
 	char	*str;
 
 	i = 0;
-	len = ft_strlen(s);
-	str = malloc(sizeof(char) * len + 1);
+	len = 0;
+	while (s[len] != '\0')
+		len++;
+	str = malloc((len + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
-	while (i < len)
+	while (s[i] != '\0')
 	{
-		str[i] = f(i, s[i]);
+		str[i] = (*f)(i, s[i]);
 		i++;
 	}
 	str[i] = '\0';
 	return (str);
 }
+/* 
+#include <stdlib.h>
+#include <stdio.h>
 
-// int main()
-// {
-//     char const str[] = "knk";
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 
-//     printf("%s", ft_strmapi(str, fonction_test));
-// }
+char	ft_change(unsigned int index, char c)
+{
+	(void)index;
+	return (c + 1);
+}
+
+int	main(void)
+{
+	char	*s;
+	char	*str;
+
+	s = "bonjour";
+	printf("avant : %s\n", s);
+	str = ft_strmapi(s, ft_change);
+	printf("apres : %s", str);
+	free(str);
+} */

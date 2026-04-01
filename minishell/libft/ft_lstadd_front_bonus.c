@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
+/*   ft_lstadd_front_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/13 11:06:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/14 12:11:08 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/14 15:46:10 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/14 15:46:13 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,24 @@
 
 void	ft_lstadd_front(t_list **lst, t_list *new)
 {
+	if (!lst || !new)
+		return ;
 	new->next = *lst;
 	*lst = new;
 }
+/* 
+#include <stdio.h>
 
-// t_list *ft_lstnew(void *content)
-// {
-//     t_list *node;
+int main(void)
+{
+	t_list  *lst;
+	t_list  *new;
 
-//     node = malloc(sizeof(t_list));
-//     if (!node)
-//         return (NULL);
-//     node->content = content;
-//     node->next = NULL;
-//     return (node);
-// }
-
-// int main()
-// {
-//     t_list *lst;
-//     char str[] = "Hello";
-//     lst = ft_lstnew(&str);
-//     t_list *new;
-//     char str2[] = "Base";
-//     new = ft_lstnew(&str2);
-// 	t_list *new1;
-
-//     printf("%s\n", (char *)lst->content);
-//     printf("%s\n", (char *)new->content);
-
-//     ft_lstadd_front(&lst, new);
-
-//     printf("%s\n", (char *)lst->content);
-//     printf("%s\n", (char *)new->next->content);
-// }
+	lst = malloc(sizeof(t_list));
+	printf("adresse struct lst = %p\n", lst);
+	new = malloc(sizeof(t_list));
+	printf("adresse struct new = %p\n", new);
+	ft_lstadd_front(&lst, new);
+	printf("new->next = %p\n", new->next);
+	printf("pointeur que lst pointe %p", lst);
+} */

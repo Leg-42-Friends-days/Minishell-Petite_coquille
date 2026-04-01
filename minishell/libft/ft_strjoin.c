@@ -3,54 +3,82 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:07:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/12 10:08:09 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/10 12:50:48 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/10 13:54:04 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strcat(char const *s1, char const *s2, int size)
+static int	ft_strl(char *str)
 {
-	int		i;
-	int		j;
-	char	*str;
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
+
+static char	*ft_fil(char const *s1, char const *s2, char *rslt)
+{
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
-	str = malloc(sizeof(char) * size + 1);
-	if (!str)
-		return (NULL);
-	while (s1[i])
+	while (s1[j] != '\0')
 	{
-		str[i] = s1[i];
+		rslt[i] = s1[j];
 		i++;
-	}
-	while (s2[j])
-	{
-		str[i + j] = s2[j];
 		j++;
 	}
-	str[i + j] = '\0';
-	return (str);
+	j = 0;
+	while (s2[j] != '\0')
+	{
+		rslt[i] = s2[j];
+		i++;
+		j++;
+	}
+	rslt[i] = '\0';
+	return (rslt);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	int		len;
-	char	*string;
+	char	*rslt;
+	int		ls1;
+	int		ls2;
 
-	len = ft_strlen(s1) + ft_strlen(s2);
-	string = ft_strcat(s1, s2, len);
-	return (string);
+	ls1 = ft_strl((char *)s1);
+	ls2 = ft_strl((char *)s2);
+	if ((ls1 + ls2) == 0)
+	{
+		rslt = (char *)malloc(1 * sizeof(char));
+		if (!rslt)
+			return (NULL);
+		rslt[0] = '\0';
+		return (rslt);
+	}
+	rslt = (char *)malloc((ls1 + ls2 + 1) * sizeof(char));
+	if (! rslt)
+		return (NULL);
+	return (ft_fil(s1, s2, rslt));
 }
+/* 
+#include <stdlib.h>
+#include <stdio.h>
 
-// int main()
-// {
-//     char s1[] = "";
-//     char s2[] = " Nobody was there";
+char	*ft_strjoin(char const *s1, char const *s2);
 
-//     printf("%s", ft_strjoin(s1, s2));
-// }
+int	main(void)
+{
+	char	s1[] = "coucou";
+	char	s2[] = " toi";
+	char	*rslt;
+
+	rslt = ft_strjoin(s1, s2);
+	printf("%s", rslt);
+} */

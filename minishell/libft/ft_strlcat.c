@@ -3,45 +3,57 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:08:03 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/06 11:48:24 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/10 11:10:18 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/10 11:10:19 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcat(char *dest, const char *src, size_t size)
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
+	size_t	lens;
+	size_t	lend;
 	size_t	i;
-	size_t	j;
-	size_t	k;
+	size_t	n;
 
-	i = 0;
-	j = 0;
-	k = 0;
-	while (i < size && dest[i])
-		i++;
-	while (src[j])
-		j++;
-	if (i == size)
-		return (size + j);
-	while (src[k] && i + k + 1 < size)
+	lens = 0;
+	lend = 0;
+	while (src[lens] != '\0')
+		lens++;
+	while (dst[lend] != '\0' && lend < dstsize)
+		lend++;
+	if (lend == dstsize)
+		return (lens + dstsize);
+	i = lend;
+	n = 0;
+	while (dstsize > i + 1 && src[n] != '\0')
 	{
-		dest[i + k] = src[k];
-		k++;
+		dst[i] = src[n];
+		i++;
+		n++;
 	}
-	dest[i + k] = '\0';
-	return (i + j);
+	dst[i] = '\0';
+	return (lens + lend);
 }
+/* 
+#include <stdio.h>
+#include <stddef.h>
+#include <string.h>
 
-// int main()
-// {
-//     char *src = "HELLO, WORLD";
-//     char dest[] = "There is";
-//     int total = ft_strlcat(dest, src, 20);
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 
-//     printf("%s : < message | len > : %d\n", dest, total);
-//     printf("%s", dest);
-// }
+int	main(void)
+{
+	char	dst[25] = "caca ";
+	char	src[] = "mais mdr";
+	int	dstsize;
+	int	N;
+
+	dstsize = 25;
+	N = ft_strlcat(dst, src, dstsize);
+	printf("%d\n",N );
+	printf("%s", dst);
+} */

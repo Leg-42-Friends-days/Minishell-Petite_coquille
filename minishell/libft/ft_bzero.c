@@ -3,39 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:05:50 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/13 10:03:42 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/06 14:12:33 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/07 17:30:19 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_bzero(void *ptr, size_t n)
+void	ft_bzero(void *s, size_t n)
 {
 	size_t	i;
-	char	*char_ptr;
 
 	i = 0;
-	char_ptr = (char *)ptr;
 	while (i < n)
 	{
-		char_ptr[i] = 0;
+		*((char *)(s + i)) = '\0';
 		i++;
 	}
 }
+/* 
+#include <strings.h>
+#include <stdio.h>
+#include <stddef.h>
 
-// int main()
-// {
-// 	char str[] = "No one loved";
-// 	int n = 1;
+void	ft_bzero(void *s, size_t n);
 
-// 	ft_bzero(str, n);
-// 	printf("%s\n", str);
-// 	printf("%s\n", str + 1);
-// 	printf("%s\n", str + 2);
-// 	printf("%s\n", str + 3);
-// 	printf("%s\n", str + 4);
-// 	printf("%s\n", str + 5);
-// }
+int	main(void)
+{
+	char	str[] = "bonjour a toi";
+
+	printf("avant : %s", str);
+	ft_bzero((str + 6), (sizeof(char) * 3));
+	//bzero((str + 6), (sizeof(char) * 3));
+	printf("\napres ma fonction : %s", str);
+	printf("\n%si", &str[5]);
+	//printf("\n vraie fonction : %s", str);
+} */

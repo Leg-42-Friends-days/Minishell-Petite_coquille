@@ -3,42 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:07:43 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/12 17:28:22 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/10 12:13:33 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/10 12:28:48 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(const char *str)
+char	*ft_strdup(char *s)
 {
 	int		i;
+	int		len;
 	char	*dup;
 
-	i = 0;
-	while (str[i])
-	{
-		i++;
-	}
-	dup = malloc(sizeof(char) * (i + 1));
+	len = 0;
+	while (s[len] != '\0')
+		len++;
+	dup = (char *)malloc((len + 1) * sizeof(char));
 	if (!dup)
 		return (NULL);
 	i = 0;
-	while (str[i])
+	while (s[i] != '\0')
 	{
-		dup[i] = str[i];
+		dup[i] = s[i];
 		i++;
 	}
 	dup[i] = '\0';
 	return (dup);
 }
+/* 
+#include <stdio.h>
+#include <stdlib.h>
 
-/*int main()
+char	*ft_strdup(const char *s);
+
+int	main(void)
 {
-	char str[] = "HELLO, WORLD";
-	char *dest = ft_strdup(str);
+	char	s[] = "coucou a toi";
+	char	*str;
 
-	printf("%s", dest);
-}*/
+	str = ft_strdup(s);
+	printf("%s", str);
+}
+ */

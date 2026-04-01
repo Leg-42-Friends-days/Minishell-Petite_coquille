@@ -3,35 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:07:37 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/12 17:49:47 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/10 11:07:59 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/10 11:08:02 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *str, int ch)
+char	*ft_strchr(const char *s, int c)
 {
-	int		i;
+	int	i;
+	int	len;
 
 	i = 0;
-	while (str[i])
+	len = 0;
+	while (s[len] != '\0')
+		len++;
+	while (i <= len)
 	{
-		if (str[i] == (char) ch)
-			return ((char *) str + i);
-		i++;
+		if (s[i] == (unsigned char)c)
+			return ((char *)&s[i]);
+		else
+			i++;
 	}
-	if (str[i] == (char) ch)
-		return ((char *) str + i);
-	return (NULL);
+	return (0);
 }
+/* 
+#include <stdio.h>
+#include <string.h>
 
-// int main()
-// {
-//     char *str = "Hello, A World";
-//     int number = 'l';
+char	*ft_strchr(const char *s, int c);
 
-//     printf("%s", ft_strchr(str, number));
-// }
+int	main(void)
+{
+	char s[] = "a la peche aux moules je ne veux pas aller maman";
+	int	c;
+
+	c = 'a';
+	printf("%s", ft_strchr(s, c));
+} */

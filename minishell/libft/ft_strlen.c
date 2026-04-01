@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:08:12 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/01/23 19:30:58 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/06 13:40:09 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/06 13:50:09 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,25 @@
 
 size_t	ft_strlen(const char *s)
 {
-	size_t	i;
+	int	i;
 
-	if (!s)
-		return (0);
 	i = 0;
-	while (s[i])
+	while (s[i] != '\0')
 		i++;
 	return (i);
 }
+/* 
+#include <string.h>
+#include <stdio.h>
+#include <stddef.h>
+
+size_t	ft_strlen(const char *s);
+
+int	main(void)
+{
+	char	*str;
+
+	str = "j";
+	printf("%lu", ft_strlen(str));
+	printf("\nla vraie fonction %lu", strlen(str));
+} */
