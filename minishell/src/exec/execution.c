@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/30 11:31:43 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 10:31:19 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	prepare_cmd(t_ast *ast, t_env *env, int *error_code, t_global *global)
 	//print_tab(ast->cmd2);
 	if ((!ast->cmd2 || !ast->cmd2[0]) && ast->redirs)
 	{
-		*(global->error_code) = 0;
+		global->error_code = 0;
 		redirection(ast, global);
 		restore_redirection(ast);
 		//close_saved_fd(ast);
@@ -101,5 +101,5 @@ void	execution_2(t_ast *ast, t_env *env, int *error_code, t_global *global)
 
 void	execution(t_global *global)
 {
-	execution_2(global->ast, global->env, global->error_code, global);
+	execution_2(global->ast, global->env, &global->error_code, global);
 }

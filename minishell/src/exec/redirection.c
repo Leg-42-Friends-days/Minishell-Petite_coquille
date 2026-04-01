@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/03/31 11:50:18 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 10:33:39 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,19 @@ void	close_previous_heredocs(t_redir *node)
 	}
 }
 
-int	free_all_in_child(t_global *global)
+int	free_all_in_child(t_global *global, char **table)
 {
 	int	error;
 
-	if (*(global->what_free) > 0)
+	if (global->what_free > 0)
 		global->true_head = global->head;
 	ft_miniclear(&(global->true_head));
 	free_parser(global->ast);
 	if (global->env)
 		free_env(global->env);
-	error = *(global->error_code);
-	free(global->error_code);
-	free(global->what_free);
-	free(global->here_doc_error);
+	if (table)
+		free_table(table);
+	error = global->error_code;
 	free(global);
 	return (error);
 }
@@ -52,16 +51,13 @@ int	free_all_pipe_subshell(t_global *global)
 {
 	int	error;
 
-	if (*(global->what_free) > 0)
+	if (global->what_free > 0)
 		global->true_head = global->head;
 	ft_miniclear(&(global->true_head));
 	free_parser(global->ast);
 	if (global->env)
 		free_env(global->env);
-	error = *(global->error_code);
-	free(global->error_code);
-	free(global->what_free);
-	free(global->here_doc_error);
+	error = global->error_code;
 	free(global);
 	return (error);
 }
@@ -70,7 +66,7 @@ void	if_limiter(char *line, t_global *global, int *fd)
 {
 	free(line);
 	close(fd[1]);
-	free_all_in_child(global);
+	free_all_in_child(global, NULL);
 	exit (0);
 }
 
@@ -146,7 +142,7 @@ void	child_here_doc(int *fd, t_redir *node, t_global *global)
 	init_signals();
 	close(fd[0]);
 	fill_here_doc(fd, &node, global);
-	free_all_in_child(global);
+	free_all_in_child(global, NULL);
 	exit(1);
 }
 
@@ -194,7 +190,7 @@ void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global)
 				{
 					if (redir->type == HEREDOC)
 						if (prepare_here_doc(redir, global) == 1)
-							*(global->here_doc_error) = 1;
+							global->here_doc_error = 1;
 					redir = redir->next;
 				}
 			}
