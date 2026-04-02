@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/04/02 15:49:43 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 19:12:46 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 t_global	*init_global(char **envp)
 {
 	t_global	*global;
-	(void)envp;
 
+	(void)envp;
 	global = (t_global *)malloc(sizeof(t_global));
 	if (!global)
 		return (NULL);
@@ -38,7 +38,6 @@ void	command_line(t_token **mini_vars, t_global *global)
 		global->what_free = 1;
 	global->head = *mini_vars;
 	global->true_head = *mini_vars;
-	//printmini(mini_vars);
 	if (!parser(mini_vars, global))
 	{
 		run_through_here_doc(global->ast, global->env, global);
@@ -65,7 +64,7 @@ int	control_d(t_global *global)
 }
 
 int	loop(t_global *global, t_token *mini_vars)
-{	
+{
 	char	*line;
 
 	while (true)

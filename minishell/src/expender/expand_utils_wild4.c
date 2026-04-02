@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 18:19:05 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/04/02 18:56:25 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/04/02 19:12:24 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ bool	check_if_next_token_wild(t_sub_token *sub_to)
 		return (false);
 	return (true);
 }
-
 
 int	mid_add(char *str, char *entry)
 {
