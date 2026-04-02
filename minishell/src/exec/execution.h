@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:21 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 12:00:31 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 20:38:11 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,7 @@ void	if_limiter(char *line, t_global *global, int *fd);
 // HERE_DOC.c
 void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global);
 int		prepare_here_doc(t_redir *node, t_global *global);
-void	child_here_doc(int *fd, t_redir *node, t_global *global);
-void	fill_here_doc(int *fd, t_redir **node, t_global *global);
-void	close_previous_heredocs(t_redir *node);
+int		heredoc_code_status(int *fd, t_redir *node, int status);
 
 // ERROR_EXEC.c
 void	error_pid(void);
@@ -104,6 +102,15 @@ void	redir_stdin(t_redir *current, t_global *global, int *code);
 void	redir_stdout_trunc(t_redir *current, t_global *global, int *code);
 void	redir_here_doc(t_redir *current, t_global *global, int *code);
 void	redir_stdout_append(t_redir *current, t_global *global, int *code);
+void	if_limiter(char *line, t_global *global, int *fd);
+void	close_previous_heredocs(t_redir *node);
+int		empty_line(char *line, int *fd);
+void	fill_here_doc(int *fd, t_redir **node, t_global *global);
+void	child_here_doc(int *fd, t_redir *node, t_global *global);
+
+// EXEC_SIGNALS.c
+void	hand(int signum);
+void	handle_sigquit(int sig);
 
 // EXEC_AST.c
 int		exec_cmd(t_ast *ast, t_env *env, t_global *global);

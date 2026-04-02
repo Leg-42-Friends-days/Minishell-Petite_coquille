@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:05:38 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/04/01 11:38:00 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 20:27:42 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,5 @@ int	parser(t_token **token, t_global *global)
 		free_parser(global->ast);
 		return (1);
 	}
-	//print_ast(global->ast);
 	return (0);
 }

@@ -6,7 +6,7 @@
 #    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/04/02 18:20:17 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/04/02 20:35:57 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRC =	main.c \
 		builtin/cd_2.c \
 		builtin/echo.c \
 		builtin/exit.c \
+		builtin/exit_2.c \
 		builtin/unset.c \
 		builtin/free_builtin.c \
 		builtin/table_env.c \
@@ -66,7 +67,9 @@ SRC =	main.c \
 		exec/redirection.c \
 		exec/error_exec.c \
 		exec/redir_utils.c \
+		exec/redir_utils_2.c \
 		exec/exec_ast.c \
+		exec/exec_signals.c \
 		exec/exec_ast_utils.c \
 		exec/here_doc.c \
 		exec/error_free.c

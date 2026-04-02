@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:06 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/02 18:13:50 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 20:27:54 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	handle_par(t_token *token)
 	in_par = 0;
 	l_par = 0;
 	r_par = 0;
-	while(token)
+	while (token)
 	{
 		if (token->type == L_PAR)
 		{

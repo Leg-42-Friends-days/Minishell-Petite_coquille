@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 19:12:50 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/31 18:27:24 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/04/02 18:56:05 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,6 @@ char	*expand_redir(t_sub_token *sub, t_global *global);
 bool	append_redir(char **result, t_sub_token *sub, t_global *global);
 char	*redir_target(t_sub_token *sub, t_global *global);
 char	*code_str(char *str, int error_code);
+int		mid_add(char *str, char *entry);
 
 #endif

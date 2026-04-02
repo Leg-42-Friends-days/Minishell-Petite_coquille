@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 16:16:36 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/04/01 14:23:45 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 20:25:19 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int		ft_pwd(char **cmd, t_env *env);
 
 // EXIT
 int		ft_exit(char **cmd, t_env *env, int *error_code, t_global *global);
+int		over_long_max(int i, const char *str, long long sign, long long res);
 
 // ENV
 int		affichage_env(t_env *env);

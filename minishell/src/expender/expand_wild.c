@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 18:18:07 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/31 18:18:47 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/04/02 18:56:17 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 bool	inside_string(bool start, bool end, char **str, char *entry)
 {
 	int	i;
+	int	add;
 	int	len;
 
 	i = 0;
+	add = 0;
 	if (!str || !*str)
 		return (false);
 	len = last_index(str) - 1;
@@ -27,8 +29,9 @@ bool	inside_string(bool start, bool end, char **str, char *entry)
 			return (false);
 		else if (end_compare(str[len], entry) == true && end == true)
 			return (false);
-		else if (mid_compare(str[i], entry) == true)
+		else if (mid_compare(str[i], entry + add) == true)
 			return (false);
+		add = mid_add(str[i], entry);
 		i++;
 	}
 	return (true);

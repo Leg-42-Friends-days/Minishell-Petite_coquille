@@ -6,20 +6,11 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/02 12:06:25 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 20:37:52 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
-
-void	if_limiter(char *line, t_global *global, int *fd)
-{
-	get_next_line(-1);
-	free(line);
-	close(fd[1]);
-	free_all_in_child(global, NULL);
-	exit (0);
-}
 
 void	dollar_before_quote(t_sub_token *current)
 {
@@ -73,7 +64,6 @@ void	join_limiter(t_redir *node)
 		}
 		next = current->next;
 		current = next;
-
 	}
 	if (result)
 		node->target->sub_token->var = result;
@@ -101,7 +91,7 @@ int	redirection(t_ast *node, t_global *global)
 		else if (current->type == APPEND)
 			redir_stdout_append(current, global, &code);
 		if (code != 0)
-		return (1);
+			return (1);
 		current = current->next;
 	}
 	return (0);

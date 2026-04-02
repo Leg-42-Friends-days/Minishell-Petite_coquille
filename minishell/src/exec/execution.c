@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:28:07 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 11:57:13 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 20:28:40 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	exec_bult_in(char **cmd, t_env *env, int *error_code, t_global *global)
 void	prepare_cmd(t_ast *ast, t_env *env, int *error_code, t_global *global)
 {
 	expand_function(ast, global);
-	//print_tab(ast->cmd2);
 	if ((!ast->cmd2 || !ast->cmd2[0]) && ast->redirs)
 	{
 		global->error_code = 0;
@@ -66,7 +65,6 @@ void	prepare_cmd(t_ast *ast, t_env *env, int *error_code, t_global *global)
 	}
 	else if ((!ast->cmd2 || !ast->cmd2[0]) && !ast->redirs)
 		return ;
-	//print_tab(ast->cmd2);
 	if (is_bult_in(ast->cmd2) == 1)
 	{
 		if (redirection(ast, global) == 1)

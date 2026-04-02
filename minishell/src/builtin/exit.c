@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 11:49:59 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/04/02 19:14:42 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 20:26:20 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ int	check_ft_atol(const char *str)
 	}
 	while (str[i] && str[i] >= '0' && str[i] <= '9')
 	{
-		if (sign == 1  && (res > LLONG_MAX / 10 || (res == LLONG_MAX / 10 && str[i] > '7')))
-			return (0);
-		if (sign == 1  && (res > LLONG_MAX / 10 || (res == LLONG_MAX / 10 && str[i] > '8')))
+		if (over_long_max(i, str, sign, res))
 			return (0);
 		res = (str[i] - '0') + res * 10;
 		i++;

@@ -6,7 +6,7 @@
 /*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 18:19:05 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/31 18:33:15 by mickzhan         ###   ########.fr       */
+/*   Updated: 2026/04/02 19:12:24 by mickzhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ bool	mid_compare(char *str, char *entry)
 	int	j;
 	int	k;
 
+	if (!entry || !str)
+		return (true);
 	i = 0;
 	while (entry[i])
 	{
@@ -78,4 +80,27 @@ bool	check_if_next_token_wild(t_sub_token *sub_to)
 			|| sub_to->prev->quote == SINGLE))
 		return (false);
 	return (true);
+}
+
+int	mid_add(char *str, char *entry)
+{
+	int	i;
+	int	j;
+	int	k;
+
+	i = 0;
+	while (entry[i])
+	{
+		j = 0;
+		k = 0;
+		while (entry[i + k] == str[j])
+		{
+			k++;
+			j++;
+			if (str[j] == '\0')
+				return (i);
+		}
+		i++;
+	}
+	return (i);
 }
