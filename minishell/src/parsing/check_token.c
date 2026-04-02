@@ -6,11 +6,40 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 11:23:06 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/02 14:17:06 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 15:58:23 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	handle_par(t_token *token)
+{
+	int	in_par;
+	int	l_par;
+	int	r_par;
+
+	in_par = 0;
+	l_par = 0;
+	r_par = 0;
+	while(token)
+	{
+		if (token->type == L_PAR)
+		{
+			in_par = 1;
+			l_par ++;
+		}
+		if (token->type == R_PAR)
+		{
+			if (in_par == 0)
+				return (1);
+			r_par ++;
+		}
+		token = token->next;
+	}
+	if (l_par != r_par)
+		return (1);
+	return (0);
+}
 
 bool	lst_last_token(t_token **token)
 {
@@ -55,7 +84,12 @@ bool	next_token(t_token **token)
 
 bool	check_token(t_token **token)
 {
+	t_token	*current;
+
+	current = *token;
 	if ((*token)->type > 6 || next_token(token) == 1)
+		return (true);
+	if (handle_par(current) == 1)
 		return (true);
 	if (lst_last_token(token) == 1)
 		return (true);

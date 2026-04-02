@@ -6,7 +6,7 @@
 #    By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:27 by mickzhan          #+#    #+#              #
-#    Updated: 2026/04/01 14:46:55 by ibrouin-         ###   ########.fr        #
+#    Updated: 2026/04/02 15:09:52 by ibrouin-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,7 +106,7 @@ val:
 	valgrind -s \
   --leak-check=full \
   --show-leak-kinds=all \
-  --suppressions=./_devtools/readline.supp \
+  --suppressions=/home/ibrouin-/Documents/Minishell/minishell/_devtools/readline.supp \
   --trace-children=yes \
   --track-fds=yes \
   ./minishell

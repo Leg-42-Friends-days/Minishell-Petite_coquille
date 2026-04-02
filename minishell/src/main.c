@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/04/02 14:36:13 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 15:49:43 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	command_line(t_token **mini_vars, t_global *global)
 		global->what_free = 1;
 	global->head = *mini_vars;
 	global->true_head = *mini_vars;
-	//printmini(&mini_vars);
+	//printmini(mini_vars);
 	if (!parser(mini_vars, global))
 	{
 		run_through_here_doc(global->ast, global->env, global);
