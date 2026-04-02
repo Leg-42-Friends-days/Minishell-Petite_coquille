@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 13:35:21 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/04/02 14:39:59 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 17:00:30 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ t_env	*env_content(t_env *env, char **envp)
 		if (!value)
 			return (env);
 		env = lstadd_back_env(env, key, value);
+		if (!env)
+			return (env);
 		i++;
 	}
 	env = lstfirst_env(env);
