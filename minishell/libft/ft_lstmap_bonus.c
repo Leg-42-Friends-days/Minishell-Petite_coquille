@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/14 12:14:26 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/15 15:10:23 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/16 19:00:28 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/16 19:00:31 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,62 @@
 
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_list	*node_new;
-	t_list	*node_start;
+	t_list	*rslt;
+	t_list	*newnode;
+	void	*content;
 
 	if (!lst || !f || !del)
 		return (NULL);
-	node_new = NULL;
-	while (lst)
+	rslt = NULL;
+	while (lst != NULL)
 	{
-		node_start = ft_lstnew(f(lst->content));
-		if (!node_start)
+		content = (*f)(lst->content);
+		if (!content)
+			return (ft_lstclear(&rslt, del), NULL);
+		newnode = ft_lstnew(content);
+		if (!newnode)
 		{
-			ft_lstclear(&node_new, del);
+			ft_lstclear(&rslt, del);
+			del(content);
 			return (NULL);
 		}
-		ft_lstadd_back(&node_new, node_start);
+		ft_lstadd_back(&rslt, newnode);
 		lst = lst->next;
 	}
-	return (node_new);
+	return (rslt);
 }
-// faire un schema pour bien comprendre
-// push et comprendre
+/* 
+void	*f(void *node)
+{
+	*(int *)node = *(int *)node + 1;
+	return (node);
+}
+
+void	del(void *node)
+{
+	free(node);
+}
+
+#include <stdio.h>
+
+int	main(void)
+{
+	t_list	*head;
+	t_list	*current;
+	int		content1;
+	int		content2;
+
+	head = malloc(sizeof(t_list));
+	current = malloc(sizeof(t_list));
+
+	head->next = current;
+	content1 = 45;
+	head->content = &content1;
+	printf("%d\n", *(int *)(head->content));
+	content2 = 22;
+	current->content = &content2;
+	printf("%d\n", *(int *)(current->content));
+	head = ft_lstmap(head, f, del);
+	printf("%d\n", *(int *)(head->content));
+	printf("%d", *(int *)(current->content));
+} */

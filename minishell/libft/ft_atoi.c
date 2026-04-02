@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:05:41 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/05 09:55:44 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/10 10:43:52 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/12/15 21:07:13 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,36 @@
 int	ft_atoi(const char *str)
 {
 	int	i;
-	int	signe;
-	int	res;
+	int	sign;
+	int	rslt;
 
 	i = 0;
-	signe = 1;
-	res = 0;
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
+	sign = 1;
+	rslt = 0;
+	while (((str[i] >= 9 && str[i] <= 13) || str[i] == 32) && str[i] != '\0')
 		i++;
-	if (str[i] == '-' || str[i] == '+')
+	if (str[i] == '+' || str[i] == '-')
 	{
 		if (str[i] == '-')
-			signe *= -1;
+			sign = -1;
 		i++;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	while (str[i] != '\0' && (str[i] >= '0' && str[i] <= '9'))
 	{
-		res = (str[i] - '0') + res * 10;
+		rslt = rslt * 10 + (str[i] - '0');
 		i++;
 	}
-	return (res * signe);
+	return (sign * rslt);
 }
+/* 
+#include <stdlib.h>
+#include <stdio.h>
 
-/*int main()
+int	ft_atoi(const char *str);
+
+int	main(void)
 {
-	printf("%d", ft_atoi("    123131dada"));
-}*/
+	char	str[] = ".  +23a4";
+
+	printf("%d", ft_atoi(str));
+} */

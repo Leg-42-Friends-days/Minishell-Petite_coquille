@@ -3,32 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:09:20 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/05 09:57:54 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/10 11:09:33 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/10 11:09:35 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_toupper(int ch)
+int	ft_toupper(int c)
 {
-	if (ch >= 'a' && ch <= 'z')
-		return (ch - 32);
-	return (ch);
+	if (c >= 97 && c <= 122)
+		return (c - 32);
+	return (c);
 }
+/* 
+#include <stdio.h>
+#include <ctype.h>
 
-/*int main()
+int	ft_toupper(int c);
+
+int	main(void)
 {
-	int i = 0;
-	char *str = "Hello, World";
-	char ch;
+	int	c;
 
-	while (str[i])
-	{
-		ch = str[i];
-		printf("%c", ft_toupper(ch));
-		i++;
-	}
-}*/
+	c = 52;
+	printf("petit : %c\n", c);
+	printf("grand : %c", ft_toupper(c));
+} */

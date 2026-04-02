@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstsize.c                                       :+:      :+:    :+:   */
+/*   ft_lstsize_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/13 11:06:02 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/13 14:15:12 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/14 16:35:03 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/14 16:35:07 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,49 +14,33 @@
 
 int	ft_lstsize(t_list *lst)
 {
-	int	i;
+	int		cmpt;
+	t_list	*ptr;
 
-	i = 0;
-	while (lst != NULL)
+	if (!lst)
+		return (0);
+	cmpt = 0;
+	ptr = lst;
+	while (ptr != NULL)
 	{
-		i++;
-		lst = lst->next;
+		cmpt++;
+		ptr = ptr->next;
 	}
-	return (i);
+	return (cmpt);
 }
+/* 
+#include <stdio.h>
 
-// t_list *ft_lstnew(void *content)
-// {
-//     t_list *node;
+int	main(void)
+{
+	t_list	*head;
+	t_list	*current;
 
-//     node = malloc(sizeof(t_list));
-//     if (!node)
-//         return (NULL);
-//     node->content = content;
-//     node->next = NULL;
-//     return (node);
-// }
-
-// int main()
-// {
-//     t_list *node1;
-//     int value = 42;
-//     node1 = ft_lstnew(&value);
-
-//     t_list *node2;
-//     int value2 = 241;
-//     node2 = ft_lstnew(&value2);
-//     node1->next = node2;
-
-//     t_list *node3;
-//     char str[] = "Hello, Test";
-//     node3 = ft_lstnew(&str);
-//     node2->next = node3;
-
-//     t_list *node4;
-//     char str2[] = "We rolling";
-//     node4 = ft_lstnew(&str2);
-//     node3->next = node4;
-
-//     printf("%d", ft_lstsize(node1));
-// }
+	head = malloc(sizeof(t_list));
+	current = malloc(sizeof(t_list));
+	head->next = current;
+	current =  malloc(sizeof(t_list));
+	head->next->next = current;
+	printf("%d", ft_lstsize(head));
+}
+ */

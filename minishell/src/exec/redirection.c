@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 15:01:11 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 11:57:56 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 12:06:25 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,35 @@
 
 void	if_limiter(char *line, t_global *global, int *fd)
 {
+	get_next_line(-1);
 	free(line);
 	close(fd[1]);
 	free_all_in_child(global, NULL);
 	exit (0);
 }
 
+void	dollar_before_quote(t_sub_token *current)
+{
+	int	len;
+
+	len = ft_strlen(current->var);
+	if (current->next)
+	{
+		if (current->next->var)
+		{
+			if (current->var[len - 1] == '$')
+			{
+				if (len > 1 && current->var[len - 2] == '$')
+					return ;
+				current->var[len - 1] = '\0';
+			}
+		}
+	}
+}
+
 void	join_sub_token_limiter(t_sub_token **c, char **result, char **first)
 {
+	dollar_before_quote((*c)->next);
 	*result = ft_strjoin(*first, (*c)->next->var);
 	if (*first)
 		free(*first);
@@ -42,6 +63,7 @@ void	join_limiter(t_redir *node)
 	next = NULL;
 	current = node->target->sub_token;
 	first = node->target->sub_token->var;
+	dollar_before_quote(current);
 	while (current)
 	{
 		if (current->next)
@@ -51,6 +73,7 @@ void	join_limiter(t_redir *node)
 		}
 		next = current->next;
 		current = next;
+
 	}
 	if (result)
 		node->target->sub_token->var = result;
@@ -77,10 +100,10 @@ int	redirection(t_ast *node, t_global *global)
 			redir_here_doc(current, global, &code);
 		else if (current->type == APPEND)
 			redir_stdout_append(current, global, &code);
+		if (code != 0)
+		return (1);
 		current = current->next;
 	}
-	if (code != 0)
-		return (1);
 	return (0);
 }
 

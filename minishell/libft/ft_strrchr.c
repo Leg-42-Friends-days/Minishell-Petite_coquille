@@ -1,40 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strrchr.c                                      :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:08:31 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/04 19:14:21 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/10 11:07:12 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/10 11:07:13 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
-char	*ft_strrchr(const char *str, int chr)
+char	*ft_strrchr(const char *s, int c)
 {
 	int	i;
+	int	len;
 
-	i = ft_strlen(str);
-	if (str[i] == (char) chr)
-		return ((char *)str + i);
-	i -= 1;
-	if (!str)
-		return (NULL);
-	while (str[i] && i >= 0)
+	len = 0;
+	while (s[len] != '\0')
+		len++;
+	i = len;
+	while (i <= len && i >= 0)
 	{
-		if (str[i] == (char) chr)
-			return ((char *)str + i);
-		i--;
+		if ((unsigned char)s[i] == (unsigned char)c)
+		{
+			return ((char *)&s[i]);
+		}
+		else
+			i--;
 	}
-	return (NULL);
+	return (0);
 }
+/* 
+#include <stdio.h>
+#include <string.h>
 
-// int main()
-// {
-//     char *str = "bonjour";
+char	*ft_strrchr(const char *s, int c);
 
-//     printf("%s", ft_strrchr(str, 'b'));
-// }
+int	main(void)
+{
+	char s[] = "teste";
+	int	c;
+
+	c = 'x';
+	printf("%s", ft_strrchr(s, c));
+} */

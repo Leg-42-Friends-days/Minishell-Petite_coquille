@@ -6,13 +6,13 @@
 #    By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/05 13:00:35 by mickzhan          #+#    #+#              #
-#    Updated: 2025/12/05 13:00:36 by mickzhan         ###   ########.fr        #
+#    Updated: 2026/04/01 23:15:57 by mickzhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -I .
 AR = ar rcs
 SRC = \
 	ft_atoi.c \
@@ -49,16 +49,16 @@ SRC = \
 	ft_putnbr_fd.c \
 	ft_memcmp.c \
 	ft_putstr_fd.c \
-	ft_printf.c \
-	ft_baselower16.c \
-	ft_baseupper16.c \
-	ft_pointer.c \
-	ft_putchar.c \
-	ft_putnbr.c \
-	ft_putstr.c \
-	ft_unsigned_putnbr.c \
-	get_next_line.c \
-	get_next_line_utils.c \
+	Printf/ft_printf.c \
+	Printf/ft_baselower16.c \
+	Printf/ft_baseupper16.c \
+	Printf/ft_pointer.c \
+	Printf/ft_putchar.c \
+	Printf/ft_putnbr.c \
+	Printf/ft_putstr.c \
+	Printf/ft_unsigned_putnbr.c \
+	GNL/get_next_line.c \
+	GNL/get_next_line_utils.c \
 	ft_lstnew_bonus.c \
 	ft_lstadd_front_bonus.c \
 	ft_lstsize_bonus.c \

@@ -3,26 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:06:32 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/05 09:56:53 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/06 11:32:56 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/06 13:26:28 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_isprint(int character)
+int	ft_isprint(int c)
 {
-	if (!(character >= 32 && character <= 126))
-		return (0);
-	return (1);
+	if (c >= 32 && c <= 126)
+		return (1);
+	return (0);
 }
-
-/*
+/* 
+#include <ctype.h>
 #include <stdio.h>
+
+int	ft_isprint(int c);
 
 int	main(void)
 {
-	printf("%d", ft_isprintable());
-}*/
+	int	nb;
+
+	nb = 126;
+	printf("%d", ft_isprint(nb));
+	printf("\nla vraie foncion %d", isprint(nb));
+} */

@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 16:26:08 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/25 13:50:00 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 14:08:21 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ void	print_string(char *str)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		if (str[i] != 92)
-			write(1, &str[i], 1);
+		write(1, &str[i], 1);
 		i++;
 	}
 }

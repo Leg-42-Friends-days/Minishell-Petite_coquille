@@ -3,42 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:07:02 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/04 19:32:53 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/07 17:02:04 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/07 19:16:58 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memcpy(void *destination, const void *source, size_t size)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	size_t	i;
-	char	*mem_dest;
-	char	*mem_src;
 
-	if (destination == NULL && source == NULL)
+	if (!dest && !src)
 		return (NULL);
 	i = 0;
-	mem_dest = (char *)destination;
-	mem_src = (char *)source;
-	while (i < size)
+	while (i < n)
 	{
-		mem_dest[i] = mem_src[i];
-		i++;
+		*((char *)(dest + i)) = *((char *)(src + i));
+		i ++;
 	}
-	return (destination);
+	return (dest);
 }
+/* 
+#include <string.h>
+#include <stdio.h>
+#include <stddef.h>
 
-// int main()
-// {
-//     char src[] = "BONJOUR, VOUS ALLEZ BIEN?";
-//     char dest[50] = "";
-//     char dest1[50] = "";
+void	*ft_memcpy(void *dest, const void *src, size_t n);
 
-//     memcpy(dest1, src, 15);
-//     ft_memcpy(dest, src, 15);
-//     printf("%s\n", dest1);
-//     printf("%s\n", dest);
-// }
+int	main(void)
+{
+	//char	dest[] = "hello toi";
+	//char	src[] = "coucou toi";
+	char	*s;
+	int	n;
+
+	n = 3;
+	//printf("source de base :%s", src);
+	//printf("\ndest avant :%s", dest);
+	//ft_memcpy(src, src, n);
+	s = memcpy(((void*)0), ((void*)0), n);
+	printf("\ndest apres :%s", s);
+} */

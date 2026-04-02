@@ -3,47 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:07:07 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/07 17:25:34 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/07 17:02:04 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/07 19:24:21 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *destinaton, const void *source, size_t size)
+void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	size_t		i;
-	const char	*mem_src;
-	char		*mem_dest;
+	size_t	i;
 
-	if (destinaton == NULL && source == NULL)
-		return (destinaton);
-	i = 0;
-	mem_dest = (char *)destinaton;
-	mem_src = (const char *)source;
-	if (source >= destinaton)
-		ft_memcpy(destinaton, source, size);
+	if (!dest && !src)
+		return (NULL);
+	if (dest < src)
+	{
+		i = 0;
+		while (i < n)
+		{
+			*((unsigned char *)(dest + i)) = *((unsigned char *)(src + i));
+			i++;
+		}
+		return (dest);
+	}
 	else
 	{
-		while (size > i)
+		i = n;
+		while (i > 0)
 		{
-			mem_dest[size - 1] = mem_src[size - 1];
-			size--;
+			i--;
+			*((unsigned char *)(dest + i)) = *((unsigned char *)(src + i));
 		}
+		return (dest);
 	}
-	return (destinaton);
 }
+/* 
+#include <string.h>
+#include <stdio.h>
+#include <stddef.h>
 
-// int main()
-// {
-//     char src[100] = "Geeksfor";
-//     char second[100] = "Geeksfor";
+void	*ft_memmove(void *dest, const void *src, size_t n);
 
-//     memmove(second + 2, src, 6);
-//     printf("%s\n", second);
+int	main(void)
+{
+	char	dest[100] = "Learningisfun";
+	//char	src[] = "coucou toi";
+	int	n;
 
-//     ft_memmove(src + 2, src, 6);
-//     printf("%s\n", src);
-// }
+	n = 13;
+	//printf("source de base :%s", src);
+	printf("\ndest avant :%s", dest);
+	//ft_memmove(dest, src, n);
+	ft_memmove((dest + 8), dest, n);
+	printf("\ndest apres :%s", dest);
+} */

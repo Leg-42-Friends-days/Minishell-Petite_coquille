@@ -3,24 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:06:09 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/05 14:22:27 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/06 11:32:56 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/06 11:43:42 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_isalpha(int character)
+int	ft_isalpha(int c)
 {
-	if (!(character >= 'a' && character <= 'z') && !(character >= 'A'
-			&& character <= 'Z'))
-		return (0);
-	return (1);
+	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
+		return (c);
+	return (0);
 }
+/* 
+#include <ctype.h>
+#include <stdio.h>
 
-/*int main()
+int	ft_isalpha(int c);
+
+int	main(void)
 {
-	printf("%d", ft_isalpha());
-}*/
+	int	nb;
+
+	nb = 66;
+	printf("%d", ft_isalpha(nb));
+	printf("\nla vraie foncion %d", isalpha(nb));
+} */

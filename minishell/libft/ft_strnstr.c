@@ -3,44 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:08:26 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/05 16:04:30 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/10 11:01:31 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/10 11:03:00 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strnstr(const char *str, const char *find, size_t size)
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
 	size_t	i;
 	size_t	j;
+	char	*str;
 
+	str = (char *)haystack;
+	if (needle[0] == '\0')
+		return (str);
 	i = 0;
-	j = 0;
-	if (*find == '\0')
-		return ((char *) str);
-	while (str[i] && i < size)
+	while (str[i] != '\0' && i < len)
 	{
-		while (str[i + j] == find[j] && i + j < size)
+		j = 0;
+		while (str[i + j] == needle[j] && (i + j) < len
+			&& needle[j] != '\0' && str[i + j] != '\0')
 		{
 			j++;
-			if (find[j] == 0)
-				return ((char *) str + i);
 		}
+		if (needle[j] == '\0')
+			return (&str[i]);
 		i++;
-		j = 0;
 	}
-	return (NULL);
+	return (0);
 }
+/* 
+#include <string.h>
+#include <stddef.h>
+#include <stdio.h>
 
-// int main()
-// {
-//     char str[13] = "Hello, World";
-//     char str2[] = "rl";
-//     int size = 11;
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 
-//     printf("%s\n", strstr(str, str2));
-//     printf("%s\n", ft_strnstr(str, str2, size));
-// }
+int	main(void)
+{
+	char	haystack[] = "coucou la compagnie, ca va ou quoi";
+	char	needle[] = "";
+
+	printf("%s", ft_strnstr(haystack, needle, 25));
+} */

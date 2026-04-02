@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/04/01 14:28:10 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/01 22:11:03 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef struct s_global
 
 void					init_signals(void);
 void					init_child_signals(void);
+void					init_child_signal_ig(void);
 void					handler(int signum);
 
 #endif

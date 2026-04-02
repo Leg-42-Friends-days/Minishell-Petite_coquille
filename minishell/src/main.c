@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/04/01 20:37:21 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 18:36:56 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 t_global	*init_global(char **envp)
 {
 	t_global	*global;
+	(void)envp;
 
 	global = (t_global *)malloc(sizeof(t_global));
 	if (!global)
@@ -26,6 +27,8 @@ t_global	*init_global(char **envp)
 		global->env = mini_env(global->env);
 	else
 		global->env = env_content(global->env, envp);
+	if (!global->env)
+		return (NULL);
 	global->error_code = 0;
 	return (global);
 }
@@ -37,7 +40,7 @@ void	command_line(t_token **mini_vars, t_global *global)
 		global->what_free = 1;
 	global->head = *mini_vars;
 	global->true_head = *mini_vars;
-	//printmini(&mini_vars);
+	//printmini(mini_vars);
 	if (!parser(mini_vars, global))
 	{
 		run_through_here_doc(global->ast, global->env, global);
@@ -53,17 +56,17 @@ void	command_line(t_token **mini_vars, t_global *global)
 	*mini_vars = NULL;
 }
 
-int	control_d(t_global *global)
+void	control_d(t_global *global)
 {
 	write(1, "exit\n", 5);
 	if (global->env)
 		free_env(global->env);
 	free(global);
 	rl_clear_history();
-	return (0);
+	return ;
 }
 
-int	loop(t_global *global, t_token *mini_vars)
+void	loop(t_global *global, t_token *mini_vars)
 {	
 	char	*line;
 
@@ -79,7 +82,7 @@ int	loop(t_global *global, t_token *mini_vars)
 			return (control_d(global));
 		if (*line)
 			add_history(line);
-		if (g_signal != 0)
+		if (g_signal == 130)
 		{
 			global->error_code = 130;
 			g_signal = 0;
@@ -103,8 +106,15 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	g_signal = 0;
 	init_signals();
-	if (isatty(0))
-		return (loop(global, mini_vars));
+	if (isatty(0) == 1)
+		loop(global, mini_vars);
 	else
+	{
 		write(2, "minishell: non-interactive mode is not supported\n", 49);
+		if (global->env)
+		free_env(global->env);
+		free(global);
+		rl_clear_history();
+	}
+	return (0);
 }

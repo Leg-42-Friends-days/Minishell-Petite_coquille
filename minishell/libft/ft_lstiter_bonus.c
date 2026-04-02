@@ -3,29 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/14 12:13:19 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/14 19:05:49 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/16 18:30:33 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/16 18:30:35 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-// void	f(void *node)
-// {
-// 	free((void *)node->content);
-// }
-
 void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
-	if (!lst)
+	t_list	*ptr;
+
+	if (!lst || !f)
 		return ;
-	while (lst->next != NULL)
+	ptr = lst;
+	while (ptr != NULL)
 	{
-		f(lst->content);
-		lst = lst->next;
+		(*f)(ptr->content);
+		ptr = ptr->next;
 	}
-	if (lst->next == NULL)
-		f(lst->content);
 }
+/*
+void	f(void *node)
+{
+	*(int *)node = *(int *)node + 1;
+}
+
+#include <stdio.h>
+
+int	main(void)
+{
+	t_list	*head;
+	t_list	*current;
+	int		content1;
+	int		content2;
+
+	head = malloc(sizeof(t_list));
+	current = malloc(sizeof(t_list));
+
+
+	head->next = current;
+	content1 = 45;
+	head->content = &content1;
+	printf("%d\n", *(int *)(head->content));
+	content2 = 22;
+	current->content = &content2;
+	printf("%d\n", *(int *)(current->content));
+	ft_lstiter(head, f);
+	printf("%d\n", *(int *)(head->content));
+	printf("%d", *(int *)(current->content));
+}
+*/

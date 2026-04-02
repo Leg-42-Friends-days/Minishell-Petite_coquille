@@ -3,32 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mickzhan <mickzhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibrouin- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 16:08:58 by mickzhan          #+#    #+#             */
-/*   Updated: 2025/11/04 18:46:57 by mickzhan         ###   ########.fr       */
+/*   Created: 2025/11/10 11:08:58 by ibrouin-          #+#    #+#             */
+/*   Updated: 2025/11/10 11:09:02 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_tolower(int ch)
+int	ft_tolower(int c)
 {
-	if (ch >= 'A' && ch <= 'Z')
-		return (ch + 32);
-	return (ch);
+	if (c >= 65 && c <= 90)
+		return (c + 32);
+	return (c);
 }
+/* 
+#include <stdio.h>
+#include <ctype.h>
 
-// int main()
-// {
-//     int i = 0;
-//     char *str = "hELLO, wORLD";
-//     char ch;
+int	ft_tolower(int c);
 
-//     while (str[i])
-//     {
-//         ch = str[i];
-//         printf("%c", ft_tolower(ch));
-//         i++;
-//     }
-// }
+int	main(void)
+{
+	int	c;
+
+	c = 70;
+	printf("grand : %c\n", c);
+	printf("petit : %c", ft_tolower(c));
+} */

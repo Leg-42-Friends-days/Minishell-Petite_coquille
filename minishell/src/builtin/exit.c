@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 11:49:59 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/03/30 11:59:56 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 19:05:29 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ int	check_ft_atol(const char *str)
 	}
 	while (str[i] && str[i] >= '0' && str[i] <= '9')
 	{
-		if (res >= (922337203685477580) && sign == 1 && str[i] > '7')
+		if (res >= (9223372036854775806) && sign == 1 && str[i] > '7')
 			return (0);
-		if (res >= (922337203685477580) && sign == -1 && str[i] > '8')
+		if (res >= (9223372036854775807) && sign == -1 && str[i] > '8')
 			return (0);
 		res = (str[i] - '0') + res * 10;
 		i++;
@@ -83,7 +83,7 @@ int	is_not_numeric(char *cmd)
 	}
 	if (cmd[i] == '\0')
 	{
-		if (!check_ft_atol(cmd))
+		if (check_ft_atol(cmd) == 0)
 			return (1);
 		else
 			return (0);
