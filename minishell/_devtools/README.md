@@ -7,7 +7,6 @@ Basically you have to reproduce how work a bash without leak
 But we have some rules to respect in those project and some few rules that we dont have to implement like :
 such as \ (backslash) ; (semicolon) "" '' single and double alone 
 
-
 ## Instructions
 
 ./minishell : to launch the programme;
@@ -15,7 +14,7 @@ make : to compile everything
 make clean : to clear .o
 make fclean : to clear all
 make re : to clear all and compile again
-make val : to check leak in minishell (you have to change de PATH to your own name)
+make val : to check leak in minishell (you have to change de PATH to your own name to use it)
 make libft : to compile libft alone
 
 ## Resources
