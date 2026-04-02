@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 11:45:00 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/02 09:53:39 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 19:23:24 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,12 @@ int	empty_line(char *line, int *fd)
 	return (0);
 }
 
+void handle_sigquit(int sig)
+{
+    (void)sig;
+    write(1, "\b\b  \b\b", 6);
+}
+
 void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 {
 	char	*line;
@@ -80,7 +86,7 @@ void	child_here_doc(int *fd, t_redir *node, t_global *global)
 	g_signal = 0;
 	close(fd[0]);
 	signal(SIGINT, hand);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, handle_sigquit);
 	fill_here_doc(fd, &node, global);
 	get_next_line(-1);
 	close(fd[1]);

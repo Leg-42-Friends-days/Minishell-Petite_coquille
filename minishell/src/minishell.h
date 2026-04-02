@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 10:29:52 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/04/01 22:11:03 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 19:15:34 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 // readline rl_clear_history, rl_on_new_line,
 // rl_replace_line, rl_redisplay add_history
 
+# include <limits.h>
 # include <dirent.h>
 # include <signal.h>
 # include <sys/wait.h>
