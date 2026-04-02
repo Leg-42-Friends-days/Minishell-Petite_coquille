@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 11:45:00 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 23:46:07 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 09:53:39 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global)
 	if (!ast)
 		return ;
 	if (is_heredoc_node(ast) == true)
-		if (handle_ast_heredocs(ast, global))
+		if (handle_heredocs(ast, global))
 			return ;
 	if (ast->left)
 		run_through_here_doc(ast->left, env, global);
