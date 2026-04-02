@@ -33,9 +33,9 @@ void	close_previous_heredocs(t_redir *node)
 void	hand(int signum)
 {
 	(void)signum;
-    write(1, "\n", 1);
-    g_signal = 130;
-    close(0);
+	g_signal = 130;
+	write(1, "\n", 1);
+	close(0);
 }
 
 int	empty_line(char *line, int *fd)
@@ -43,18 +43,9 @@ int	empty_line(char *line, int *fd)
 	if (!line)
 	{
 		close(fd[1]);
-		return(1);
+		return (1);
 	}
-	return (0);git add .
-}
-
-void	if_ctrl_c(int *fd, t_global *global)
-{
-	printf("rwtg\n");
-	close(fd[1]);
-	free_all_in_child(global, NULL);
-	g_signal = 130;
-	exit(130);
+	return (0);
 }
 
 void	fill_here_doc(int *fd, t_redir **node, t_global *global)
@@ -68,8 +59,6 @@ void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 		line = get_next_line(0);
 		if (empty_line(line, fd))
 			break ;
-		//if (g_signal == 130)
-		//	if_ctrl_c(fd, global);
 		if (line[ft_strlen(line) - 1] == '\n')
 			line[ft_strlen(line) - 1] = '\0';
 		if ((ft_strncmp(line, (*node)->target->sub_token->var,
@@ -88,24 +77,44 @@ void	fill_here_doc(int *fd, t_redir **node, t_global *global)
 void	child_here_doc(int *fd, t_redir *node, t_global *global)
 {
 	join_limiter(node);
-	//g_signal = 0;
+	g_signal = 0;
 	close(fd[0]);
 	signal(SIGINT, hand);
+	signal(SIGQUIT, SIG_IGN);
 	fill_here_doc(fd, &node, global);
+	get_next_line(-1);
+	close(fd[1]);
 	free_all_in_child(global, NULL);
-	exit(1);
+	if (g_signal == 130)
+		exit(130);
+	exit(0);
 }
 
+int	heredoc_code_status(int *fd, t_redir *node, int status)
+{
+	if (WIFEXITED(status))
+	{
+		if (WEXITSTATUS(status) != 0)
+		{
+			close(fd[0]);
+			node->fd = -1;
+			return (WEXITSTATUS(status));
+		}
+		node->fd = fd[0];
+		return (0);
+	}
+	close(fd[0]);
+	node->fd = -1;
+	return (0);
+}
 
 int	prepare_here_doc(t_redir *node, t_global *global)
 {
 	int		fd[2];
 	pid_t	pid;
 	int		status;
-	int		sig;
 
 	status = 0;
-	sig = 0;
 	init_child_signal_ig();
 	if (pipe(fd) == -1)
 		error_pipe();
@@ -113,66 +122,56 @@ int	prepare_here_doc(t_redir *node, t_global *global)
 	if (pid == -1)
 		error_pid();
 	if (pid == 0)
-	{
 		child_here_doc(fd, node, global);
-	}
 	close(fd[1]);
 	waitpid(pid, &status, 0);
-	if (status > 0)
-		close(fd[0]);
 	close_previous_heredocs(node);
-	node->fd = fd[0];
 	init_signals();
-	/* if (WIFSIGNALED(status))
-	{
-		sig = WTERMSIG(status);
-		printf("%d\n", sig);
-		return (signal_value(sig));
-	} */
-	printf("%d\n", g_signal);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	return (0);
+	return (heredoc_code_status(fd, node, status));
 }
 
-void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global)
+int	handle_heredocs(t_ast *current, t_global *global)
 {
-	t_ast	*current;
 	t_redir	*redir;
 	int		error;
 
 	error = 0;
-	current = ast;
-	if (ast != NULL)
+	redir = current->redirs;
+	if (!redir)
+		return (0);
+	while (redir)
 	{
-		if (current->type == AST_CMD || current->type == AST_SUBSHELL)
+		if (redir->type == HEREDOC)
 		{
-			redir = current->redirs;
-			if (redir)
+			error = prepare_here_doc(redir, global);
+			if (error != 0)
 			{
-				while (redir)
-				{
-					if (redir->type == HEREDOC)
-					{
-						error = prepare_here_doc(redir, global);
-						printf("%d\n", error);
-						if (error == 1)
-							global->here_doc_error = 1;
-						if (error == 256)
-						{
-							printf("mdrrrr\n");
-							global->here_doc_error = 1;
-							global->error_code = 130;
-							return ;
-						}
-					}
-					redir = redir->next;
-				}
+				global->here_doc_error = 1;
+				global->error_code = error;
+				return (1);
 			}
 		}
-		if (current->left)
-			run_through_here_doc(current->left, env, global);
-		if (current->right)
-			run_through_here_doc(current->right, env, global);
+		redir = redir->next;
 	}
+	return (0);
+}
+
+bool	is_heredoc_node(t_ast *current)
+{
+	if (current->type == AST_CMD || current->type == AST_SUBSHELL)
+		return (true);
+	return (false);
+}
+
+void	run_through_here_doc(t_ast *ast, t_env *env, t_global *global)
+{
+	if (!ast)
+		return ;
+	if (is_heredoc_node(ast) == true)
+		if (handle_ast_heredocs(ast, global))
+			return ;
+	if (ast->left)
+		run_through_here_doc(ast->left, env, global);
+	if (ast->right)
+		run_through_here_doc(ast->right, env, global);
 }
