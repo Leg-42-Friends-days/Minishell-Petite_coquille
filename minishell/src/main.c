@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 12:13:10 by mickzhan          #+#    #+#             */
-/*   Updated: 2026/04/01 14:41:31 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 14:36:13 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 t_global	*init_global(char **envp)
 {
 	t_global	*global;
+	(void)envp;
 
 	global = (t_global *)malloc(sizeof(t_global));
 	if (!global)
@@ -79,7 +80,7 @@ int	loop(t_global *global, t_token *mini_vars)
 			return (control_d(global));
 		if (*line)
 			add_history(line);
-		if (g_signal != 0)
+		if (g_signal == 130)
 		{
 			global->error_code = 130;
 			g_signal = 0;

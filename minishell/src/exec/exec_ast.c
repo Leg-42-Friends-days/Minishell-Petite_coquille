@@ -6,7 +6,7 @@
 /*   By: ibrouin- <ibrouin-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 15:21:53 by ibrouin-          #+#    #+#             */
-/*   Updated: 2026/04/01 11:56:47 by ibrouin-         ###   ########.fr       */
+/*   Updated: 2026/04/02 13:37:52 by ibrouin-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	exec_cmd(t_ast *ast, t_env *env, t_global *global)
 	if (pid == 0)
 		child_cmd(&ast, global);
 	waitpid(pid, &status, 0);
-	signal(SIGINT, handler);
+	// signal(SIGINT, handler);
 	if (WIFSIGNALED(status))
 	{
 		sig = WTERMSIG(status);
